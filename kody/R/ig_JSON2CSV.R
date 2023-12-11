@@ -76,6 +76,8 @@ merged_df$photos <- unlist(merged_df$photos)
 colnames(merged_df)[colnames(merged_df) == "photos"] <- "photosTimestamp"
 
 merged_df <- cbind(merged_df, app = "ig")
+merged_df <- cbind(merged_df, person = "f")
+
 
 # Wyświetl wynik
 print(merged_df)

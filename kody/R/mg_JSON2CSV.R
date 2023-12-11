@@ -96,6 +96,8 @@ merged_df$gifs <- lapply(merged_df$gifs, function(gif) {
 merged_df$gifs <- unlist(merged_df$gifs)
 
 merged_df <- cbind(merged_df, app = "mg")
+merged_df <- cbind(merged_df, person = "f")
+
 
 
 # Wyświetl wynik

@@ -31,6 +31,7 @@ for (i in seq_along(json_data_snap_f)) {
 }
 
 result_df <- cbind(result_df, app = "sp")
+result_df <- cbind(result_df, person = "f")
 
 # Wyświetl wynik
 print(result_df)
