@@ -7,7 +7,7 @@ import codecs
 
 
 def clear_actor_and_uri_fields(source_path):
-    # Tworzymy ścieżkę do folderu 'nowe'
+    # Tworzymy ścieżkę do folderu 'perlowe'
     destination_path = os.path.join(os.path.dirname(source_path), 'perlowe')
 
     # Sprawdzamy, czy folder docelowy istnieje, jeśli nie, to go tworzymy
@@ -62,11 +62,18 @@ def clear_actor_and_uri_fields(source_path):
                         if 'uri' in filee:
                             filee['uri'] = ''
 
-                    # tylko do Instagrama
+                    if 'sticker' in message:
+                        message['sticker'] = ''
+
+                    if 'ip' in message:
+                        message['ip'] = ""
+
+
+                    # tylko do Instagrama {
 
                     if 'share' in message:
                         message['share'] = ''
-
+                    # }
                 if 'thread_path' in modified_data:
                     modified_data['thread_path'] = ''
                     thread_path_count += 1
@@ -85,7 +92,7 @@ def clear_actor_and_uri_fields(source_path):
 
 
 # path z folderu biale
-path_to_search = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\instagram\biale'
+path_to_search = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\messenger\biale'
 clear_actor_and_uri_fields(path_to_search)
 
 
