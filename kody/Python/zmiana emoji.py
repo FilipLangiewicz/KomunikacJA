@@ -15,7 +15,7 @@ def fix_lines_in_json_folder(input_folder_path, output_folder_path):
             input_file_path = os.path.join(input_folder_path, filename)
             output_file_path = os.path.join(output_folder_path, filename)
 
-            with open(input_file_path, 'r', encoding='utf-8') as file:
+            with open(input_file_path, 'r', encoding='utf-8-sig') as file:
                 data = json.load(file)
 
             # Apply the fix_emoji function to each value in the JSON data
