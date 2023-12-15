@@ -5,10 +5,11 @@ file_path <- "D:\\STUDIA\\Semestr 3\\Techniki wizualizacji danych\\Projekt\\Proj
 df <- read.csv(file_path)
 
 # Konwersja kolumny timestamp na daty
-df$date <- as.POSIXct(df$timestamp_ms / 1000, origin = "1970-01-01", tz = "Europe/Warsaw")
+df$rawDate <- as.POSIXct(df$timestamp_ms / 1000, origin = "1970-01-01", tz = "Europe/Warsaw")
 
 # Formatowanie dat w formacie YYYYMMDD
-df$date <- format(df$date, "%Y%m%d")
+df$date <- format(df$rawDate, "%Y%m%d")
+df$strDate <- format(df$rawDate, "%d-%m-%Y")
 
 # Wyświetlenie wynikowej ramki danych
 print(df)
