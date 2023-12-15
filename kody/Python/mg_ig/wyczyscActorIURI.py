@@ -93,4 +93,10 @@ def clear_actor_and_uri_fields(source_path):
 
 # path z folderu biale
 path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\biale'
+<<<<<<< HEAD
 clear_actor_and_uri_fields(path_to_search)
+=======
+clear_actor_and_uri_fields(path_to_search)
+
+
+>>>>>>> 064e8ba57640ff7dda5e79876fefbea3a915c3d9
