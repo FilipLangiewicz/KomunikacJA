@@ -92,7 +92,5 @@ def clear_actor_and_uri_fields(source_path):
 
 
 # path z folderu biale
-path_to_search = r'C:\Users\anost\OneDrive\Dokumenty\twd_proj2\poufne_dane\instagram\biale'
+path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\biale'
 clear_actor_and_uri_fields(path_to_search)
-
-

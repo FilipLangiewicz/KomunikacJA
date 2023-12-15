@@ -15,6 +15,9 @@ def process_json_files(source_path):
 
     # Inicjalizujemy licznik wiadomości
     message_count = 0
+    ileZ = 0
+    ileA = 0
+    ileF = 0
 
     # Przeszukujemy w głąb folderu źródłowego
     for root, dirs, files in os.walk(source_path):
@@ -36,6 +39,13 @@ def process_json_files(source_path):
 
                         # Zliczamy wystąpienia słowa 'content'
                         message_count += 1
+                    if 'sender_name' in message:
+                        if message['sender_name'] == "Zosia Kaminska":
+                            ileZ += 1
+                        if message['sender_name'] == "Anna Ostrowska":
+                            ileA += 1
+                        if message['sender_name'] == "Filip Langiewicz":
+                            ileF += 1
 
                 # Tworzymy ścieżkę do pliku w folderze 'nowe'
                 destination_file_path = os.path.join(destination_path, file)
@@ -47,8 +57,12 @@ def process_json_files(source_path):
                 print(f"Przetworzono: {file_path} -> {destination_file_path}")
 
     print(f"Zliczono wystąpień słowa 'content': {message_count}")
+    print(f"Dostalam': {message_count - ileZ}")
+    print(f"Z:{ileZ}")
+    print(f"A:{ileA}")
+    print(f"F:{ileF}")
 
 
 # path z folderu brudne
-path_to_search = r'C:\Users\anost\OneDrive\Dokumenty\twd_proj2\poufne_dane\instagram\brudne'
+path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\brudne'
 process_json_files(path_to_search)

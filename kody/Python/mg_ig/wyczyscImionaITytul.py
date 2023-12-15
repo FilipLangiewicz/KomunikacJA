@@ -64,5 +64,5 @@ def clear_fields(source_path):
 
 
 # path z folderu ciemnoszare
-path_to_search = r'C:\Users\anost\OneDrive\Dokumenty\twd_proj2\poufne_dane\instagram\ciemnoszare'
+path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\ciemnoszare'
 clear_fields(path_to_search)
