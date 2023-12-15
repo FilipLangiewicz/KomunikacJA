@@ -47,8 +47,5 @@ def rename_files_with_prefix(source_folder_path):
 
 # path z folderem perlowe
 path_to_source_folder = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\perlowe'
-<<<<<<< HEAD
 rename_files_with_prefix(path_to_source_folder)
-=======
-rename_files_with_prefix(path_to_source_folder)
->>>>>>> 064e8ba57640ff7dda5e79876fefbea3a915c3d9
+

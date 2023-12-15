@@ -30,7 +30,6 @@ def fix_unicode(text):
 # Otwórz plik oryginalny do odczytu
 input_filename = r''
 output_filename = r''
-
 i = 1
 
 # Otwórz plik docelowy do zapisu
