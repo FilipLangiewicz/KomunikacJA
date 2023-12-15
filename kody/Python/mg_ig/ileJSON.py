@@ -4,7 +4,7 @@
 
 import os
 
-folder_path = r'e'
+folder_path = r'C:\Users\Zosia\Downloads\instagram-zosiek_cosiek-2023-12-05-TkmIUkQI\messages'
 suma = 0
 
 def policzJsony(item):

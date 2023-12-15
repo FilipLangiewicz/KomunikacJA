@@ -46,5 +46,5 @@ def rename_files_with_prefix(source_folder_path):
 
 
 # path z folderem perlowe
-path_to_source_folder = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\messenger\perlowe'
+path_to_source_folder = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\perlowe'
 rename_files_with_prefix(path_to_source_folder)

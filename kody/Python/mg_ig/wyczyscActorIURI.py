@@ -92,7 +92,7 @@ def clear_actor_and_uri_fields(source_path):
 
 
 # path z folderu biale
-path_to_search = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\messenger\biale'
+path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\biale'
 clear_actor_and_uri_fields(path_to_search)
 
 

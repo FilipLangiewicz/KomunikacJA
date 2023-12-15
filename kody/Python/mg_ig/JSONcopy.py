@@ -39,5 +39,5 @@ def copy_and_rename_json_files(source_path):
                 print(f"Skopiowano: {file_path} -> {destination_file_path}")
 
 # path ma folder wszystko, czyli wszystkie foldery w ktorych siedza jsony
-path_to_search = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\instagram\messages\inbox'
+path_to_search = r'C:\Users\Zosia\Desktop\AAAPROJEKT2\poufne_dane\instagram\inbox'
 copy_and_rename_json_files(path_to_search)
