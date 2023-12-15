@@ -50,5 +50,5 @@ def process_json_files(source_path):
 
 
 # path z folderu brudne
-path_to_search = r'D:\STUDIA\Semestr 3\Techniki wizualizacji danych\Projekt\Projekt_TWD_2\poufne_dane\instagram\brudne'
+path_to_search = r'C:\Users\anost\OneDrive\Dokumenty\twd_proj2\poufne_dane\instagram\brudne'
 process_json_files(path_to_search)
