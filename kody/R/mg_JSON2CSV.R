@@ -6,7 +6,7 @@ library(dplyr)
 
 
 # Ścieżka do folderu z plikami JSON czystymi
-sciezka_do_folderu <- "D:\\STUDIA\\Semestr 3\\Techniki wizualizacji danych\\Projekt\\Projekt_TWD_2\\poufne_dane\\messenger\\czyste"
+sciezka_do_folderu <- "C:\\Users\\flang\\Downloads\\czysteZosia\\czyste"
 
 # Pobierz listę plików JSON w folderze
 pliki_json <- list.files(sciezka_do_folderu, pattern = "\\.json$", full.names = TRUE)

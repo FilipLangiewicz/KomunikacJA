@@ -6,7 +6,7 @@ library(dplyr)
 
 
 # Ścieżka do folderu z plikami JSON czystymi
-sciezka_do_folderu <- "D:\\STUDIA\\Semestr 3\\Techniki wizualizacji danych\\Projekt\\Projekt_TWD_2\\poufne_dane\\instagram\\czyste"
+sciezka_do_folderu <- "C:\\Users\\flang\\Downloads\\czysteZosia\\czyste"
 
 # Pobierz listę plików JSON w folderze
 pliki_json <- list.files(sciezka_do_folderu, pattern = "\\.json$", full.names = TRUE)
@@ -42,41 +42,43 @@ merged_df <- bind_rows(ramki_danych)
 
 
 # Przetwórz kolumnę "reactions"
-for (i in 1:length(merged_df$reactions)){
-  merged_df$reactions[[i]] <- ifelse(is.null(merged_df$reactions[[i]]), NA, merged_df$reactions[[i]]$reaction)
-}
+
+merged_df$reactions <- lapply(merged_df$reactions, function(reaction) {
+  ifelse(is.null(reaction), NA, reaction$reaction)
+})
 
 merged_df$reactions <- unlist(merged_df$reactions)
 
 
 # Przetwórz kolumnę "audio_files"
-for (i in 1:length(merged_df$audio_files)){
-  merged_df$audio_files[[i]] <- ifelse(is.null(merged_df$audio_files[[i]]), NA, merged_df$audio_files[[i]]$creation_timestamp)
-}
+merged_df$audio_files <- lapply(merged_df$audio_files, function(audio) {
+  ifelse(is.null(audio), NA, audio$creation_timestamp)
+})
+
 
 merged_df$audio_files <- unlist(merged_df$audio_files)
 colnames(merged_df)[colnames(merged_df) == "audio_files"] <- "audioFilesTimestamp"
 
 
 # Przetwórz kolumnę "videos"
-for (i in 1:length(merged_df$videos)){
-  merged_df$videos[[i]] <- ifelse(is.null(merged_df$videos[[i]]), NA, merged_df$videos[[i]]$creation_timestamp)
-}
+merged_df$videos <- lapply(merged_df$videos, function(video) {
+  ifelse(is.null(video), NA, video$creation_timestamp)
+})
 
 merged_df$videos <- unlist(merged_df$videos)
 colnames(merged_df)[colnames(merged_df) == "videos"] <- "videosTimestamp"
 
 
 # Przetwórz kolumnę "photos"
-for (i in 1:length(merged_df$photos)){
-  merged_df$photos[[i]] <- ifelse(is.null(merged_df$photos[[i]]), NA, merged_df$photos[[i]]$creation_timestamp)
-}
+merged_df$photos <- lapply(merged_df$photos, function(photo) {
+  ifelse(is.null(photo), NA, ifelse(is.null(photo$creation_timestamp), -1, photo$creation_timestamp))
+})
 
 merged_df$photos <- unlist(merged_df$photos)
 colnames(merged_df)[colnames(merged_df) == "photos"] <- "photosTimestamp"
 
 merged_df <- cbind(merged_df, app = "ig")
-merged_df <- cbind(merged_df, person = "f")
+merged_df <- cbind(merged_df, person = "z")
 
 
 # Wyświetl wynik
@@ -84,6 +86,6 @@ print(merged_df)
 
 
 # zapisz do csvki
-write.csv(merged_df, file = "./data_csv/ig_f.csv", row.names = FALSE)
+write.csv(merged_df, file = "./data_csv/ig_z.csv", row.names = FALSE)
 
 
