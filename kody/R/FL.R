@@ -33,3 +33,12 @@ plot <- df %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ggplotly(plot)
+
+
+mg1 <- read.csv("./data_csv/mg_a1.csv")
+mg2 <- read.csv("./data_csv/mg_a2.csv")
+mg3 <- read.csv("./data_csv/mg_a3.csv")
+
+mg_a <- bind_rows(mg1, mg2, mg3)
+ig_a <- read.csv("./data_csv/ig_a.csv")
+

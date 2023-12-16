@@ -2,11 +2,11 @@ library(dplyr)
 
 mg_f <- read.csv("./data_csv/mg_f.csv")
 mg_z <- read.csv("./data_csv/mg_z.csv")
-mg_a <- read.csv("./data_csv/mg_z.csv")
+mg_a <- read.csv("./data_csv/mg_a.csv")
 
 ig_f <- read.csv("./data_csv/ig_f.csv")
 ig_z <- read.csv("./data_csv/ig_z.csv")
-ig_a <- read.csv("./data_csv/ig_z.csv")
+ig_a <- read.csv("./data_csv/ig_a.csv")
 
 sp_f <- read.csv("./data_csv/sp_f.csv")
 sp_z <- read.csv("./data_csv/sp_f.csv")
@@ -21,13 +21,15 @@ konwertujTimestampy <- function(df) {
   # Formatowanie dat w formacie YYYYMMDD
   df$date <- format(df$rawDate, "%Y%m%d")
   df$strDate <- format(df$rawDate, "%d-%m-%Y")
-  
+  df$year <- format(df$rawDate, "%Y")
+  df$month <- format(df$rawDate, "%m")
+  df$day <- format(df$rawDate, "%d")
   return(df)
 }
 
 wybierzOdpowiednieKolumny <- function(df) {
   return(df %>% 
-           select(timestamp_ms, date, strDate, app, person)
+           select(person, app, day, month, year)
   )
 }
 
@@ -77,11 +79,21 @@ main_df <- bind_rows(mg_f,
 
 write.csv(main_df, "../app/KomunikacJA/appData/heatMap/heatMapData.csv", row.names = FALSE)
 
+write.csv(ig_a, "../app/KomunikacJA/appData/heatMap/ig_a.csv", row.names = FALSE)
+write.csv(ig_f, "../app/KomunikacJA/appData/heatMap/ig_f.csv", row.names = FALSE)
+write.csv(ig_z, "../app/KomunikacJA/appData/heatMap/ig_z.csv", row.names = FALSE)
+
+write.csv(mg_a, "../app/KomunikacJA/appData/heatMap/mg_a.csv", row.names = FALSE)
+write.csv(mg_f, "../app/KomunikacJA/appData/heatMap/mg_f.csv", row.names = FALSE)
+write.csv(mg_z, "../app/KomunikacJA/appData/heatMap/mg_z.csv", row.names = FALSE)
+
+write.csv(sp_f, "../app/KomunikacJA/appData/heatMap/sp_f.csv", row.names = FALSE)
+  
+
+ee <- mg_a %>% 
+  select(person, app, day, month, year)
 
 
-
-
-
-
+write.csv(ee, "../app/KomunikacJA/appData/heatMap/ee.csv", row.names = FALSE)
 
 
