@@ -1,5 +1,2 @@
 mg_a.csv filter=lfs diff=lfs merge=lfs -text
-<<<<<<< HEAD
-*.csv filter=lfs diff=lfs merge=lfs -text
-=======
->>>>>>> 1c1a9bba02a666413928855b64d405b8ae9b4354
+
