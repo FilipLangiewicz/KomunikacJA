@@ -41,7 +41,7 @@ def modify_and_save_json(input_path, output_path):
 
 if __name__ == "__main__":
     # sciezke do pliku brudne, ktorym jest json ze wszystkimi wiadomosciami
-    input_file_path = r"twoja\sciezka"
+    input_file_path = r"C:\twd_proj2\poufne_dane\snapchat\chat_history.json"
     output_file_path = os.path.join(os.path.dirname(input_file_path), "czyste.json")
 
     modify_and_save_json(input_file_path, output_file_path)
