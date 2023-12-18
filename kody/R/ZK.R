@@ -22,6 +22,7 @@ all_emojis <- unlist(emoji_list)
 emoji_freq <- data.frame(table(all_emojis))
 emoji_freq <- emoji_freq %>%  filter (emoji_freq$Freq >= (1/10)*max(emoji_freq$Freq))
 
+View(emoji_freq)
 # Create a word cloud with dark yellow color
 wordcloud(
   words = emoji_freq$all_emojis,
@@ -39,8 +40,9 @@ wordcloud2(
   minRotation = 0,
   maxRotation = 0,
   rotateRatio = 0,
-  gridSize = 50,
-  shape = "circle"
+  gridSize = 15,
+  shape = "circle",
+  shuffle = FALSE
 )
 
 #AVERAGE DŁUGOŚĆ WIADOMOŚCI
@@ -57,6 +59,30 @@ average_length <- mean(zosia_data$MessageLength)
 
 # Print the result
 cat("Average message length sent by Zosia Kamińska:", round(average_length, 2), "characters\n")
+
+# Find the shortest and longest messages
+shortest_message <- zosia_data[which.min(zosia_data$MessageLength), c("Content", "MessageLength")]
+longest_message <- zosia_data[which.max(zosia_data$MessageLength), c("Content", "MessageLength")]
+
+# Print the results
+cat("Shortest message (", shortest_message$MessageLength, " characters)", "\n")
+cat("Longest message (", longest_message$MessageLength, " characters)", "\n")
+
+boxplot_stats <- boxplot.stats(zosia_data$MessageLength)
+
+# Identify outliers
+outliers <- boxplot_stats$out
+
+# Remove the biggest outliers
+filtered_data <- zosia_data[!zosia_data$MessageLength %in% outliers, ]
+
+boxplot <- plot_ly(filtered_data, y = ~MessageLength, type = "box") %>%
+  layout(title = "Message Length Distribution",
+         yaxis = list(title = "Message Length"))
+
+# Display the boxplot
+boxplot
+
 
 
 #AVERAGE LICZBA EMOTEK NA WIADOMOŚĆ
@@ -94,6 +120,7 @@ data_with_emojis <- data %>%
 # Extract timestamps with milliseconds
 data_with_emojis$Timestamp <- as.POSIXct(data_with_emojis$Timestamp / 1000, origin = "1970-01-01", tz = "GMT")
 
+View(data_with_emojis)
 # Pivot the data
 pivoted_data <- data_with_emojis %>%
   select(Sender, Timestamp, emojis) %>%
@@ -104,6 +131,8 @@ pivoted_data <- data_with_emojis %>%
   group_by(Sender, emojis) %>%
   mutate(cumulative_count = cumsum(count)) %>% 
   filter(Sender == "Zosia Kamińska")
+
+View(pivoted_data)
 
 # Select the top 10 emojis based on cumulative_count
 top_10 <- pivoted_data %>%
