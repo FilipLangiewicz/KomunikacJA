@@ -9,8 +9,8 @@ ig_z <- read.csv("./data_csv/ig_z.csv")
 ig_a <- read.csv("./data_csv/ig_a.csv")
 
 sp_f <- read.csv("./data_csv/sp_f.csv")
-sp_z <- read.csv("./data_csv/sp_f.csv")
-sp_a <- read.csv("./data_csv/sp_f.csv")
+sp_z <- read.csv("./data_csv/sp_z.csv")
+sp_a <- read.csv("./data_csv/sp_a.csv")
 
 konwertujTimestampy <- function(df) {
   
@@ -72,7 +72,7 @@ main_df <- bind_rows(mg_f,
                      ig_z,
                      ig_a,
                      sp_f,
-                     sp_z,
+                    # sp_z,
                      sp_a)
 
 # w celu przyspieszenia aplikacji moze zajsc koniecznosc zrobienia gotowej ramki danych
