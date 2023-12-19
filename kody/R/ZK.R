@@ -7,6 +7,43 @@ library(stringr)
 library(lubridate)
 library(plotly)
 
+#PRZED ROZPOCZĘCIEM ZRÓBCIE PROSZE PRZY POMOCY PLIKU JSON2CSV ramki dla messengera i instagrama, 
+#używając zmienione_znaki czy coś tam, jest w pliku pythonowym, nie wrzucajcie na repo!
+
+
+#TERAZ zrobimy ramki które możecie wrzucić na repo
+
+data <- read.csv("C:\\Users\\Zosia\\Desktop\\AAAPROJEKT2\\poufne_dane\\messenger\\csvs.csv") #trzeba zrobić dla messengera i insta osobno
+
+# Filter messages containing emojis
+data_with_emojis <- data %>%
+  mutate(emojis = str_extract_all(Content, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]"))
+
+# Extract timestamps with milliseconds
+data_with_emojis$Timestamp <- as.POSIXct(data_with_emojis$Timestamp / 1000, origin = "1970-01-01", tz = "GMT")
+
+data_with_emojis$MessageLength <- nchar(data_with_emojis$Content)
+
+data_with_emojis <- data_with_emojis %>% 
+  select(Sender, emojis, Timestamp, GroupOrPriv, MessageLength)
+
+data_with_emojis$Sender[data_with_emojis$Sender != "Zosia Kamińska"] <- "Other" #uważać na imie, ja mam bez ń na insta na przykład
+data_with_emojis$platform <- "fb" #zmienić przy instagramie na "in"
+data_with_emojis$name <- "z"
+
+data_with_emojis$emojis[data_with_emojis$emojis == "character(0)"] <- NA 
+
+data_with_emojis$emojis <- sapply(data_with_emojis$emojis, function(vec) paste(vec, collapse = ""))
+View(data_with_emojis)
+
+write.csv(data_with_emojis, "../app/KomunikacJA/appData/emojiData/emoji_fb_z.csv", row.names = FALSE) #zmienić literke i platforme
+#DZIĘKIIIII
+
+
+#POTEM SOBIE ZMERGUJE JAKOŚ TE RAMKI JESZCZE
+#WYKRESY JESZCZE MUSZĘ POPRAWIĆ ŻEBY UŻYWAŁY TEJ NOWEJ RAMKI ale to potem zrobię
+
+
 #EMOJI WORDCLOUD
 data <- read.csv("C:\\Users\\Zosia\\Desktop\\AAAPROJEKT2\\poufne_dane\\messenger\\csvs.csv")
 
