@@ -45,7 +45,7 @@ wordcloud2(
   shuffle = FALSE
 )
 
-#AVERAGE DŁUGOŚĆ WIADOMOŚCI
+#AVERAGE DŁUGOŚĆ WIADOMOŚCI + NAJKRÓTSZA, NAJDŁUŻSZA
 
 # Filter messages sent by Zosia
 zosia_data <- data %>%
@@ -64,10 +64,11 @@ cat("Average message length sent by Zosia Kamińska:", round(average_length, 2),
 shortest_message <- zosia_data[which.min(zosia_data$MessageLength), c("Content", "MessageLength")]
 longest_message <- zosia_data[which.max(zosia_data$MessageLength), c("Content", "MessageLength")]
 
-# Print the results
 cat("Shortest message (", shortest_message$MessageLength, " characters)", "\n")
 cat("Longest message (", longest_message$MessageLength, " characters)", "\n")
 
+
+#BOXPLOT Z DŁUGOŚCIAMI WIADOMOŚCI
 boxplot_stats <- boxplot.stats(zosia_data$MessageLength)
 
 # Identify outliers
@@ -82,6 +83,8 @@ boxplot <- plot_ly(filtered_data, y = ~MessageLength, type = "box") %>%
 
 # Display the boxplot
 boxplot
+
+
 
 
 
