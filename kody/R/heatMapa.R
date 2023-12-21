@@ -30,15 +30,15 @@ data <- dff %>%
 
 ggplotly(
   data %>% 
-    filter(year(Date) == 2022) %>% 
+    filter(year(Date) == 2023) %>% 
     filter(person == "f") %>% 
     filter(app == "mg") %>% 
     group_by(Date) %>% 
     summarise(liczba_wiadomosci = n()) %>% 
     ggplot(aes(x = day(Date), y = month(Date), fill = liczba_wiadomosci)) +
     geom_tile() +
-    scale_fill_continuous(high = "darkgreen",
-                      low = "lightgreen") +
+    # scale_fill_gradient(high = "darkgreen",
+    #                   low = "lightgreen") +
     scale_y_continuous(limits = c(12.5, 0.5),
                        breaks = 1:12,
                        labels = month.name,
@@ -47,9 +47,6 @@ ggplotly(
     scale_x_continuous(limits = c(0.5, 31.5),
                        breaks = 1:31,
                        expand = expansion(c(0, 0), c(0.5, 0))) +
-    
-  
-    
     labs(title = paste("Heatmap for year"),
          x = "Day of Month",
          y = "Month") +
@@ -60,28 +57,27 @@ ggplotly(
                linewidth = 0.3) +
     geom_vline(xintercept = 0.5:31.5,
                linewidth = 0.3)
-)%>% 
+) %>% 
   layout(
     xaxis = list(fixedrange = TRUE), 
-    yaxis = list(fixedrange = TRUE))
+    yaxis = list(fixedrange = TRUE)) -> p
+  p[["x"]][["data"]][[2]][["hoverinfo"]] = 'skip'
+  p[["x"]][["data"]][[3]][["hoverinfo"]] = 'skip'
+  p
+
+  
+  
+  colorScale <- data.frame(c(0,0.5,0.5,1), c("red","red","#FDE624","#FDE624"))
   
 
+  p[["x"]][["data"]][[1]][["colorscale"]] = colorScale
+  names(p[["x"]][["data"]][[1]][["colorscale"]]) = NULL
+  p[["x"]][["data"]][[4]][["marker"]][["colorscale"]] = colorScale
+  names(p[["x"]][["data"]][[4]][["marker"]][["colorscale"]]) = NULL
+  
+  p
+  
 
-  # nierowna walka z plotly
-#    
-#   layout(
-#          yaxis = list(range = list(12.5, 0.5),
-#                       tick0 = 0.5,
-#                       dtick = 1,
-#                       showticklabels = TRUE,
-#                       showgrid = TRUE,
-#                       gridcolor = "blue",
-#                       tickmode = "linear"))
-#          # yaxis2 = list(range = list(12.5, 0.5),
-#          #              tickvals = 1:12,
-#          #              showgrid = TRUE,
-#          #              ticktext = month.name
-#           #-> p
 
 
 
