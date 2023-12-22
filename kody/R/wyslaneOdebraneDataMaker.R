@@ -1,11 +1,13 @@
 library(dplyr)
 
-#sciezki do brudnych csv (tych samych, co wrzucaliscie do Zosi przy emoji)
+#sciezki do brudnych csv z mg i ig (tych samych, co wrzucaliscie do Zosi przy emoji)
 #ZMIENIC LITERKI
+#ze snapa ja wzielam juz Filipa, Zosi jeszcze nie ma:()
 ig_a <- read.csv("C:\\twd_proj2\\poufne_dane\\instagram\\csv.csv")
 sp_a <- read.csv("C:\\twd_proj2\\repo\\Projekt_TWD_02\\kody\\data_csv\\sp_a.csv")
 mg_a <- read.csv("C:\\twd_proj2\\poufne_dane\\messenger\\csv.csv")
 
+sp_f <- read.csv("C:\\twd_proj2\\repo\\Projekt_TWD_02\\kody\\data_csv\\sp_f.csv")
 konwertujTimestampy <- function(df) {
   
   
@@ -42,20 +44,20 @@ zmienDaneSnap <- function(df){
   )
 }
 #WAZNE - pozmieniac literki!
-sp_a <- zmienDaneSnap(sp_a)
+sp_f <- zmienDaneSnap(sp_f)
 mg_a <- konwertujIWybierz(mg_a)
 ig_a <- konwertujIWybierz(ig_a)
-sp_a <- konwertujTimestampy(sp_a)
-sp_a <- sp_a %>% 
+sp_f <- konwertujTimestampy(sp_f)
+sp_f <- sp_f %>% 
   select(Sender,date)
 
 #ZMIENIC LITERKI I NAZWISKA
 mg_a$Sender[mg_a$Sender != "Anna Ostrowska"] <- "Other"
 ig_a$Sender[ig_a$Sender != "Anna Ostrowska"] <- "Other"
-sp_a$Sender[sp_a$Sender != "TRUE"] <- "Other"
-sp_a$Sender[sp_a$Sender == "TRUE"] <- "Anna Ostrowska"
+sp_f$Sender[sp_a$Sender != "TRUE"] <- "Other"
+sp_f$Sender[sp_a$Sender == "TRUE"] <- "Anna Ostrowska"
 
 #TU TEZ ZMIENIC
 write.csv(mg_a, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/mg_a.csv", row.names = FALSE)
 write.csv(ig_a, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/ig_a.csv", row.names = FALSE)
-write.csv(sp_a, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/sp_a.csv", row.names = FALSE)
+write.csv(sp_f, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/sp_f.csv", row.names = FALSE)
