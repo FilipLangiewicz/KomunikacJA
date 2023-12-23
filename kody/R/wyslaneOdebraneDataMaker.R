@@ -58,6 +58,6 @@ sp_f$Sender[sp_a$Sender != "TRUE"] <- "Other"
 sp_f$Sender[sp_a$Sender == "TRUE"] <- "Anna Ostrowska"
 
 #TU TEZ ZMIENIC
-write.csv(mg_a, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/mg_a.csv", row.names = FALSE)
-write.csv(ig_a, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/ig_a.csv", row.names = FALSE)
-write.csv(sp_f, "C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA/appData/WyslaneOdebrane/WyslaneOdebraneData/sp_f.csv", row.names = FALSE)
+write.csv(mg_a, "../app/KomunikacJA/appData/wyslaneOdebrane/wyslaneOdebrane_mg_f.csv", row.names = FALSE)
+write.csv(ig_a, "../app/KomunikacJA/appData/wyslaneOdebrane/wyslaneOdebrane_ig_f.csv", row.names = FALSE)
+write.csv(sp_f, "../app/KomunikacJA/appData/wyslaneOdebrane/wyslaneOdebrane_sp_f.csv", row.names = FALSE)
