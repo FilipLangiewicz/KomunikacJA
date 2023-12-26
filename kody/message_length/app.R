@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(plotly)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -47,7 +48,17 @@ server <- function(input, output) {
     return(data[!data$MessageLength %in% outliers, ])
   }
   
-  data <- read.csv("C:\\Users\\Zosia\\Desktop\\AAAPROJEKT2\\repo\\Projekt_TWD_02\\app\\KomunikacJA\\appData\\length_data.csv")
+  data_mg_z <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_mg_z.csv")
+  data_in_z <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_in_z.csv")
+  data_mg_a <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_mg_a.csv")
+  data_in_a <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_ig_a.csv")
+  data_mg_f <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_mg_f.csv")
+  data_in_f <- read.csv("../app/KomunikacJA/appData/emojiData/emoji_ig_f.csv")
+  data_z <- bind_rows(data_in_z, data_mg_z)
+  data_a <- bind_rows(data_in_a, data_mg_a)
+  data_f <- bind_rows(data_in_f, data_mg_f)
+  
+  data <- bind_rows(data_f, data_a, data_z)
   data <- data %>% mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
   
   filtered_data <- reactive({
@@ -58,7 +69,7 @@ server <- function(input, output) {
     box_data <- filter_outliers(filtered_data())
     boxplot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~GroupOrPriv) %>%
       layout(title = paste("Sent Message Length Distribution -", input$who),
-             yaxis = list(title = "Message Length",  range = c(0, max(box_data$MessageLength)+10)))
+             yaxis = list(title = "Message Length (characters)",  range = c(0, max(box_data$MessageLength)+10)))
     
     # Update the plot
     output$boxplot <- renderPlotly(boxplot)
