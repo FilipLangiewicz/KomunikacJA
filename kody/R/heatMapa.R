@@ -25,17 +25,25 @@ dff <- read.csv("../app/KomunikacJA/appData/heatMap/heatMapData.csv")
 # )
 
 
-data <- dff %>%
-  mutate(Date = as.Date(sprintf("%04d-%02d-%02d", year, month, day)))
+heatMap_data <- dff %>%
+  mutate(date = as.Date(sprintf("%04d-%02d-%02d", year, month, day))) %>% 
+  mutate(liczba = 1)
 
 ggplotly(
-  data %>% 
-    filter(year(Date) == 2023) %>% 
+  heatMap_data %>% 
     filter(person == "f") %>% 
-    filter(app == "mg") %>% 
-    group_by(Date) %>% 
-    summarise(liczba_wiadomosci = n()) %>% 
-    ggplot(aes(x = day(Date), y = month(Date), fill = liczba_wiadomosci)) +
+    filter(app == "sp") %>% 
+    right_join(data.frame(date = seq(min(heatMap_data %>% 
+                                           filter(person == "f",
+                                                  app %in% "sp") %>% 
+                                           .$date),
+                                     as.Date("2023-12-31"),
+                                     by = "day")), 
+               by = "date") %>% 
+    filter(year(date) == 2023) %>% 
+    group_by(date) %>% 
+    summarise(liczba_wiadomosci = sum(liczba, na.rm = TRUE)) %>% 
+    ggplot(aes(x = day(date), y = month(date), fill = liczba_wiadomosci)) +
     geom_tile() +
     # scale_fill_gradient(high = "darkgreen",
     #                   low = "lightgreen") +
@@ -61,6 +69,7 @@ ggplotly(
   layout(
     xaxis = list(fixedrange = TRUE), 
     yaxis = list(fixedrange = TRUE)) -> p
+  p
   p[["x"]][["data"]][[2]][["hoverinfo"]] = 'skip'
   p[["x"]][["data"]][[3]][["hoverinfo"]] = 'skip'
   p
