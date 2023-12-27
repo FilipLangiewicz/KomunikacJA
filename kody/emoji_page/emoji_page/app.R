@@ -1,6 +1,10 @@
 library(shiny)
 library(plotly)
 library(dplyr)
+library(stringr)
+library(wordcloud2)
+library(lubridate)
+library(tidyr)
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
@@ -27,7 +31,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   #nie wiem jak tu się robi żeby brało plik z repo a nie z komputera
-  data <- read.csv("C:\\Users\\Zosia\\Desktop\\AAAPROJEKT2\\repo\\Projekt_TWD_02\\app\\KomunikacJA\\appData\\emoji_merged.csv")
+  data <- read.csv("..\\..\\..\\app\\KomunikacJA\\appData\\emoji_merged.csv")
   data <- data %>% mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
   
   filtered_data <- reactive({

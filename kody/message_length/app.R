@@ -47,7 +47,7 @@ server <- function(input, output) {
   }
   
   #nie wiem jak tu się robi żeby brało plik z repo a nie z komputera
-  data <- read.csv("C:\\Users\\Zosia\\Desktop\\AAAPROJEKT2\\repo\\Projekt_TWD_02\\kody\\message_length\\length_data.csv")
+  data <- read.csv("..\\message_length\\length_data.csv")
   data <- data %>% mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
   
   filtered_data <- reactive({
