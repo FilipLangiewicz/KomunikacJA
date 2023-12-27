@@ -88,6 +88,8 @@ main_df <- main_df %>%
 main_df <- main_df %>% 
   select(person, app, date, liczba)
 
+main_df <- main_df %>% group_by(person, app, date) %>% summarise(liczba = sum(liczba))
+
 # w celu przyspieszenia aplikacji moze zajsc koniecznosc zrobienia gotowej ramki danych
 
 write.csv(main_df, "../app/KomunikacJA/appData/heatMap/heatMapData.csv", row.names = FALSE)
