@@ -238,9 +238,35 @@ server <- function(input, output) {
         ) -> p
     p[["x"]][["data"]][[2]][["hoverinfo"]] = 'skip'
     p[["x"]][["data"]][[3]][["hoverinfo"]] = 'skip'
+    
+    scale <- rep(seq(0, 
+                     1, 
+                     len = 9),
+                 each = 2)
+    scale <- scale[-c(1, length(scale))]
+    #colors <- c("red","red","#FDE624","#FDE624")
+    colors <- rep(c(
+      # "#e5f7ff", 
+      #               "#ccefff", 
+       #              "#b2e7ff", 
+                    "#99e0ff", 
+      #               "#7fd8ff", 
+                    "#66d0ff",
+                    #"#4cc9ff", 
+                    "#32c1ff", 
+                    #"#19b9ff",
+                    "#00b2ff",
+                    #"#00a0e5",
+                    "#008ecc",
+                    #"#007cb2",
+                    "#006a99",
+                    #"#00597f",
+                    "#004766",
+                   # "#00354c",
+                    "#002333"), each = 2)
 
 
-    colorScale <- data.frame(c(0,0.5,0.5,1), c("red","red","#FDE624","#FDE624"))
+    colorScale <- data.frame(scale, colors)
 
     p[["x"]][["data"]][[1]][["colorscale"]] = colorScale
     names(p[["x"]][["data"]][[1]][["colorscale"]]) = NULL
