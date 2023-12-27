@@ -1,0 +1,25 @@
+.person_button{
+  width: 100%;
+}
+
+.app_button{
+  width: 20%;
+}
+
+.person_button .btn.btn-default.action-button.shiny-bound-input {
+    color: #333;
+    background-color: #ff211e;
+    border-color: #ccc;
+    width: -webkit-fill-available;
+    margin-bottom: 10px;
+    height: 90px;
+}
+
+.app_button .btn.btn-default.action-button.shiny-bound-input {
+    color: #333;
+    background-color: #f121ee;
+    border-color: #ccc;
+    width: -webkit-fill-available;
+    margin-bottom: 10px;
+    height: 60px;
+}

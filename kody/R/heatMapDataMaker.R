@@ -1,4 +1,5 @@
 library(dplyr)
+library(tidyverse)
 
 mg_f <- read.csv("./data_csv/mg_f.csv")
 mg_z <- read.csv("./data_csv/mg_z.csv")
@@ -9,7 +10,8 @@ ig_z <- read.csv("./data_csv/ig_z.csv")
 ig_a <- read.csv("./data_csv/ig_a.csv")
 
 sp_f <- read.csv("./data_csv/sp_f.csv")
-sp_z <- read.csv("./data_csv/sp_z.csv")
+sp_z <- read.csv("./data_csv/sp_a.csv") %>% 
+  mutate(person = "z")
 sp_a <- read.csv("./data_csv/sp_a.csv")
 
 konwertujTimestampy <- function(df) {
@@ -72,8 +74,19 @@ main_df <- bind_rows(mg_f,
                      ig_z,
                      ig_a,
                      sp_f,
-                    # sp_z,
+                     sp_z,
                      sp_a)
+
+
+main_df <- main_df %>%
+  mutate(year = as.numeric(year),
+         month = as.numeric(month),
+         day = as.numeric(day)) %>% 
+  mutate(date = as.Date(sprintf("%04d-%02d-%02d", year, month, day))) %>% 
+  mutate(liczba = 1) 
+
+main_df <- main_df %>% 
+  select(person, app, date, liczba)
 
 # w celu przyspieszenia aplikacji moze zajsc koniecznosc zrobienia gotowej ramki danych
 
