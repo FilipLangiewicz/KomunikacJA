@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-.app_button{
+.app_button {
   width: 20%;
 }
 
@@ -23,3 +23,35 @@
     margin-bottom: 10px;
     height: 60px;
 }
+
+.navbar-default {
+    background-color: bisque;
+    border-color: #e7e7e7;
+    position:fixed;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.navbar-default li{
+    background-color: #efef23;
+    height: 80px;
+    text-align: center;
+}
+
+.navbar-default li a{
+    background-color: #efef23;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+
+
+

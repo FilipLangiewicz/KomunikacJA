@@ -27,7 +27,7 @@ ui1 <- tags$div(
 
   
     tags$div(
-      style = "background-color: yellow; min-height: 2000px",
+      style = "background-color: yellow; min-height: 2000px; margin-top:100px;",
       fixedPanel(
         style = "margin-right: 200px; width: 20%; height: 100%; background-color: blue; height:100vh; display: grid;",
         tags$div(
@@ -83,10 +83,20 @@ ui1 <- tags$div(
   )
 )
 
-ui_main <- navbarPage("JA",
-                      includeCSS("../../../app/KomunikacJA/css/styles.css"),
-                      tabPanel("Heatmapa", ui1),
-                      tabPanel("cos tu kiedys bedzie"))
+ui_main <- tags$div(includeCSS("../../../app/KomunikacJA/css/styles.css"),
+                    style = "background-color: red; display:block;",
+                    tags$div(
+                      style = "background-color: #4fe290;",
+                      navbarPage("",
+                                 tabPanel("cos tu kiedys bedzie"),
+                                 tabPanel("Heatmapa", ui1),
+                                 tabPanel("cos tu kiedys bedzie"),
+                                 tabPanel("cos tu kiedys bedzie"),
+                                 tabPanel("cos tu kiedys bedzie"),
+                                 tabPanel("cos tu kiedys bedzie"),selected = "Heatmapa"
+                      )
+                    )
+)
 
 
 
