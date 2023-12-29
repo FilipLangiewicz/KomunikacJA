@@ -120,13 +120,77 @@
     background-color: #EBEDF0;
 }
 
+.left_panel {
+  margin-right: 200px; 
+  width: 300px;
+  background-color: white; 
+  height:100vh; 
+  display: grid;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color:#EBEDF0;
+}
+
+.osoby {
+  display: flex;
+  width: -webkit-fill-available;
+  justify-content: space-evenly;
+  height:80px;
+  align-items:center;
+  margin-top:120px;
+  margin-right:15px;
+  border-top-width: 3px;
+  border-top-style: solid;
+  border-top-color:#EBEDF0;
+  padding-top:20px;
+}
+
+.tytul_konwersacji {
+  margin-bottom:20px;
+  padding-bottom: 20px;
+  padding-left:20px;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  border-bottom-color:#EBEDF0;
+}
+
+.wiadomosc {
+  background-color: #EBEDF0;
+  border-radius:15px;
+  padding:20px;
+  margin:30px;
+}
+
+.wiadomosc_tekst {
+  width: fit-content;
+  font-size: 15px;
+}
 
 
+.shiny-input-container:not(.shiny-input-container-inline) {
+  width: 300px;
+  max-width: 100%;
+  float: right;
+  margin-right: 60px;
+  margin-top:70px;
+  margin-bottom: 10px;
+  
+}
 
+label#input_year-label.control-label {
+  z-index: 10;
+  position: relative;
+}
 
+.convo_div {
+  background-color: white; 
+  margin-left: 20%;
+  padding-top:0.1px;
+  height: 80%
+}
 
-
-
-
-
+.main_right{
+  background-color: yellow; 
+  margin-top:100px;
+}
 

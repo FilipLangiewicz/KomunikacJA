@@ -4,7 +4,9 @@ library(plotly)
 library(tidyverse)
 
 
-dff <- read.csv("../app/KomunikacJA/appData/heatMap/heatMapData.csv") 
+heatMap_data <- read.csv("../app/KomunikacJA/appData/heatMap/heatMapData.csv",
+                         colClasses = c(date = "Date"))
+ 
 
 
 # pierwsza próba 
@@ -32,11 +34,11 @@ heatMap_data <- dff %>%
 ggplotly(
   heatMap_data %>% 
     filter(person == "f") %>% 
-    filter(app == "sp") %>% 
-    right_join(data.frame(date = seq(min(heatMap_data %>% 
+    filter(app == "mg") %>% 
+    right_join(data.frame(date = seq((min(heatMap_data %>% 
                                            filter(person == "f",
-                                                  app %in% "sp") %>% 
-                                           .$date),
+                                                  app %in% "mg") %>% 
+                                           .$date)),
                                      as.Date("2023-12-31"),
                                      by = "day")), 
                by = "date") %>% 
