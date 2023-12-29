@@ -166,7 +166,7 @@ ui2 <- tags$div(
   tags$div(
     style = "background-color: pink; min-height: 2000px; margin-top:105px;",
     fixedPanel(
-      style = "margin-right: 200px; width: 300px; height: 100%; background-color: white; height:100vh; display: grid;",
+      style = "margin-right: 200px; width: 300px; height: 10%; background-color: white; height:100vh; display: grid;",
       tags$div(
         tags$div(
           HTML("<h1>Osoby</h1>"),
@@ -208,14 +208,15 @@ ui2 <- tags$div(
     
     tags$div(
       titlePanel("linePlot:)"),
-      style = "background-color: pink; margin-left: 25%; height: 80%",
+      style = "background-color: pink; margin-left: 25%; height: 10%",
       sliderInput(inputId = "rok",
                   label = "Lata:",
                   min = min(as.numeric(format(linePlot_data$date, "%Y"))),
                   max = max(as.numeric(format(linePlot_data$date, "%Y"))),
                   value = c(2020, 2023)),
       tags$div(
-        plotlyOutput("linePlot_plot")
+        plotlyOutput("linePlot_plot"),
+        textOutput("opis")
       )
       
     )
@@ -231,7 +232,6 @@ ui_main <- tags$div(includeCSS("C:/twd_proj2/repo/Projekt_TWD_02/app/KomunikacJA
                                                    style = "width:500px;")),
                                  tabPanel("Heatmapa", ui1),
                                  tabPanel("linePlocik", ui2),
-                                 tabPanel("cos tu kiedys bedzie"),
                                  tabPanel("cos tu kiedys bedzie"),
                                  tabPanel("cos tu kiedys bedzie"),selected = "Heatmapa"
                       )
@@ -343,7 +343,7 @@ updateOptions2 <- function() {
                          " roku")
     ggplotly(
       linePlot$data %>%
-        filter(year(date) == input$rok) %>%
+        filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>%
         ggplot(aes(x=date, y = suma_kumulacyjna, color=typ)) +
         geom_line()+
         labs(title=plot_title,
@@ -451,6 +451,8 @@ updateOptions2 <- function() {
                                  eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee\neeeee
                                  eeeeeeeeeeeeeee"
                                  )})
+  output$opis <- renderText({HTML(":)))))))))))))))))))))))))))"
+  )})
 
 
 }
