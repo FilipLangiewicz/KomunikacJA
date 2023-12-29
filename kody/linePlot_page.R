@@ -38,8 +38,8 @@ policzWiadomosci <- function(sp_a) {
 
 #policzenie wiadomosci z podzialem na wyslane i odebrane
 policzWiadomosciPodzial <- function(sp_a) {
-  sp_a$typ[sp_a$Sender != "Anna Ostrowska"] <- "odebrane"
-  sp_a$typ[sp_a$Sender == "Anna Ostrowska"] <- "wyslane"
+  sp_a$typ[sp_a$Sender == "Other"] <- "odebrane"
+  sp_a$typ[sp_a$Sender != "Other"] <- "wyslane"
   sp_a <- sp_a %>% 
     group_by(date, typ) %>% 
     summarize(liczba_wiadomosci = n()) %>%
@@ -174,34 +174,30 @@ ui2 <- tags$div(
         ),
         tags$div(  
           class = "person_button",
-          actionButton("a", "Ania")
+          actionButton("a2", "Ania")
         ),
         tags$div(  
           class = "person_button",
-          actionButton("z", "Zosia")
+          actionButton("z2", "Zosia")
         ),
         tags$div(  
           class = "person_button",
-          actionButton("f", "Filip")
+          actionButton("f2", "Filip")
         )
       ),
       tags$div(
         style="display: flex;width: -webkit-fill-available;justify-content: space-evenly;height:80px;align-items:center;margin-top:120px;margin-right:15px;border-top-width: 3px;border-top-style: solid;border-top-color:#EBEDF0;padding-top:20px;",
         tags$div(
           class = "app_button",
-          actionButton("mg", "mg")
+          actionButton("mg2", "mg")
         ),
         tags$div(
           class = "app_button",
-          actionButton("ig", "ig")
+          actionButton("ig2", "ig")
         ),
         tags$div(
           class = "app_button",
-          actionButton("sp", "sp")
-        ),
-        tags$div(
-          class = "app_button",
-          actionButton("all", "all")
+          actionButton("sp2", "sp")
         )
       ),
     )),
@@ -288,40 +284,70 @@ updateOptions2 <- function() {
 }
 
 
-  observeEvent(input$a, {
+  observeEvent(input$a2, {
     person_main("a")
     updateData()
   })
 
-  observeEvent(input$z, {
+  observeEvent(input$z2, {
     person_main("z")
     updateData()
   })
 
-  observeEvent(input$f, {
+  observeEvent(input$f2, {
     person_main("f")
     updateData()
   })
 
-  observeEvent(input$mg, {
+  observeEvent(input$mg2, {
     app_main("mg")
     updateData()
   })
 
-  observeEvent(input$ig, {
+  observeEvent(input$ig2, {
     app_main("ig")
     updateData()
   })
 
-  observeEvent(input$sp, {
+  observeEvent(input$sp2, {
     app_main("sp")
     updateData()
   })
 
+  observeEvent(input$a, {
+    person_main("a")
+    updateData()
+  })
+  
+  observeEvent(input$z, {
+    person_main("z")
+    updateData()
+  })
+  
+  observeEvent(input$f, {
+    person_main("f")
+    updateData()
+  })
+  
+  observeEvent(input$mg, {
+    app_main("mg")
+    updateData()
+  })
+  
+  observeEvent(input$ig, {
+    app_main("ig")
+    updateData()
+  })
+  
+  observeEvent(input$sp, {
+    app_main("sp")
+    updateData()
+  })
+  
   observeEvent(input$all, {
     app_main(c("mg", "ig", "sp"))
     updateData()
-
+    
   })
   #
   # ### az dotad trwa obsluga wyboru osob i aplikacji
@@ -462,3 +488,4 @@ updateOptions2 <- function() {
 
 # Run the application 
 shinyApp(ui = ui_main, server = server)
+
