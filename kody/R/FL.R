@@ -114,3 +114,92 @@ eee %>%
   group_by(sender_name) %>% 
   summarise(n = n()) %>% 
   arrange(-n)
+
+
+
+chosen_app <- "mg"
+
+chosen_person <- "f"
+plot_title <- "ee"
+months <- c("Styczeń", 
+            "Luty", 
+            "Marzec", 
+            "Kwiecień", 
+            "Maj", 
+            "Czerwiec", 
+            "Lipiec", 
+            "Sierpień", 
+            "Wrzesień", 
+            "Październik", 
+            "Listopad", 
+            "Grudzień")
+ggplotly(
+  heatMap_data %>%
+    right_join(data.frame(date = seq(min(heatMap_data %>%
+                                           filter(person == "f",
+                                                  app %in% "mg") %>%
+                                           .$date),
+                                     as.Date("2023-12-31"),
+                                     by = "day")),
+               by = "date") %>%
+    filter(year(date) == 2023) %>%
+    group_by(date) %>%
+    summarise(liczba_wiadomosci = sum(liczba,
+                                      na.rm = TRUE)) %>%
+    ggplot(aes(x = day(date), y = month(date), fill = liczba_wiadomosci, text = paste0(format(date, "%d %B %Y"),
+                                                                                       "<br>Wysłano i odebrano ",
+                                                                                       liczba_wiadomosci,
+                                                                                       " wiadomości"))) +
+    geom_tile() +
+    scale_y_continuous(limits = c(12.5, 0.5),
+                       breaks = 1:12,
+                       labels = paste0("<b>", months, "</b>"),
+                       trans = "reverse",
+                       expand = expansion(c(0, 0), c(0.3, 0))) +
+    scale_x_continuous(limits = c(0.5, 31.5),
+                       breaks = 1:31,
+                       expand = expansion(c(0, 0), c(0.5, 0)),
+                       labels = paste0("<b>", 1:31, "</b>")) +
+    labs(title = plot_title,
+         x = "Dzień miesiąca",
+         y = "Miesiąc") +
+    theme_minimal() +
+    theme(panel.border = element_blank(),
+          panel.grid.major = element_blank()) +
+    geom_hline(yintercept = 0.5:12.5,
+               linewidth = 0.3) +
+    geom_vline(xintercept = 0.5:31.5,
+               linewidth = 0.3),
+  tooltip = "text"
+) %>%
+  layout(
+    xaxis = list(fixedrange = TRUE,
+                 title = list(standoff = 15),
+                 tickfont = list(size = 15,
+                                 color = "black",
+                                 thickness = 3)),
+    yaxis = list(fixedrange = TRUE,
+                 title = list(standoff = 15),
+                 tickfont = list(size = 15,
+                                 color = "black",
+                                 thickness = 3)
+    ),
+    plot_bgcolor = "rgba(0,0,0,0)",
+    paper_bgcolor = "rgba(0,0,0,0)",
+    hoverlabel = list(
+      bgcolor = "white",  
+      font = list(size = 14, 
+                  color = "black")  
+    ),
+    title = list(font = list(size = 20),
+                 y = 0.99, 
+                 x = 0.51, 
+                 xanchor = 'center', 
+                 yanchor =  'top')) %>% 
+  plotly::config(displayModeBar = FALSE) -> pe
+pe
+
+
+
+
+
