@@ -129,6 +129,14 @@ dlugosciWiadomosciPlot_data <- read.csv("./appData/dlugosciWiadomosciPlot/length
   colnames(dlugosciWiadomosciPlot_data) <- c("person", "MessageLength", "GroupOrPriv", "app")
 ##### wczytanie danych dlugosci wiadomosci Zosi koniec #####
 
+  
+##### wczytanie danych friendsPlot #####
+friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
+                             colClasses = c(date = "Date"))
+  
+##### wczytanie danych friendsPlot koniec #####
+  
+  
 
 ###### wczytanie danych koniec #####
 
@@ -487,13 +495,61 @@ ui4 <- tags$div(
 
 ############################# ui dlugosci wiadomosci Zosi koniec #####################
 
+  
+  
+############################# ui friendsPlot #####################
 
+  
+ui5 <- tags$div(
+  
+  tags$div(
+    class = "main_panel",
+    fixedPanel(
+      class = "left_panel",
+      tags$div(
+        tags$div(
+          HTML("<h1>Osoby</h1>"),
+          style = "background-color:white;"
+        ),
+        tags$div(  
+          class = "person_button_focused", 
+          actionButton("azf5", "Ania, Zosia i Filip")
+        )
+      ),
+      tags$div(
+        class = "apki",
+        tags$div(
+          class = "app_button_focused",
+          actionButton("fb", "fb")
+        )
+      )
+    ),
+    
+    tags$div(
+      tags$div(
+        HTML('<h1 class = "tytul_konwersacji"><b>Kiedy przybywa nam najwięcej znajomych?</b></h1>')),
+      class = "convo_div",
+      
+      tags$div(
+        tags$div(
+          class = "wiadomosc",
+          plotlyOutput("friends_plot")
+        ),
+        tags$div(
+          class = c("wiadomosc", "wiadomosc_tekst"),
+          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+        )
+      )
+      
+      
+    )
+  )
+)
+  
+############################# ui friendsPlot koniec #####################
+  
 
-
-
-
-
-#############################ui głowne #####################
+############################# ui głowne #####################
 
 ui_main <- tags$div(includeCSS("./css/styles.css"),
                     style = "background-color: red; display:block;",
@@ -505,19 +561,19 @@ ui_main <- tags$div(includeCSS("./css/styles.css"),
                                  tabPanel("LinePlot", ui2),
                                  tabPanel("emotki", ui3),
                                  tabPanel("dlugości wiadomości", ui4),
-                                 tabPanel("znajomi"),selected = "Heatmapa"
+                                 tabPanel("znajomi", ui5),selected = "znajomi"
                       )
                     )
 )
 
-#############################ui głowne koniec #####################
+############################# ui głowne koniec #####################
 
 
 
 
 
 
-# oblsuga server
+### oblsuga server
 
 server <- function(input, output) {
   
@@ -525,7 +581,8 @@ server <- function(input, output) {
   person_main <- reactiveVal("a")
   app_main <- reactiveVal("mg")
   
-  ### wczytywanie początkowych danych na wykresy
+  
+  #### wczytywanie początkowych danych na wykresy ####
   heatMap <- reactiveValues(data = heatMap_data %>%
                               filter(person == "a",
                                      app == "mg")
@@ -548,7 +605,9 @@ server <- function(input, output) {
                                        #app == "mg"
                                        )
   )
+  #### wczytywanie początkowych danych na wykresy koniec ####
   
+
   
   
   ### aktualizacja danych po naciśnięciu push buttonow
@@ -743,7 +802,13 @@ server <- function(input, output) {
   })
   ##### nasluchiwanie ze strony dlugosciWiadomosciPlot Zosi koniec #####  
   
+  ##### nasluchiwanie ze strony friendsPlot #####
 
+  
+  ##### nasluchiwanie ze strony friendsPlot koniec #####
+  
+  
+  
   
   ################# tworzenie wykresów ################
   
@@ -1125,12 +1190,26 @@ server <- function(input, output) {
 
   })
 
-
+  ### tworzenie friendsPlot 
+  output$friends_plot <- renderPlotly({
+    friendsPlot_data %>%
+      group_by(person, date) %>%
+      summarise(liczba_znajomych = n()) %>%
+      mutate(sumaryczna_liczba_znajomych = cumsum(liczba_znajomych)) %>%
+      plot_ly(x = ~date, y = ~sumaryczna_liczba_znajomych, color = ~person, type = "scatter", mode = "lines") %>%
+      layout(title = "Sumaryczna liczba znajomych w czasie",
+             xaxis = list(title = "Data"),
+             yaxis = list(title = "Sumaryczna liczba znajomych"),
+             showlegend = TRUE) 
     
+  })
+  
+    
+################# tworzenie wykresów koniec ################
   
   
   
 }
 
-# Run the application 
+# Zapinamy pasy i lecimy 
 shinyApp(ui = ui_main, server = server)
