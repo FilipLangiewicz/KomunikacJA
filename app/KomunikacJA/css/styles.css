@@ -87,7 +87,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: center;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .navbar-default {
@@ -104,11 +104,9 @@
     background-color: white;
     height: 80px;
     text-align: center;
-    margin-left:30px;
     width:180px;
     align-items: center;
-    margin-right: 30px;
-    
+
 }
 
 .navbar-default li a{
@@ -223,10 +221,12 @@ footer{
   width:100%;
   text-align: center;
   display: flex;
-  justify-content: center;
-  height:60px;
-  padding-top:10px;
-  padding-bottom:10px;
+  justify-content: flex-start;
+  height: 60px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  flex-direction: column;
+  align-items: center;
   
 }
 
@@ -311,6 +311,21 @@ footer a:hover{
   height: 60px;
   font-weight: 700;
   border-radius:20px;
+}
+
+.JA {
+  color:#ff00ff;
+  font-size: 40px;
+}
+
+.menu_text{
+  font-size: 25px;
+}
+
+.copyright {
+  color: #9f009f;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 

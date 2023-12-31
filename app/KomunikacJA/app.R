@@ -1,4 +1,4 @@
-#### wczytanie biblitotek ####
+#### wczytanie bibliotek ####
 
 library(shiny)
 library(ggplot2)
@@ -7,7 +7,9 @@ library(tidyverse)
 library(dplyr)
 library(wordcloud2)
 
-#### ####
+#### wczytanie bibliotek koniec####
+
+
 
 
 ##### wczytanie funkcji pomocniczych #####
@@ -20,12 +22,15 @@ filter_outliers <- function(data) {
 
 
 
+
 ###### wczytanie danych #####
+
 
 ##### wczytanie danych heatmapa #####
 heatMap_data <- read.csv("./appData/heatMap/heatMapData.csv",
                          colClasses = c(date = "Date"))
 ##### wczytanie danych heatmapa koniec #####
+
 
 ##### wczytanie danych linePlot Ani #####
 
@@ -113,7 +118,6 @@ linePlot_data$date <- as.Date(as.character(linePlot_data$date), format = "%Y%m%d
 ##### wczytanie danych linePlot Ani koniec #####
 
 
-
 ##### wczytanie danych emojiPlot Zosi #####
 ### troche lepiej ale tez koniecznie do poprawy
 emojiPlot_data <- read.csv("./appData\\emoji_merged.csv")
@@ -136,7 +140,6 @@ friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
   
 ##### wczytanie danych friendsPlot koniec #####
   
-  
 
 ###### wczytanie danych koniec #####
 
@@ -152,15 +155,15 @@ ui0 <- tags$div(
   class = "logo",
   img(src = "logo.png", 
       style = "height:76vh;"),
-  tags$footer(HTML("<a href = 'https://github.com/FilipLangiewicz/Projekt_TWD_02'>Link do repozytorium na GitHubie</a>"))
+  tags$footer(
+    HTML("<a href = 'https://github.com/FilipLangiewicz/Projekt_TWD_02'>Link do repozytorium na GitHubie</a>"),
+    HTML("<p class = 'copyright'>© Copright 2023</p>"))
   
 )
 
 
 
 ############################# ui z logo koniec #####################
-
-
 
 
 ############################# ui do heatmapy #####################
@@ -237,9 +240,6 @@ ui1 <- tags$div(
 ############################# ui do heatmapy koniec #####################
 
 
-
-
-
 ############################# ui liczba wiadomosci Ani #####################
 
 ui2 <- tags$div(
@@ -291,11 +291,12 @@ ui2 <- tags$div(
       tags$div(
         HTML('<h1 class = "tytul_konwersacji"><b>Z jakich aplikacji najwięcej korzystamy?</b></h1>')),
       class = "convo_div",
-      sliderInput(inputId = "rok",
-                  label = "Lata:",
-                  min = min(as.numeric(format(linePlot_data$date, "%Y"))),
-                  max = max(as.numeric(format(linePlot_data$date, "%Y"))),
-                  value = c(2020, 2023)),
+      # duzo latwiej obsluzyc to htmlowo przez taki rangeslider jak dodalem w layout
+      # sliderInput(inputId = "rok",
+      #             label = "Lata:",
+      #             min = min(as.numeric(format(linePlot_data$date, "%Y"))),
+      #             max = max(as.numeric(format(linePlot_data$date, "%Y"))),
+      #             value = c(2020, 2023)),
       tags$div(
         tags$div(
           class = "wiadomosc",
@@ -318,7 +319,6 @@ ui2 <- tags$div(
 
 
 ############################# ui liczba wiadomosci Ani koniec #####################
-
 
 
 ############################# ui emoji plot Zosi #####################
@@ -398,8 +398,6 @@ ui3 <- tags$div(
 
 
 ############################# ui emoji plot Zosi koniec #####################
-
-
 
 
 ############################# ui dlugosci wiadomosci Zosi #####################
@@ -496,7 +494,6 @@ ui4 <- tags$div(
 ############################# ui dlugosci wiadomosci Zosi koniec #####################
 
   
-  
 ############################# ui friendsPlot #####################
 
   
@@ -533,7 +530,7 @@ ui5 <- tags$div(
       tags$div(
         tags$div(
           class = "wiadomosc",
-          plotlyOutput("friends_plot")
+          plotlyOutput("friends_plot"),
         ),
         tags$div(
           class = c("wiadomosc", "wiadomosc_tekst"),
@@ -549,26 +546,24 @@ ui5 <- tags$div(
 ############################# ui friendsPlot koniec #####################
   
 
-############################# ui głowne #####################
+############################# ui główne #####################
 
 ui_main <- tags$div(includeCSS("./css/styles.css"),
                     style = "background-color: red; display:block;",
                     tags$div(
                       style = "background-color: white;",
                       navbarPage("",
-                                 tabPanel("JA", ui0),
-                                 tabPanel("Heatmapa", ui1),
-                                 tabPanel("LinePlot", ui2),
-                                 tabPanel("emotki", ui3),
-                                 tabPanel("dlugości wiadomości", ui4),
-                                 tabPanel("znajomi", ui5),selected = "znajomi"
+                                 tabPanel(HTML("<b class = 'JA'>JA</b>"), ui0),
+                                 tabPanel(HTML("<b class = 'menu_text'>Wiadomości</b>"), ui1),
+                                 tabPanel(HTML("<b class = 'menu_text'>Aplikacje</b>"), ui2),
+                                 tabPanel(HTML("<b class = 'menu_text'>Emocje</b>"), ui3),
+                                 tabPanel(HTML("<b class = 'menu_text'>Forma</b>"), ui4),
+                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5)
                       )
                     )
 )
 
-############################# ui głowne koniec #####################
-
-
+############################# ui główne koniec #####################
 
 
 
@@ -577,9 +572,11 @@ ui_main <- tags$div(includeCSS("./css/styles.css"),
 
 server <- function(input, output) {
   
+  
   ### początkowe wybrane osoby i apki
   person_main <- reactiveVal("a")
   app_main <- reactiveVal("mg")
+  
   
   
   #### wczytywanie początkowych danych na wykresy ####
@@ -607,14 +604,12 @@ server <- function(input, output) {
   )
   #### wczytywanie początkowych danych na wykresy koniec ####
   
-
   
   
-  ### aktualizacja danych po naciśnięciu push buttonow
+  #### aktualizacja danych po naciśnięciu push buttonow ####
   updateData <- function(){
     heatMap$data <- heatMap_data %>%
       filter(person == person_main(),
-             # year(date) == 2023,
              app %in% app_main())
     updateOptions()
   }
@@ -622,15 +617,12 @@ server <- function(input, output) {
   updateData2 <- function() {
     linePlot$data <- linePlot_data %>%
       filter(person == person_main(),
-             # year(date) == 2023,
              app %in% app_main())
-    updateOptions2()
   }
   
   updateData3 <- function() {
     emojiPlot$data <- emojiPlot_data %>%
       filter(person == person_main(),
-             # year(date) == 2023,
              app %in% app_main())
   }
   
@@ -640,9 +632,10 @@ server <- function(input, output) {
              app %in% app_main()
              )
   }
+  ### aktualizacja danych po naciśnięciu push buttonow koniec ####
   
   
-  ### aktualizacja mozliwych do wyboru opcji po nacisnieciu pushbuttonow
+  ### aktualizacja mozliwych do wyboru opcji po nacisnieciu pushbuttonow na stronie Heatmapy
   updateOptions <- function() {
     updateSelectInput(inputId = "input_year",
                       choices = unique(year(heatMap$data$date)) %>% sort,
@@ -651,17 +644,9 @@ server <- function(input, output) {
                                         2023))
   }
   
-  updateOptions2 <- function() {
-    updateSliderInput(inputId = "rok",
-                      label = "Lata:",
-                      min = min(as.numeric(format(linePlot_data$date, "%Y"))),
-                      max = max(as.numeric(format(linePlot_data$date, "%Y"))),
-                      value = input$rok)
-  }
   
   
-  
-  ###### nasluchiwanie z mojej strony Heatmapy #####
+  ##### nasluchiwanie z mojej strony Heatmapy #####
   observeEvent(input$a, {
     person_main("a")
     updateData()
@@ -696,7 +681,7 @@ server <- function(input, output) {
     app_main(c("mg", "ig", "sp"))
     updateData()
   })
-  ###### nasluchiwanie z mojej strony Heatmapy koniec #####
+  ##### nasluchiwanie z mojej strony Heatmapy koniec #####
   
   
   ##### nasluchiwanie ze strony linePlot Ani #####
@@ -802,11 +787,11 @@ server <- function(input, output) {
   })
   ##### nasluchiwanie ze strony dlugosciWiadomosciPlot Zosi koniec #####  
   
+  
   ##### nasluchiwanie ze strony friendsPlot #####
 
   
   ##### nasluchiwanie ze strony friendsPlot koniec #####
-  
   
   
   
@@ -853,7 +838,10 @@ server <- function(input, output) {
                                                filter(person == person_main(),
                                                       app %in% app_main()) %>%
                                                .$date),
-                                         as.Date("2023-12-31"),
+                                         max(heatMap_data %>%
+                                               filter(person == person_main(),
+                                                      app %in% app_main()) %>%
+                                               .$date),
                                          by = "day")),
                    by = "date") %>%
         filter(year(date) == input$input_year) %>%
@@ -980,19 +968,19 @@ server <- function(input, output) {
                          " wysłanych i odebranych przez ",
                          chosen_person,
                          chosen_app,
-                         " do danego dnia ",
-                         max(input$rok),
-                         " roku")
+                         " do danego dnia")
     ggplotly(
       linePlot$data %>%
-        filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>%
+        #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
         ggplot(aes(x=date, y = suma_kumulacyjna, color=typ)) +
         geom_line()+
         labs(title=plot_title,
              x = "Data",   # Zmiana podpisu osi x
              y = "Liczba wiadomości",)+ # Zmiana podpisu osi y
-        theme_minimal())
-  })
+        theme_minimal()
+      ) %>% 
+      layout(xaxis = list(rangeslider = list(type = "date"))) # to dodalem, bo duzo latwiej taki slider obsluzyc
+  }) 
   
   
   ### tworzenie emojiPlot Zosi
@@ -1197,19 +1185,25 @@ server <- function(input, output) {
       summarise(liczba_znajomych = n()) %>%
       mutate(sumaryczna_liczba_znajomych = cumsum(liczba_znajomych)) %>%
       plot_ly(x = ~date, y = ~sumaryczna_liczba_znajomych, color = ~person, type = "scatter", mode = "lines") %>%
-      layout(title = "Sumaryczna liczba znajomych w czasie",
-             xaxis = list(title = "Data"),
-             yaxis = list(title = "Sumaryczna liczba znajomych"),
-             showlegend = TRUE) 
+      layout(
+        title = "Liczba znajomych w czasie",
+        xaxis = list(title = "Data", 
+                     rangeslider = list(type = "date")),
+        yaxis = list(title = "Liczba znajomych"),
+        showlegend = TRUE,
+        plot_bgcolor = "rgba(0,0,0,0)",
+        paper_bgcolor = "rgba(0,0,0,0)"
+        
+      )
     
   })
   
     
-################# tworzenie wykresów koniec ################
-  
+  ################# tworzenie wykresów koniec ################
   
   
 }
+
 
 # Zapinamy pasy i lecimy 
 shinyApp(ui = ui_main, server = server)
