@@ -18,6 +18,12 @@
     font-weight: 100;
     border-color: white;
     margin-right: 15px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
 
 }
 
@@ -59,6 +65,7 @@
     height: 60px;
     border-radius:20px;
     font-weight: 700;
+    background-position: center;
 }
 
 .app_button .btn.btn-default.action-button.shiny-bound-input:hover {
@@ -286,6 +293,12 @@ footer a:hover{
   font-size: 20px;
   font-weight: 600;
   margin-right: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .app_button_focused{
@@ -311,6 +324,8 @@ footer a:hover{
   height: 60px;
   font-weight: 700;
   border-radius:20px;
+  background-position: center;
+
 }
 
 .JA {
@@ -328,5 +343,35 @@ footer a:hover{
   font-weight: 600;
 }
 
+.person_img{
+  height: 100%;
+  border-radius: 50%;
+}
 
+.person {
+  margin-bottom: 30px;
+  margin-left: 20px;
+}
+
+.mg_button{
+  background-image: URL("mg_logo.png");
+  background-size: cover;
+}
+.ig_button{
+  background-image: URL("ig_logo.png");
+  background-size: cover;
+}
+.sp_button{
+  background-image: URL("sp_logo.png");
+  background-size: cover;
+}
+.fb_button{
+  background-image: URL("fb_logo.png");
+  background-size: cover;
+}
+.all_button{
+  background-image: URL("mycat.jpg");
+  background-size: cover;
+  
+}
 

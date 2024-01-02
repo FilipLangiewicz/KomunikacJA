@@ -133,15 +133,15 @@ dlugosciWiadomosciPlot_data <- read.csv("./appData/dlugosciWiadomosciPlot/length
   colnames(dlugosciWiadomosciPlot_data) <- c("person", "MessageLength", "GroupOrPriv", "app")
 ##### wczytanie danych dlugosci wiadomosci Zosi koniec #####
 
-  
+
 ##### wczytanie danych friendsPlot #####
 friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
                              colClasses = c(date = "Date"))
-  
-##### wczytanie danych friendsPlot koniec #####
-  
 
-###### wczytanie danych koniec #####
+##### wczytanie danych friendsPlot koniec #####
+
+
+# ###### wczytanie danych koniec #####
 
 
 
@@ -180,34 +180,68 @@ ui1 <- tags$div(
         ),
         tags$div(  
           class = "person_button",
-          actionButton("a", "Ania")
+          tags$button(
+            id = "a",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Ania</p>"),
+          )
         ),
         tags$div(  
           class = "person_button",
-          actionButton("z", "Zosia")
+          tags$button(
+            id = "z",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Zosia</p>"),
+          )
         ),
         tags$div(  
           class = "person_button",
-          actionButton("f", "Filip")
+          tags$button(
+            id = "f",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Filip</p>"),
+          )
         )
       ),
       tags$div(
         class = "apki",
         tags$div(
           class = "app_button",
-          actionButton("mg", "mg")
+          tags$button(
+            id = "mg",
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
+            "mg"
+          )
         ),
         tags$div(
           class = "app_button",
-          actionButton("ig", "ig")
+          tags$button(
+            id = "ig",
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
+            "ig"
+          )
         ),
         tags$div(
           class = "app_button",
-          actionButton("sp", "sp")
+          tags$button(
+            id = "sp",
+            class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
+            "sp"
+          )
         ),
         tags$div(
           class = "app_button",
-          actionButton("all", "all")
+          tags$button(
+            id = "all",
+            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            "all"
+          )
         )
       ),
     ),
@@ -255,34 +289,66 @@ ui2 <- tags$div(
         ),
         tags$div(
           class = "person_button",
-          actionButton("a2", "Ania")
+          tags$button(
+            id = "a2",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Ania</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("z2", "Zosia")
+          tags$button(
+            id = "z2",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Zosia</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("f2", "Filip")
+          tags$button(
+            id = "f2",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Filip</p>"),
+          )
         )
       ),
       tags$div(
         class = "apki",
         tags$div(
           class = "app_button",
-          actionButton("mg2", "mg")
+          tags$button(
+            id = "mg2",
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
+            "mg"
+          )        ),
+        tags$div(
+          class = "app_button",
+          tags$button(
+            id = "ig2",
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
+            "ig"
+          )        ),
+        tags$div(
+          class = "app_button",
+          tags$button(
+            id = "sp2",
+            class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
+            "sp"
+          )
         ),
         tags$div(
           class = "app_button",
-          actionButton("ig2", "ig")
-        ),
-        tags$div(
-          class = "app_button",
-          actionButton("sp2", "sp")
-        ),
-        tags$div(
-          class = "app_button",
-          actionButton("all2", "all")
+          tags$button(
+            id = "all2",
+            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            "all"
+          )
         )
       ),
     ),
@@ -337,30 +403,58 @@ ui3 <- tags$div(
         ),
         tags$div(
           class = "person_button",
-          actionButton("a3", "Ania")
+          tags$button(
+            id = "a3",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Ania</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("z3", "Zosia")
+          tags$button(
+            id = "z3",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Zosia</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("f3", "Filip")
+          tags$button(
+            id = "f3",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Filip</p>"),
+          )
         )
       ),
       tags$div(
         class = "apki",
         tags$div(
           class = "app_button",
-          actionButton("mg3", "mg")
-        ),
+          tags$button(
+            id = "mg3",
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
+            "mg"
+          )        ),
         tags$div(
           class = "app_button",
-          actionButton("ig3", "ig")
-        ),
+          tags$button(
+            id = "ig3",
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
+            "ig"
+          )        ),
         tags$div(
           class = "app_button",
-          actionButton("all3", "all")
+          tags$button(
+            id = "all3",
+            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            "all"
+          )
         )
       ),
     ),
@@ -416,34 +510,68 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_button",
-          actionButton("a4", "Ania")
+          tags$button(
+            id = "a4",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Ania</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("z4", "Zosia")
+          tags$button(
+            id = "z4",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Zosia</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("f4", "Filip")
+          tags$button(
+            id = "f4",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Filip</p>"),
+          )
         ),
         tags$div(
           class = "person_button",
-          actionButton("azf4", "Ania, Zosia i Filip")
+          tags$button(
+            id = "azf4",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Wszyscy razem</p>"),
+          )
         )
       ),
       tags$div(
         class = "apki",
         tags$div(
           class = "app_button",
-          actionButton("mg4", "mg")
-        ),
+          tags$button(
+            id = "mg4",
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
+            "mg"
+          )        ),
         tags$div(
           class = "app_button",
-          actionButton("ig4", "ig")
-        ),
+          tags$button(
+            id = "ig4",
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
+            "ig"
+          )        ),
         tags$div(
           class = "app_button",
-          actionButton("all4", "all")
+          tags$button(
+            id = "all4",
+            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            "all"
+          )
         )
       ),
      ),
@@ -510,14 +638,24 @@ ui5 <- tags$div(
         ),
         tags$div(  
           class = "person_button_focused", 
-          actionButton("azf5", "Ania, Zosia i Filip")
+          tags$button(
+            id = "azf5",
+            class = "btn btn-default action-button shiny-bound-input",
+            tags$img(src = "mycat.jpg",
+                     class = "person_img"),
+            HTML("<p class = 'person'>Wszyscy razem</p>"),
+          )
         )
       ),
       tags$div(
         class = "apki",
         tags$div(
           class = "app_button_focused",
-          actionButton("fb", "fb")
+          tags$button(
+            id = "fb",
+            class = c("btn btn-default action-button shiny-bound-input", "fb_button"),
+            "fb"
+          )
         )
       )
     ),
@@ -554,11 +692,12 @@ ui_main <- tags$div(includeCSS("./css/styles.css"),
                       style = "background-color: white;",
                       navbarPage("",
                                  tabPanel(HTML("<b class = 'JA'>JA</b>"), ui0),
-                                 tabPanel(HTML("<b class = 'menu_text'>Wiadomości</b>"), ui1),
+                                 tabPanel(HTML("<b class = 'menu_text'>Wiadomości</b>"), ui1, value = 2),
                                  tabPanel(HTML("<b class = 'menu_text'>Aplikacje</b>"), ui2),
                                  tabPanel(HTML("<b class = 'menu_text'>Emocje</b>"), ui3),
                                  tabPanel(HTML("<b class = 'menu_text'>Forma</b>"), ui4),
-                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5)
+                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5)#,
+                                 #selected = 2
                       )
                     )
 )
