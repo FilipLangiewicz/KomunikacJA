@@ -1228,11 +1228,13 @@ server <- function(input, output) {
     emoji_freq <- data.frame(table(all_emojis))
     emoji_freq <- emoji_freq %>%  filter (emoji_freq$Freq >= (1/50)*max(emoji_freq$Freq))
     
-    emoji_freq <- emoji_freq %>% filter(!(all_emojis %in% c("🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+    emoji_freq <- emoji_freq %>% filter(!(all_emojis %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+    emoji_freq$all_emojis[emoji_freq$all_emojis == '☹'] <-  '😟'
+    emoji_freq$all_emojis[emoji_freq$all_emojis == '☺'] <-  '🙂'
     
     wordcloud2(
       data = emoji_freq,
-      color = "goldenrod",
+      color = "red",
 #      backgroundColor = "white",
       size = 1.5,
       minRotation = 0,
