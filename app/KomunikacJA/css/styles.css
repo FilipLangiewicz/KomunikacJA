@@ -176,7 +176,8 @@
   background-color: #EBEDF0;
   border-radius:15px;
   padding:20px;
-  margin:30px;
+  margin:30px 30px 30px 8px;
+  width: -webkit-fill-available;
 }
 
 .wiadomosc_tekst {
@@ -189,9 +190,13 @@
   width: 300px;
   max-width: 100%;
   float: right;
-  margin-right: 60px;
-  margin-top:70px;
+  margin-right: 45px;
+  margin-top: 290px;
   margin-bottom: 10px;
+  margin-left: 60px;
+  position: absolute;
+  top: 0;
+  right: 0;
   
 }
 
@@ -372,6 +377,31 @@ footer a:hover{
 .all_button{
   background-image: URL("mycat.jpg");
   background-size: cover;
-  
 }
+
+
+.person_img_convo{
+  height: 40px;
+  border-radius: 50%;
+  margin: 30px 0 30px 30px;
+}
+
+.person_message{
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  width: -webkit-fill-available;
+  align-items: flex-end;
+}
+
+
+
+
+
+
+
+
+
 

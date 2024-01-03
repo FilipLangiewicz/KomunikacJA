@@ -141,7 +141,7 @@ friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
 ##### wczytanie danych friendsPlot koniec #####
 
 
-# ###### wczytanie danych koniec #####
+###### wczytanie danych koniec #####
 
 
 
@@ -250,19 +250,32 @@ ui1 <- tags$div(
       tags$div(
         HTML('<h1 class = "tytul_konwersacji"><b>Którego dnia roku najwięcej się komunikujemy?</b></h1>')),
       class = "convo_div",
-      selectInput("input_year",
-                  choices = unique(year(heatMap_data$date)) %>% sort(),
-                  label = "Wybierz rok",
-                  selected = 2023,
-                  width = "10%"),
+
       tags$div(
+
         tags$div(
-          class = "wiadomosc",
-          plotlyOutput("heatMapa_plot")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            plotlyOutput("heatMapa_plot"),
+            selectInput("input_year",
+                        choices = unique(year(heatMap_data$date)) %>% sort(),
+                        label = "Wybierz rok",
+                        selected = 2023,
+                        width = "10%")
+          ),
+
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          )
         )
       )
       
@@ -365,13 +378,23 @@ ui2 <- tags$div(
       #             value = c(2020, 2023)),
       tags$div(
         tags$div(
-          class = "wiadomosc",
-          plotlyOutput("linePlot_plot")
-          
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            plotlyOutput("linePlot_plot")
+            
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          )
         )
       )
       
@@ -466,20 +489,40 @@ ui3 <- tags$div(
 
       tags$div(
         tags$div(
-          class = "wiadomosc",
-          htmlOutput("emoji_plot"),
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            htmlOutput("emoji_plot"),
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          ),
         ),
         tags$div(
-          class = "wiadomosc",
-          plotlyOutput("animated_plot")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            plotlyOutput("animated_plot")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          )
         )
       )
       
@@ -545,7 +588,7 @@ ui4 <- tags$div(
             class = "btn btn-default action-button shiny-bound-input",
             tags$img(src = "mycat.jpg",
                      class = "person_img"),
-            HTML("<p class = 'person'>Wszyscy razem</p>"),
+            HTML("<p class = 'person'>Razem</p>"),
           )
         )
       ),
@@ -583,36 +626,76 @@ ui4 <- tags$div(
 
       tags$div(
         tags$div(
-          class = "wiadomosc",
-          plotlyOutput("dlugosciWiadomosci_plot"),
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            plotlyOutput("dlugosciWiadomosci_plot"),
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text2")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text2")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text3")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text3")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text4")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text4")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text5")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text5")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text6")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text6")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text7")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text7")
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          textOutput("dlugosciWiadomosci_text8")
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("dlugosciWiadomosci_text8")
+          )
         )
       )
     )
@@ -643,7 +726,7 @@ ui5 <- tags$div(
             class = "btn btn-default action-button shiny-bound-input",
             tags$img(src = "mycat.jpg",
                      class = "person_img"),
-            HTML("<p class = 'person'>Wszyscy razem</p>"),
+            HTML("<p class = 'person'>Razem</p>"),
           )
         )
       ),
@@ -667,12 +750,22 @@ ui5 <- tags$div(
       
       tags$div(
         tags$div(
-          class = "wiadomosc",
-          plotlyOutput("friends_plot"),
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = "wiadomosc",
+            plotlyOutput("friends_plot"),
+          ),
         ),
         tags$div(
-          class = c("wiadomosc", "wiadomosc_tekst"),
-          "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          class = "person_message",
+          tags$img(src = "mycat.jpg",
+                   class = "person_img_convo"),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+          )
         )
       )
       
@@ -696,8 +789,8 @@ ui_main <- tags$div(includeCSS("./css/styles.css"),
                                  tabPanel(HTML("<b class = 'menu_text'>Aplikacje</b>"), ui2),
                                  tabPanel(HTML("<b class = 'menu_text'>Emocje</b>"), ui3),
                                  tabPanel(HTML("<b class = 'menu_text'>Forma</b>"), ui4),
-                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5)#,
-                                 #selected = 2
+                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5),
+                                 selected = 2
                       )
                     )
 )
@@ -988,9 +1081,9 @@ server <- function(input, output) {
         summarise(liczba_wiadomosci = sum(liczba,
                                           na.rm = TRUE)) %>%
         ggplot(aes(x = day(date), y = month(date), fill = liczba_wiadomosci, text = paste0(format(date, "%d %B %Y"),
-                                                                                           "<br>Wysłano i odebrano ",
+                                                                                           "<br>W tym dniu wysłano i odebrano w sumie<br><b> ",
                                                                                            liczba_wiadomosci,
-                                                                                           " wiadomości"))) +
+                                                                                           " wiadomości</b>"))) +
         geom_tile() +
         scale_y_continuous(limits = c(12.5, 0.5),
                            breaks = 1:12,
