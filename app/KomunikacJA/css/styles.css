@@ -438,7 +438,18 @@ footer a:hover{
 }
 
 
-
+#person_main, #person_main2, #person_main3, #person_main4, #person_main5{
+  margin-bottom:20px;
+  padding-bottom: 20px;
+  padding-left:20px;
+  border-bottom-width: 3px;
+  border-bottom-style: solid;
+  border-bottom-color:#EBEDF0;
+  line-height: 1.1;
+  font-weight: 700;
+  font-size: 36px;
+  margin-top: 20px;
+}
 
 
 
