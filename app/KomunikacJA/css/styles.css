@@ -216,7 +216,7 @@
   max-width: 100%;
   float: right;
   margin-right: 200px;
-  margin-top: 320px;
+  margin-top: 340px;
   margin-bottom: 10px;
   margin-left: 60px;
   position: absolute;
@@ -439,19 +439,49 @@ footer a:hover{
 
 
 #person_main, #person_main2, #person_main3, #person_main4, #person_main5{
-  margin-bottom:20px;
+  padding-left: 20px;
+  line-height: 1.1;
+  font-weight: 700;
+  font-size: 36px;
+  margin-top: 20px;
+  align-self: center;
+}
+
+#person_title_im, #person_title_im2, #person_title_im3, #person_title_im4, #person_title_im5 {
+  height: fit-content; 
+  margin-top: 20px;
+}
+
+
+.tytul_konwersacji_convo{
   padding-bottom: 20px;
   padding-left:20px;
   border-bottom-width: 3px;
   border-bottom-style: solid;
   border-bottom-color:#EBEDF0;
-  line-height: 1.1;
-  font-weight: 700;
-  font-size: 36px;
-  margin-top: 20px;
+  display: flex;
+  margin-bottom: 20px;
 }
 
+.tytul_konwersacji_convo img{
+  border-radius: 50%;
+  height: 60px;
+  width: auto;
+}
 
+#person_title_im.shiny-image-output.shiny-bound-output {
+  width:auto;
+  height: auto;
+}
 
+.person_image_convo {
+  height: 30px;
+  width:30px;
+  margin: 0px 0px 30px 15px;
+}
 
-
+.person_image_convo img{
+  border-radius: 50%;
+  height: 30px;
+  width: auto;
+}

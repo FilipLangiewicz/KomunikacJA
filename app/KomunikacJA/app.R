@@ -23,6 +23,7 @@ filter_outliers <- function(data) {
 
 
 
+
 ###### wczytanie danych #####
 
 
@@ -42,9 +43,9 @@ linePlot_sp_a <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_a.csv
 linePlot_mg_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_f.csv")
 linePlot_ig_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_f.csv")
 linePlot_sp_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_f.csv")
-linePlot_mg_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_a.csv")
-linePlot_ig_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_a.csv")
-linePlot_sp_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_a.csv")
+linePlot_mg_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_z.csv")
+linePlot_ig_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_z.csv")
+linePlot_sp_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_z.csv")
 
 linePlot_sp_a$GroupOrPriv <- "priv"
 linePlot_sp_f$GroupOrPriv <- "priv"
@@ -145,7 +146,6 @@ friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
 
 
 
-
 #### obsluga UI
 
 
@@ -183,7 +183,7 @@ ui1 <- tags$div(
           tags$button(
             id = "a",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_a.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Ania</p>"),
           )
@@ -193,7 +193,7 @@ ui1 <- tags$div(
           tags$button(
             id = "z",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_z.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Zosia</p>"),
           )
@@ -203,7 +203,7 @@ ui1 <- tags$div(
           tags$button(
             id = "f",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_f.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Filip</p>"),
           )
@@ -248,7 +248,10 @@ ui1 <- tags$div(
     
     tags$div(
       tags$div(
-        imageOutput("person_title_im"),
+        class = "tytul_konwersacji_convo",
+        imageOutput("person_title_im",
+                    height = "auto",
+                    width = "auto"),
         textOutput("person_main"),
         # HTML('<h1 class = "tytul_konwersacji"><b>Którego dnia roku najwięcej się komunikujemy?</b></h1>')
       ),
@@ -267,8 +270,12 @@ ui1 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im",
+                        height = "auto",
+                        width = "auto"),
+                   ),
           tags$div(
             class = "wiadomosc",
             plotlyOutput("heatMapa_plot"),
@@ -281,8 +288,12 @@ ui1 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im2",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższa mapka pokazuje ile wiadomości danego dnia zostało przeze mnie odebranych i wysłanych w sumie. Wystarczy, że najedziesz na odpowiedni kwadracik i wszystkie ważne informacje powinny Ci się pokazać! Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało mi się pobrać, więc te wyniki mogą być zaniżone"
@@ -316,7 +327,7 @@ ui2 <- tags$div(
           tags$button(
             id = "a2",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_a.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Ania</p>"),
           )
@@ -326,7 +337,7 @@ ui2 <- tags$div(
           tags$button(
             id = "z2",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_z.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Zosia</p>"),
           )
@@ -336,7 +347,7 @@ ui2 <- tags$div(
           tags$button(
             id = "f2",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_f.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Filip</p>"),
           )
@@ -379,6 +390,10 @@ ui2 <- tags$div(
     
     tags$div(
       tags$div(
+        class = "tytul_konwersacji_convo",
+        imageOutput("person_title_im2",
+                    height = "auto",
+                    width = "auto"),
         textOutput("person_main2"),
         
         # HTML('<h1 class = "tytul_konwersacji"><b>Z jakich aplikacji najwięcej korzystamy?</b></h1>')
@@ -387,8 +402,12 @@ ui2 <- tags$div(
       tags$div(
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im3",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = "wiadomosc",
             plotlyOutput("linePlot_plot")
@@ -397,8 +416,12 @@ ui2 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im4",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
@@ -437,7 +460,7 @@ ui3 <- tags$div(
           tags$button(
             id = "a3",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_a.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Ania</p>"),
           )
@@ -447,7 +470,7 @@ ui3 <- tags$div(
           tags$button(
             id = "z3",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_z.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Zosia</p>"),
           )
@@ -457,7 +480,7 @@ ui3 <- tags$div(
           tags$button(
             id = "f3",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_f.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Filip</p>"),
           )
@@ -492,6 +515,10 @@ ui3 <- tags$div(
     
     tags$div(
       tags$div(
+        class = "tytul_konwersacji_convo",
+        imageOutput("person_title_im3",
+                    height = "auto",
+                    width = "auto"),
         textOutput("person_main3"),
         # HTML('<h1 class = "tytul_konwersacji"><b>Jakich emotek używamy najczęściej?</b></h1>')
       ),
@@ -500,8 +527,12 @@ ui3 <- tags$div(
       tags$div(
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im5",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = "wiadomosc",
             htmlOutput("emoji_plot"),
@@ -509,8 +540,12 @@ ui3 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im6",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
@@ -518,8 +553,12 @@ ui3 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im7",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = "wiadomosc",
             plotlyOutput("animated_plot")
@@ -527,8 +566,12 @@ ui3 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im8",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
@@ -566,7 +609,7 @@ ui4 <- tags$div(
           tags$button(
             id = "a4",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_a.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Ania</p>"),
           )
@@ -576,7 +619,7 @@ ui4 <- tags$div(
           tags$button(
             id = "z4",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_z.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Zosia</p>"),
           )
@@ -586,7 +629,7 @@ ui4 <- tags$div(
           tags$button(
             id = "f4",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_f.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Filip</p>"),
           )
@@ -596,7 +639,7 @@ ui4 <- tags$div(
           tags$button(
             id = "azf4",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_all.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Razem</p>"),
           )
@@ -631,6 +674,10 @@ ui4 <- tags$div(
 
     tags$div(
       tags$div(
+        class = "tytul_konwersacji_convo",
+        imageOutput("person_title_im4",
+                    height = "auto",
+                    width = "auto"),
         textOutput("person_main4"),
         # HTML('<h1 class = "tytul_konwersacji"><b>Jak długie są nasze wiadomości?</b></h1>')
       ),
@@ -639,8 +686,12 @@ ui4 <- tags$div(
       tags$div(
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im9",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = "wiadomosc",
             plotlyOutput("dlugosciWiadomosci_plot"),
@@ -648,8 +699,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im10",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text2")
@@ -657,8 +712,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im11",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text3")
@@ -666,8 +725,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im12",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text4")
@@ -675,8 +738,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im13",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text5")
@@ -684,8 +751,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im14",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text6")
@@ -693,8 +764,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im15",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text7")
@@ -702,8 +777,12 @@ ui4 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im16",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text8")
@@ -736,7 +815,7 @@ ui5 <- tags$div(
           tags$button(
             id = "azf5",
             class = "btn btn-default action-button shiny-bound-input",
-            tags$img(src = "mycat.jpg",
+            tags$img(src = "cat_all.jpg",
                      class = "person_img"),
             HTML("<p class = 'person'>Razem</p>"),
           )
@@ -757,6 +836,10 @@ ui5 <- tags$div(
     
     tags$div(
       tags$div(
+        class = "tytul_konwersacji_convo",
+        imageOutput("person_title_im5",
+                    height = "auto",
+                    width = "auto"),
         textOutput("person_main5"),
         # HTML('<h1 class = "tytul_konwersacji"><b>Kiedy przybywa nam najwięcej znajomych?</b></h1>')
       ),
@@ -765,8 +848,12 @@ ui5 <- tags$div(
       tags$div(
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im17",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = "wiadomosc",
             plotlyOutput("friends_plot"),
@@ -774,8 +861,12 @@ ui5 <- tags$div(
         ),
         tags$div(
           class = "person_message",
-          tags$img(src = "mycat.jpg",
-                   class = "person_img_convo"),
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im18",
+                        height = "auto",
+                        width = "auto"),
+          ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
@@ -854,6 +945,10 @@ server <- function(input, output) {
   
   #### aktualizacja danych po naciśnięciu push buttonow ####
   updateData <- function(){
+    if (all(person_main() == c("a", "z", "f"))) {
+      person_main("a")
+    }
+    
     heatMap$data <- heatMap_data %>%
       filter(person == person_main(),
              app %in% app_main())
@@ -861,12 +956,20 @@ server <- function(input, output) {
   }
   
   updateData2 <- function() {
+    if (all(person_main() == c("a", "z", "f"))) {
+      person_main("a")
+    }
+    
     linePlot$data <- linePlot_data %>%
       filter(person == person_main(),
              app %in% app_main())
   }
   
   updateData3 <- function() {
+    if (all(person_main() == c("a", "z", "f"))) {
+      person_main("a")
+    }
+    
     emojiPlot$data <- emojiPlot_data %>%
       filter(person == person_main(),
              app %in% app_main())
@@ -1202,6 +1305,8 @@ server <- function(input, output) {
   
   ### tworzenie lineplot Ani
   output$linePlot_plot <- renderPlotly({
+    updateData2()
+    
     chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
                             identical(app_main(),"ig") ~ " w Instagramie",
                             identical(app_main(),"sp") ~ " w Snapchacie",
@@ -1231,7 +1336,7 @@ server <- function(input, output) {
   
   ### tworzenie emojiPlot Zosi
   output$emoji_plot <- renderUI({
-    
+    updateData3()
     # name_data_a <- emojiPlot_data %>% 
     #   filter(person == "a")
     # name_data_z <- emojiPlot_data %>% 
@@ -1303,6 +1408,7 @@ server <- function(input, output) {
   ### tworzenie animowanego barplot Zosi
   output$animated_plot <- renderPlotly({
     ### tu jest bardzo duzo do poprawy bo musza byc juz przygoyowane  wiekszosci dane  
+    updateData3()
     
     convert_to_vector <- function(emoji_string) {
       if (!is.na(emoji_string)) {
@@ -1439,15 +1545,19 @@ server <- function(input, output) {
   ################# tworzenie tytulow konwersacji ################
   
   observe({
-    person <- case_when(person_main() == "a" ~ "Ania",
-                        person_main() == "z" ~ "Zosia",
-                        person_main() == "f" ~ "Filip",
-                        TRUE ~ "Razem")
+    if (all(person_main() == c("a", "z", "f"))) {
+      person <- "Razem"
+    } else {
+      person <- case_when(person_main() == "a" ~ "Ania",
+                          person_main() == "z" ~ "Zosia",
+                          person_main() == "f" ~ "Filip",
+                          TRUE ~ "Razem")
+    }
     output$person_main <- renderText(person)
     output$person_main2 <-renderText(person)
     output$person_main3 <- renderText(person)
     output$person_main4 <- renderText(person)
-    output$person_main5 <- renderText(person)
+    output$person_main5 <- renderText("Razem")
   })
   
   ################# tworzenie tytulow konwersacji koniec ################
@@ -1457,20 +1567,115 @@ server <- function(input, output) {
   
   observe({
     
-    
-    output$person_title_im <- renderImage({
+    if (all(person_main() == c("a", "z", "f"))) {
+      link <- "cat_all.jpg"
+    } else {
       link <- case_when(person_main() == "a" ~ "cat_a.jpg",
-                        person_main() == "z" ~ "mycat.jpg",
-                        person_main() == "f" ~ "mycat.jpg",
-                        TRUE ~ "mycat.jpg")
-      print(link)
-      list(src = link, width = "100%", height = "100%")
-    }, 
+                        person_main() == "z" ~ "cat_z.jpg",
+                        person_main() == "f" ~ "cat_f.jpg")
+    }
+    image <- list(src = file.path(".", "www", link), 
+         alt = "im")
+    
+    output$person_title_im <- renderImage({image}, 
+    deleteFile = FALSE)
+    
+    output$person_title_im2 <- renderImage({image}, 
+    deleteFile = FALSE)
+    
+    output$person_title_im3 <- renderImage({image}, 
+    deleteFile = FALSE)
+    
+    output$person_title_im4 <- renderImage({image}, 
+    deleteFile = FALSE)
+    
+    output$person_title_im5 <- renderImage({list(src = file.path(".", "www", "cat_all.jpg"), 
+                                                 alt = "im")}, 
     deleteFile = FALSE)
     
   })
   
   ################# tworzenie zdjec do tytulow konwersacji koniec ################
+  
+  
+  ################# tworzenie zdjec do wiadomosci ################
+  observe({
+    
+    if (all(person_main() == c("a", "z", "f"))) {
+      link <- "cat_all.jpg"
+    } else {
+      link <- case_when(person_main() == "a" ~ "cat_a.jpg",
+                        person_main() == "z" ~ "cat_z.jpg",
+                        person_main() == "f" ~ "cat_f.jpg")
+    }
+    
+    image <- list(src = file.path(".", "www", link), 
+                  alt = "im")
+    
+    output$person_message_im <- renderImage({image}, 
+                                          deleteFile = FALSE)
+    
+    output$person_message_im2 <- renderImage({image}, 
+                                           deleteFile = FALSE)
+    
+    output$person_message_im3 <- renderImage({image}, 
+                                           deleteFile = FALSE)
+    
+    output$person_message_im4 <- renderImage({image}, 
+                                           deleteFile = FALSE)
+    
+    output$person_message_im5 <- renderImage({image}, 
+                                           deleteFile = FALSE)
+    
+    output$person_message_im6 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im7 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im8 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im9 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im10 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im11 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im12 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im13 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im14 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im15 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im16 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im17 <- renderImage({list(src = file.path(".", "www", "cat_all.jpg"), 
+                                                    alt = "im")}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im18 <- renderImage({list(src = file.path(".", "www", "cat_all.jpg"), 
+                                                    alt = "im")}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im19 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+    output$person_message_im20 <- renderImage({image}, 
+                                             deleteFile = FALSE)
+    
+  })
+  ################# tworzenie zdjec do wiadomosci koniec ################
   
   
   ################# tworzenie tekstow ################
