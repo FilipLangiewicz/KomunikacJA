@@ -1226,19 +1226,43 @@ server <- function(input, output) {
   ### tworzenie emojiPlot Zosi
   output$emoji_plot <- renderUI({
     
-    name_data <- emojiPlot$data
+    name_data_a <- emojiPlot_data %>% 
+      filter(person == "a")
+    name_data_z <- emojiPlot_data %>% 
+      filter(person == "z")
+    name_data_f <- emojiPlot_data %>% 
+      filter(person == "f")
+    
     # Extract emojis from the content
-    emoji_list <- str_extract_all(name_data$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
-    all_emojis <- unlist(emoji_list)
+    emoji_list_a <- str_extract_all(name_data_a$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+    all_emojis_a <- unlist(emoji_list_a)
+    emoji_list_z <- str_extract_all(name_data_z$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+    all_emojis_z <- unlist(emoji_list_z)
+    emoji_list_f <- str_extract_all(name_data_f$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+    all_emojis_f <- unlist(emoji_list_f)
     
     
     # Create a data frame with emoji frequencies
-    emoji_freq <- data.frame(table(all_emojis))
-    emoji_freq <- emoji_freq %>%  filter (emoji_freq$Freq >= (1/50)*max(emoji_freq$Freq))
+    emoji_freq_a <- data.frame(table(all_emojis_a))
+    emoji_freq_a <- emoji_freq_a %>%  filter (emoji_freq_a$Freq >= (1/50)*max(emoji_freq_a$Freq))
+    emoji_freq_z <- data.frame(table(all_emojis_z))
+    emoji_freq_z <- emoji_freq_z %>%  filter (emoji_freq_z$Freq >= (1/50)*max(emoji_freq_z$Freq))
+    emoji_freq_f <- data.frame(table(all_emojis_f))
+    emoji_freq_f <- emoji_freq_f %>%  filter (emoji_freq_f$Freq >= (1/50)*max(emoji_freq_f$Freq))
     
-    emoji_freq <- emoji_freq %>% filter(!(all_emojis %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    emoji_freq$all_emojis[emoji_freq$all_emojis == '☹'] <-  '😟'
-    emoji_freq$all_emojis[emoji_freq$all_emojis == '☺'] <-  '🙂'
+    emoji_freq_a <- emoji_freq_a %>% filter(!(all_emojis_a %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+    emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☹'] <-  '😟'
+    emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☺'] <-  '🙂'
+    emoji_freq_z <- emoji_freq_z %>% filter(!(all_emojis_z %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+    emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☹'] <-  '😟'
+    emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☺'] <-  '🙂'
+    emoji_freq_f <- emoji_freq_f %>% filter(!(all_emojis_f %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+    emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☹'] <-  '😟'
+    emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☺'] <-  '🙂'
+    
+    emoji_freq_a %>% mutate(person = "a")
+    emoji_freq_z %>% mutate(person = "z")
+    emoji_freq_f %>% mutate(person = "f")
     
     wordcloud2(
       data = emoji_freq,
@@ -1251,7 +1275,7 @@ server <- function(input, output) {
       gridSize = 5,
       shape = "circle",
       shuffle = FALSE,
-      backgroundColor = "#EBEDF0"
+      backgroundColor = rgb(0,0,0,0)
     )
   })
   
