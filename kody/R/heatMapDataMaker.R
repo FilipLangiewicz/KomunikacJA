@@ -10,8 +10,7 @@ ig_z <- read.csv("./data_csv/ig_z.csv")
 ig_a <- read.csv("./data_csv/ig_a.csv")
 
 sp_f <- read.csv("./data_csv/sp_f.csv")
-sp_z <- read.csv("./data_csv/sp_a.csv") %>% 
-  mutate(person = "z")
+sp_z <- read.csv("./data_csv/sp_z.csv")
 sp_a <- read.csv("./data_csv/sp_a.csv")
 
 konwertujTimestampy <- function(df) {
@@ -66,6 +65,8 @@ ig_a <- konwertujIWybierz(ig_a)
 sp_f <- konwertujIWybierz(sp_f)
 sp_z <- konwertujIWybierz(sp_z)
 sp_a <- konwertujIWybierz(sp_a)
+
+sp_z <- sp_z %>% filter(year != 2024)
 
 main_df <- bind_rows(mg_f,
                      mg_z,
