@@ -252,7 +252,16 @@ ui1 <- tags$div(
       class = "convo_div",
 
       tags$div(
-
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("heatmapa_text1")
+          ),
+        # tu chyba jednak nie powinno być tego zdjęcia
+        #   tags$img(src = "mycat.jpg",
+        #            class = "person_img_convo_flip"),
+        ),
         tags$div(
           class = "person_message",
           tags$img(src = "mycat.jpg",
@@ -264,9 +273,8 @@ ui1 <- tags$div(
                         choices = unique(year(heatMap_data$date)) %>% sort(),
                         label = "Wybierz rok",
                         selected = 2023,
-                        width = "10%")
+                        width = "7%")
           ),
-
         ),
         tags$div(
           class = "person_message",
@@ -274,7 +282,7 @@ ui1 <- tags$div(
                    class = "person_img_convo"),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Powyższa mapka pokazuje ile wiadomości danego dnia zostało przeze mnie odebranych i wysłanych w sumie. Wystarczy, że najedziesz na odpowiedni kwadracik i wszystkie ważne informacje powinny Ci się pokazać! Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało mi się pobrać, więc te wyniki mogą być zaniżone"
           )
         )
       )
@@ -1048,7 +1056,7 @@ server <- function(input, output) {
                          " wysłanych i odebranych przez ",
                          chosen_person,
                          chosen_app,
-                         " danego dnia w ",
+                         " w ",
                          input$input_year,
                          " roku",
                          "</b>")
@@ -1126,7 +1134,7 @@ server <- function(input, output) {
                       color = "black")  
         ),
         title = list(font = list(size = 20),
-                     y = 0.99, 
+                     y = 0.97, 
                      x = 0.51, 
                      xanchor = 'center', 
                      yanchor =  'top')) %>% 
@@ -1136,7 +1144,7 @@ server <- function(input, output) {
     p[["x"]][["data"]][[2]][["hoverinfo"]] = 'skip'
     p[["x"]][["data"]][[3]][["hoverinfo"]] = 'skip'
     
-    p[["x"]][["data"]][[4]][["marker"]][["colorbar"]][["title"]] = HTML("<br>ㅤ<br>ㅤ<br>Sumaryczna liczba <br>wiadomości<br>ㅤ")
+    p[["x"]][["data"]][[4]][["marker"]][["colorbar"]][["title"]] = HTML("<br>ㅤ<br>ㅤ<br>Sumaryczna <br>liczba <br>wiadomości<br>ㅤ")
     p[["x"]][["data"]][[4]][["marker"]][["colorbar"]][["len"]] = 1
     p[["x"]][["data"]][[4]][["marker"]][["colorbar"]][["tickvals"]] = seq(0, 1, len = 9)
     p[["x"]][["data"]][[4]][["marker"]][["colorbar"]][["ticktext"]] = floor(seq(0, 
@@ -1359,59 +1367,6 @@ server <- function(input, output) {
   })
 
 
-  ### tworzenie tekstu do dlugosciWiadomosci Zosi
-  observe({
-    example_data <- data.frame(
-      name = c("z", "f", "a"),
-      example_message = c(
-        "This is an example message for 'z'.",
-        "An example message for 'f'.",
-        "Example message for 'a'."
-      )
-    )
-
-    stats_data <- dlugosciWiadomosciPlot$data
-    average_length <- mean(stats_data$MessageLength)
-    shortest_message <- stats_data[which.min(stats_data$MessageLength), c("MessageLength", "app")]
-    longest_message <- stats_data[which.max( stats_data$MessageLength), c("MessageLength", "app")]
-    total_mg <- sum(stats_data$app == "mg")
-    total_in <- sum(stats_data$app == "ig")
-    total_group <- sum(stats_data$GroupOrPriv == "group")
-    total_priv <- sum(stats_data$GroupOrPriv == "priv")
-    example_message <- example_data$example_message[example_data$name == person_main()]
-
-
-    output$dlugosciWiadomosci_text2 <- renderText({
-      paste("Total number of messages sent: ", (total_mg + total_in)," [", total_mg, "(messenger), ", total_in, " (instagram)]")
-    })
-
-    output$dlugosciWiadomosci_text3 <- renderText({
-      paste("Total number sent on group chats: ", total_group)
-    })
-
-    output$dlugosciWiadomosci_text4 <- renderText({
-      paste("Total number of private messages: ", total_priv)
-    })
-
-    output$dlugosciWiadomosci_text5 <- renderText({
-      paste("Overall average message length: ", round(average_length, 2))
-    })
-
-    output$dlugosciWiadomosci_text6 <- renderText({
-      paste("Example message: ", example_message)
-    })
-
-    output$dlugosciWiadomosci_text7 <- renderText({
-      paste("Shortest message: ", shortest_message$MessageLength, " characters (", shortest_message$app, ")")
-    })
-
-    output$dlugosciWiadomosci_text8 <- renderText({
-      paste("Longest message: ", longest_message$MessageLength, " characters (", longest_message$app, ")")
-    })
-
-
-  })
-
   ### tworzenie friendsPlot 
   output$friends_plot <- renderPlotly({
     friendsPlot_data %>%
@@ -1435,6 +1390,93 @@ server <- function(input, output) {
     
   ################# tworzenie wykresów koniec ################
   
+  
+  
+  ################# tworzenie tekstow ################
+  
+  ### tworzenie tekstu do heatmapy
+  output$heatmapa_text1 <- renderText({
+    
+    person <- case_when(person_main() == "a" ~ "Ania",
+                        person_main() == "z" ~ "Zosia",
+                        person_main() == "f" ~ "Filip")
+    sex <- case_when(person_main() == "f" ~ "e",
+                     TRUE ~ "a")
+    
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
+                            TRUE ~ " na Messengerze, Instagramie i Snapchacie łącznie")
+    
+    paste0("Hej ",
+           person,
+           ", ciekawi mnie, którego dnia w ",
+           input$input_year,
+           " roku wysłał", sex, "ś i odebrał", sex, "ś najwięcej wiadomości",
+           chosen_app)
+  })
+  
+  
+  ################# tworzenie tekstow koniec ################
+  
+  
+  
+  ################# tworzenie odpowiedzi ################
+  
+  ### tworzenie odpowiedzi do dlugosciWiadomosci Zosi
+  observe({
+    example_data <- data.frame(
+      name = c("z", "f", "a"),
+      example_message = c(
+        "This is an example message for 'z'.",
+        "An example message for 'f'.",
+        "Example message for 'a'."
+      )
+    )
+    
+    stats_data <- dlugosciWiadomosciPlot$data
+    average_length <- mean(stats_data$MessageLength)
+    shortest_message <- stats_data[which.min(stats_data$MessageLength), c("MessageLength", "app")]
+    longest_message <- stats_data[which.max( stats_data$MessageLength), c("MessageLength", "app")]
+    total_mg <- sum(stats_data$app == "mg")
+    total_in <- sum(stats_data$app == "ig")
+    total_group <- sum(stats_data$GroupOrPriv == "group")
+    total_priv <- sum(stats_data$GroupOrPriv == "priv")
+    example_message <- example_data$example_message[example_data$name == person_main()]
+    
+    
+    output$dlugosciWiadomosci_text2 <- renderText({
+      paste("Total number of messages sent: ", (total_mg + total_in)," [", total_mg, "(messenger), ", total_in, " (instagram)]")
+    })
+    
+    output$dlugosciWiadomosci_text3 <- renderText({
+      paste("Total number sent on group chats: ", total_group)
+    })
+    
+    output$dlugosciWiadomosci_text4 <- renderText({
+      paste("Total number of private messages: ", total_priv)
+    })
+    
+    output$dlugosciWiadomosci_text5 <- renderText({
+      paste("Overall average message length: ", round(average_length, 2))
+    })
+    
+    output$dlugosciWiadomosci_text6 <- renderText({
+      paste("Example message: ", example_message)
+    })
+    
+    output$dlugosciWiadomosci_text7 <- renderText({
+      paste("Shortest message: ", shortest_message$MessageLength, " characters (", shortest_message$app, ")")
+    })
+    
+    output$dlugosciWiadomosci_text8 <- renderText({
+      paste("Longest message: ", longest_message$MessageLength, " characters (", longest_message$app, ")")
+    })
+    
+    
+  })
+  
+  ################# tworzenie odpowiedzi ################
   
 }
 

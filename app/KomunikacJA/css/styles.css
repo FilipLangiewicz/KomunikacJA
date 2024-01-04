@@ -173,25 +173,50 @@
 }
 
 .wiadomosc {
-  background-color: #EBEDF0;
+  background-color: #F0F0F0;
   border-radius:15px;
-  padding:20px;
-  margin:30px 30px 30px 8px;
+  padding: 8px 12px;
+  margin:0px 30px 30px 8px;
   width: -webkit-fill-available;
+  max-width: 80%;
+}
+
+.wiadomosc_flip {
+  background-color: #0084FF;
+  border-radius:15px;
+  padding: 8px 12px;
+  margin:0px 8px 30px 30px;
+  width: -webkit-fill-available;
+  max-width: 80%;
+  color:white;
 }
 
 .wiadomosc_tekst {
   width: fit-content;
   font-size: 15px;
+  color: #050505;
+	font-family: "Segoe UI", Helvetica, Arial, sans-serif; 
+
 }
+
+
+.wiadomosc_tekst_flip {
+  width: fit-content;
+  font-size: 15px;
+  color: #ffffff;
+	font-family: "Segoe UI", Helvetica, Arial, sans-serif; 
+
+}
+
+
 
 
 .shiny-input-container:not(.shiny-input-container-inline) {
   width: 300px;
   max-width: 100%;
   float: right;
-  margin-right: 45px;
-  margin-top: 290px;
+  margin-right: 200px;
+  margin-top: 320px;
   margin-bottom: 10px;
   margin-left: 60px;
   position: absolute;
@@ -381,9 +406,9 @@ footer a:hover{
 
 
 .person_img_convo{
-  height: 40px;
+  height: 30px;
   border-radius: 50%;
-  margin: 30px 0 30px 30px;
+  margin: 0px 0px 30px 15px;
 }
 
 .person_message{
@@ -396,7 +421,21 @@ footer a:hover{
   align-items: flex-end;
 }
 
+.person_message_flip{
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  width: -webkit-fill-available;
+  align-items: flex-end;
+}
 
+.person_img_convo_flip{
+  height: 40px;
+  border-radius: 50%;
+  margin: 30px 30px 30px 0;
+}
 
 
 
