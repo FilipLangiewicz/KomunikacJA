@@ -343,7 +343,7 @@ ui2 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Powyższy wykres pokazuje ile wiadomości odebrała i wysłała dana osoba w sumie do danego dnia. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać. Wybierając poszczególne aplikacje oddzielnie możemy zobaczyć podział wymienionych wiadomości na wysłane i odebrane. Przy wyborze przycisku wszystkich aplikacji wiadomości są podzielone na aplikacje, na których były wymieniane. Ze względu na to, że Messenger jest przeze mnie używany o wiele częściej i intensywniej, niż pozostałe komunikatory, zastosowana tu została skala logarytmiczna, aby łatwiej było odczytać wartości na osi Y."
           )
         )
       )
@@ -1267,16 +1267,20 @@ server <- function(input, output) {
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
-    plot_title <- paste0("Liczba wiadomości",
-                         " wysłanych i odebranych przez ",
+    plot_title <- paste0("Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
                          " do danego dnia")
     legend_title <- case_when(
-      identical(app_main(), "mg") ~ "typ",
-      identical(app_main(), "ig") ~ "typ",
-      identical(app_main(), "sp") ~ "typ",
-      TRUE ~ "aplikacja")
+      identical(app_main(), "mg") ~ "<i>typ</i>",
+      identical(app_main(), "ig") ~ "<i>typ</i>",
+      identical(app_main(), "sp") ~ "<i>typ</i>",
+      TRUE ~ "<i>aplikacja</i>")
+    podpis_y <- case_when(
+      identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
+      identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
+      identical(app_main(), "sp") ~ "<b>Liczba wiadomości</b>",
+      TRUE ~ "<b>Liczba wiadomości (log)</b>")
 
       linePlot$data %>% 
         mutate(color_plot = case_when(
@@ -1288,10 +1292,22 @@ server <- function(input, output) {
         ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
         geom_line()+
         labs(title=plot_title,
-             x = "Data",   # Zmiana podpisu osi x
-             y = "Liczba wiadomości",
+             x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
+             y = podpis_y,
              color = legend_title)+ 
-        theme_minimal()->p
+        scale_color_manual(values = c(
+          "mg" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+          "ig" = "#C13584",
+          "sp" = "#FFFC00",
+          "wszystkie" = "#0066CC",
+          "wyslane" = "#00CC66",
+          "odebrane" = "#99004C"
+        )) +
+        theme_minimal()+
+        theme(
+          plot.title = element_text(face = "bold", size = 19),
+          panel.grid.major = element_line(size = 1.1, color = "#CECECE" )  # Pogrubienie linii siatki głównej
+          )->p
  
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p 
@@ -1299,17 +1315,18 @@ server <- function(input, output) {
       p+ scale_y_log10()
     }
      ggplotly(p) %>% 
-      layout(xaxis = list(rangeslider = list(type = "date")),
-             yaxis = list(tickfont = list(size = 15,
-                                          color = "black",
-                                          thickness = 4)),
-             title = list(font = list(size = 20),
-                          y = 0.97, 
-                          x = 0.51, 
-                          xanchor = 'center', 
-                          yanchor =  'top'),
+      layout(title = list(font = list(size = 19),
+             y = 0.97, 
+             x = 0.51, 
+             xanchor = 'center', 
+             yanchor =  'top'),
              plot_bgcolor = "rgba(0,0,0,0)",
-             paper_bgcolor = "rgba(0,0,0,0)") 
+             paper_bgcolor = "rgba(0,0,0,0)",
+     xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
+                  title = list(standoff = 15)),
+     yaxis = list(fixedrange = TRUE,
+                  title = list(standoff = 15, y = 0)))
+     
   }) 
   
   ### tworzenie emojiPlot Zosi
