@@ -485,3 +485,11 @@ footer a:hover{
   height: 30px;
   width: auto;
 }
+
+#emoji_plot_title{
+  font-size: 20px;
+  text-align: center;
+  font-weight: 600;
+  font-family: "Open Sans";
+}
+

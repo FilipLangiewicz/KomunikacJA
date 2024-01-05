@@ -461,6 +461,7 @@ ui3 <- tags$div(
           ),
           tags$div(
             class = "wiadomosc",
+            textOutput("emoji_plot_title"),
             htmlOutput("emoji_plot"),
           ),
         ),
@@ -1525,6 +1526,26 @@ server <- function(input, output) {
   
     
   ################# tworzenie wykresów koniec ################
+  
+  
+  ################# tworzenie tytulu do heatmapy ################
+  output$emoji_plot_title <- renderText({
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            TRUE ~ " w obu aplikacjach")
+    
+    chosen_person <- case_when(person_main() == "a" ~ "Anię",
+                               person_main() == "z" ~ "Zosię",
+                               person_main() == "f" ~ "Filipa")
+    
+    paste0("Najczęściej wysyłane emotki przez ",
+      chosen_person,
+      " ",
+      chosen_app
+    )
+    
+  })
+  ################# tworzenie tytulu do heatmapy koniec ################
   
   
   
