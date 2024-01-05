@@ -1306,7 +1306,8 @@ server <- function(input, output) {
         theme_minimal()+
         theme(
           plot.title = element_text(face = "bold", size = 19),
-          panel.grid.major = element_line(size = 1.1, color = "#CECECE" )  # Pogrubienie linii siatki głównej
+          panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
+          legend.text = element_text(hjust = 0.5)
           )->p
  
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
