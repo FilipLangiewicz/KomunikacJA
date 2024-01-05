@@ -201,5 +201,110 @@ pe
 
 
 
+emojiPlot_data <- read.csv("../app/KomunikacJA/appData\\emoji_merged.csv")
+emojiPlot_data <- emojiPlot_data %>% mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
+colnames(emojiPlot_data) <- c("emojis", "Timestamp", "app", "person")
+
+emoji_mg_f <- emojiPlot_data %>% 
+  filter(person == "f",
+         app == "mg")
+emoji_mg_a <- emojiPlot_data %>% 
+  filter(person == "a",
+         app == "mg")
+emoji_mg_z <- emojiPlot_data %>% 
+  filter(person == "z",
+         app == "mg")
+
+emoji_ig_f <- emojiPlot_data %>% 
+  filter(person == "f",
+         app == "ig")
+emoji_ig_a <- emojiPlot_data %>% 
+  filter(person == "a",
+         app == "ig")
+emoji_ig_z <- emojiPlot_data %>% 
+  filter(person == "z",
+         app == "ig")
+
+
+makeEmoji <- function(emoji_Data) {
+  name_data_a <- emoji_Data
+  emoji_list_a <- str_extract_all(name_data_a$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+  all_emojis_a <- unlist(emoji_list_a)
+  
+  emoji_freq_a <- data.frame(table(all_emojis_a))
+  emoji_freq_a <- emoji_freq_a %>%  mutate(all_emojis_a = as.character(all_emojis_a))
+  #emoji_freq_a <- emoji_freq_a %>%  filter (emoji_freq_a$Freq >= (1/50)*max(emoji_freq_a$Freq))
+  
+  emoji_freq_a <- emoji_freq_a %>% filter(!(all_emojis_a %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+  print(emoji_freq_a %>% filter(all_emojis_a == "☹"))
+  emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☹'] <- '☹️️'
+  emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☺'] <-  '🙂'
+  
+  emoji_freq_a
+}
+
+emoji_mg_f <- makeEmoji(emoji_mg_f) %>% 
+  mutate(person = "f",
+         app = "mg")
+emoji_mg_a <- makeEmoji(emoji_mg_a) %>% 
+  mutate(person = "a",
+         app = "mg")
+emoji_mg_z <- makeEmoji(emoji_mg_z) %>% 
+  mutate(person = "z",
+         app = "mg")
+
+emoji_ig_ff <- makeEmoji(emoji_ig_f) %>% 
+  mutate(person = "f",
+         app = "ig")
+emoji_ig_a <- makeEmoji(emoji_ig_a) %>% 
+  mutate(person = "a",
+         app = "ig")
+emoji_ig_z <- makeEmoji(emoji_ig_z) %>% 
+  mutate(person = "z",
+         app = "ig")
+
+
+
+
+name_data_a <- emojiPlot_data %>%
+  filter(person == "a")
+name_data_z <- emojiPlot_data %>%
+  filter(person == "z")
+name_data_f <- emojiPlot_data %>%
+  filter(person == "f")
+
+# Extract emojis from the content
+emoji_list_a <- str_extract_all(name_data_a$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+all_emojis_a <- unlist(emoji_list_a)
+emoji_list_z <- str_extract_all(name_data_z$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+all_emojis_z <- unlist(emoji_list_z)
+emoji_list_f <- str_extract_all(name_data_f$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
+all_emojis_f <- unlist(emoji_list_f)
+
+
+# Create a data frame with emoji frequencies
+emoji_freq_a <- data.frame(table(all_emojis_a))
+emoji_freq_a <- emoji_freq_a %>%  filter (emoji_freq_a$Freq >= (1/50)*max(emoji_freq_a$Freq))
+emoji_freq_z <- data.frame(table(all_emojis_z))
+emoji_freq_z <- emoji_freq_z %>%  filter (emoji_freq_z$Freq >= (1/50)*max(emoji_freq_z$Freq))
+emoji_freq_f <- data.frame(table(all_emojis_f))
+emoji_freq_f <- emoji_freq_f %>%  filter (emoji_freq_f$Freq >= (1/50)*max(emoji_freq_f$Freq))
+
+emoji_freq_a <- emoji_freq_a %>% filter(!(all_emojis_a %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☹'] <-  '😟'
+emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☺'] <-  '🙂'
+emoji_freq_z <- emoji_freq_z %>% filter(!(all_emojis_z %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☹'] <-  '😟'
+emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☺'] <-  '🙂'
+emoji_freq_f <- emoji_freq_f %>% filter(!(all_emojis_f %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
+emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☹'] <-  '😟'
+emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☺'] <-  '🙂'
+
+emoji_freq_a %>% mutate(person = "a")
+emoji_freq_z %>% mutate(person = "z")
+emoji_freq_f %>% mutate(person = "f")
+
+
+
 
 

@@ -34,97 +34,13 @@ heatMap_data <- read.csv("./appData/heatMap/heatMapData.csv",
 
 
 ##### wczytanie danych linePlot Ani #####
-
-### tu powinna byc jedna linijka wczytujaca dane jak u mnie
-
-linePlot_mg_a <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_a.csv")
-linePlot_ig_a <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_a.csv")
-linePlot_sp_a <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_a.csv")
-linePlot_mg_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_f.csv")
-linePlot_ig_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_f.csv")
-linePlot_sp_f <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_f.csv")
-linePlot_mg_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_mg_z.csv")
-linePlot_ig_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_ig_z.csv")
-linePlot_sp_z <- read.csv(".\\appData\\wyslaneOdebrane\\wyslaneOdebrane_sp_z.csv")
-
-linePlot_sp_a$GroupOrPriv <- "priv"
-linePlot_sp_f$GroupOrPriv <- "priv"
-linePlot_sp_z$GroupOrPriv <- "priv"
-
-policzWiadomosci <- function(sp_a) {
-  sp_a %>%
-    group_by(date) %>%
-    summarize(liczba_wiadomosci = n()) -> sp_a
-  sp_a <- sp_a[order(sp_a$date), ]
-  sp_a$suma_kumulacyjna <- cumsum(sp_a$liczba_wiadomosci)
-  sp_a$typ <- 'wszystkie'
-  return(sp_a)
-}
-
-#policzenie wiadomosci z podzialem na wyslane i odebrane
-policzWiadomosciPodzial <- function(sp_a) {
-  sp_a$typ[sp_a$Sender == "Other"] <- "odebrane"
-  sp_a$typ[sp_a$Sender != "Other"] <- "wyslane"
-  sp_a <- sp_a %>%
-    group_by(date, typ) %>%
-    summarize(liczba_wiadomosci = n()) %>%
-    arrange(date) %>%
-    group_by(typ) %>%
-    mutate(suma_kumulacyjna = cumsum(liczba_wiadomosci))
-  return(sp_a)
-}
-
-policzWszystkie <- function(sp_a){
-  wszystkie <- policzWiadomosci(sp_a)%>%
-    select(date, suma_kumulacyjna, typ)
-  podzial <- policzWiadomosciPodzial(sp_a)%>%
-    select(date, suma_kumulacyjna, typ)
-  razem <- rbind(wszystkie,podzial)
-  return(razem)
-}
-
-linePlot_mg_a <- policzWszystkie(linePlot_mg_a)
-linePlot_sp_a <- policzWszystkie(linePlot_sp_a)
-linePlot_ig_a <- policzWszystkie(linePlot_ig_a)
-linePlot_mg_f <- policzWszystkie(linePlot_mg_f)
-linePlot_sp_f <- policzWszystkie(linePlot_sp_f)
-linePlot_ig_f <- policzWszystkie(linePlot_ig_f)
-linePlot_mg_z <- policzWszystkie(linePlot_mg_z)
-linePlot_sp_z <- policzWszystkie(linePlot_sp_z)
-linePlot_ig_z <- policzWszystkie(linePlot_ig_z)
-linePlot_mg_a$app <- "mg"
-linePlot_mg_f$app <- "mg"
-linePlot_mg_z$app <- "mg"
-linePlot_sp_a$app <- "sp"
-linePlot_sp_f$app <- "sp"
-linePlot_sp_z$app <- "sp"
-linePlot_ig_a$app <- "ig"
-linePlot_ig_f$app <- "ig"
-linePlot_ig_z$app <- "ig"
-linePlot_mg_a$person <- "a"
-linePlot_ig_a$person <- "a"
-linePlot_sp_a$person <- "a"
-linePlot_mg_f$person <- "f"
-linePlot_ig_f$person <- "f"
-linePlot_sp_f$person <- "f"
-linePlot_mg_z$person <- "z"
-linePlot_ig_z$person <- "z"
-linePlot_sp_z$person <- "z"
-
-linePlot_data <- rbind(linePlot_mg_a, linePlot_ig_a, linePlot_sp_a, linePlot_mg_f, linePlot_ig_f, linePlot_sp_f, linePlot_mg_z, linePlot_ig_z, linePlot_sp_z)
-linePlot_data$date <- as.Date(as.character(linePlot_data$date), format = "%Y%m%d")
-
-###wszystko powyzej koniecznie do poprawy
-
+linePlot_data <- read.csv("./appData/wyslaneOdebrane/wyslaneOdebrane_all.csv",
+                          colClasses = c(date = "Date"))
 ##### wczytanie danych linePlot Ani koniec #####
 
 
 ##### wczytanie danych emojiPlot Zosi #####
-### troche lepiej ale tez koniecznie do poprawy
-emojiPlot_data <- read.csv("./appData\\emoji_merged.csv")
-emojiPlot_data <- emojiPlot_data %>% mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
-colnames(emojiPlot_data) <- c("emojis", "Timestamp", "app", "person")
-
+emojiPlot_data <- read.csv("./appData/emojiData/cloud_data.csv")
 ##### wczytanie danych emojiPlot Zosi koniec #####
 
 
@@ -972,7 +888,9 @@ server <- function(input, output) {
     
     emojiPlot$data <- emojiPlot_data %>%
       filter(person == person_main(),
-             app %in% app_main())
+             app %in% app_main()) %>% 
+      group_by(all_emojis) %>% 
+      summarise(Freq = sum(Freq, na.rm = TRUE))
   }
   
   updateData4 <- function() {
@@ -1152,9 +1070,9 @@ server <- function(input, output) {
   output$heatMapa_plot <- renderPlotly({
     updateData()
     
-    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
-                            identical(app_main(),"ig") ~ " w Instagramie",
-                            identical(app_main(),"sp") ~ " w Snapchacie",
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
                             TRUE ~ " we wszystkich aplikacjach")
     
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
@@ -1337,62 +1255,11 @@ server <- function(input, output) {
   ### tworzenie emojiPlot Zosi
   output$emoji_plot <- renderUI({
     updateData3()
-    # name_data_a <- emojiPlot_data %>% 
-    #   filter(person == "a")
-    # name_data_z <- emojiPlot_data %>% 
-    #   filter(person == "z")
-    # name_data_f <- emojiPlot_data %>% 
-    #   filter(person == "f")
-    # 
-    # # Extract emojis from the content
-    # emoji_list_a <- str_extract_all(name_data_a$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
-    # all_emojis_a <- unlist(emoji_list_a)
-    # emoji_list_z <- str_extract_all(name_data_z$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
-    # all_emojis_z <- unlist(emoji_list_z)
-    # emoji_list_f <- str_extract_all(name_data_f$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
-    # all_emojis_f <- unlist(emoji_list_f)
-    # 
-    # 
-    # # Create a data frame with emoji frequencies
-    # emoji_freq_a <- data.frame(table(all_emojis_a))
-    # emoji_freq_a <- emoji_freq_a %>%  filter (emoji_freq_a$Freq >= (1/50)*max(emoji_freq_a$Freq))
-    # emoji_freq_z <- data.frame(table(all_emojis_z))
-    # emoji_freq_z <- emoji_freq_z %>%  filter (emoji_freq_z$Freq >= (1/50)*max(emoji_freq_z$Freq))
-    # emoji_freq_f <- data.frame(table(all_emojis_f))
-    # emoji_freq_f <- emoji_freq_f %>%  filter (emoji_freq_f$Freq >= (1/50)*max(emoji_freq_f$Freq))
-    # 
-    # emoji_freq_a <- emoji_freq_a %>% filter(!(all_emojis_a %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    # emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☹'] <-  '😟'
-    # emoji_freq_a$all_emojis_a[emoji_freq_a$all_emojis == '☺'] <-  '🙂'
-    # emoji_freq_z <- emoji_freq_z %>% filter(!(all_emojis_z %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    # emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☹'] <-  '😟'
-    # emoji_freq_z$all_emojis_z[emoji_freq_z$all_emojis == '☺'] <-  '🙂'
-    # emoji_freq_f <- emoji_freq_f %>% filter(!(all_emojis_f %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    # emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☹'] <-  '😟'
-    # emoji_freq_f$all_emojis_f[emoji_freq_f$all_emojis == '☺'] <-  '🙂'
-    # 
-    # emoji_freq_a %>% mutate(person = "a")
-    # emoji_freq_z %>% mutate(person = "z")
-    # emoji_freq_f %>% mutate(person = "f")
-    
-    name_data <- emojiPlot$data
-    # Extract emojis from the content
-    emoji_list <- str_extract_all(name_data$emojis, "[\\x{1F600}-\\x{1F64F}\\x{1F300}-\\x{1F5FF}\\x{1F680}-\\x{1F6FF}\\x{1F700}-\\x{1F77F}\\x{1F780}-\\x{1F7FF}\\x{1F800}-\\x{1F8FF}\\x{1F900}-\\x{1F9FF}\\x{1FA00}-\\x{1FA6F}\\x{2600}-\\x{26FF}\\x{2700}-\\x{27BF}]")
-    all_emojis <- unlist(emoji_list)
-    
-    
-    # Create a data frame with emoji frequencies
-    emoji_freq <- data.frame(table(all_emojis))
-    emoji_freq <- emoji_freq %>%  filter (emoji_freq$Freq >= (1/50)*max(emoji_freq$Freq))
-    
-    emoji_freq <- emoji_freq %>% filter(!(all_emojis %in% c("🏿","🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    emoji_freq$all_emojis[emoji_freq$all_emojis == '☹'] <-  '😟'
-    emoji_freq$all_emojis[emoji_freq$all_emojis == '☺'] <-  '🙂'
     
     wordcloud2(
-      data = emoji_freq,
+      data = emojiPlot$data %>% 
+        filter(emojiPlot$data$Freq >= (1 / 50)* max(emojiPlot$data$Freq)),
       color = "red",
-#      backgroundColor = "white",
       size = 1.5,
       minRotation = 0,
       maxRotation = 0,
@@ -1402,6 +1269,7 @@ server <- function(input, output) {
       shuffle = FALSE,
       backgroundColor = rgb(0,0,0,0)
     )
+    
   })
   
   
