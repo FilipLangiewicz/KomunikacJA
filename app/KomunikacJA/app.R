@@ -445,6 +445,13 @@ ui3 <- tags$div(
 
       tags$div(
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("emojiPlot_text1")
+          ),
+        ),
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -468,6 +475,13 @@ ui3 <- tags$div(
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyżej pokazane są najczęściej wysyłane przeze mnie emotki, podczas całego okresu używania wybranej aplikacji (dokładnie jaki to okres można sobie wyczytać z heatmapy w zakładce Wiadomości). Warto dodać że liczba emotek jest proporcjonalna do liczby wysłanych wiadomości, stąd duże różnice w liczbie wysłanych emotek między wybranymi osobami. Wykresy zawierają dane zarówno z konwersacji prywatnych jak i grupowych."
+          ),
+        ),
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("emojiPlot_text2")
           ),
         ),
         tags$div(
@@ -604,6 +618,13 @@ ui4 <- tags$div(
 
       tags$div(
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Ciekawi mnie, czy wszystkie wiadomości mają podobną długość itd? Ciekawe też czy ma znaczenie, czy te wiadomości były z czatów grupowych, czy prywatnych, w końcu na priv pewnie piszemy krótsze wiadomości. Albo czy wszyscy piszą wiadomości o podobnej długości. Gdyby tylko dało się to jakoś sprawdzić..."
+          ),
+        ),
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -620,6 +641,26 @@ ui4 <- tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
+            imageOutput("person_message_im19",
+                        height = "auto",
+                        width = "auto"),
+          ),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            "Wszystko możesz wyczytać z powyższego przygotowanego przeze mnie wykresu :))"
+          ),
+        ),
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Super! A tak w zasadzie to ile było tych wysłanych przez wiadomości?"
+          ),
+        ),
+        tags$div(
+          class = "person_message",
+          tags$div(
+            class = "person_image_convo",
             imageOutput("person_message_im10",
                         height = "auto",
                         width = "auto"),
@@ -627,6 +668,13 @@ ui4 <- tags$div(
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text2")
+          ),
+        ),
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "A ile z tego było na grupach?"
           ),
         ),
         tags$div(
@@ -643,6 +691,13 @@ ui4 <- tags$div(
           ),
         ),
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "A na priv?"
+          ),
+        ),
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -656,6 +711,13 @@ ui4 <- tags$div(
           ),
         ),
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Nieźle, to średnia długość wiadomości to ile w takim razie? Nigdy nie szło mi odczytywanie takich ładnych wykresów!"
+          ),
+        ),
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -666,6 +728,13 @@ ui4 <- tags$div(
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text5")
+          ),
+        ),
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "A to w sumie dużo czy mało? Wyobraźnia też nie działa u mnie najlepiej... Może chcesz podesłać jakąś swoją przykładową wiadomość o takiej długości?"
           ),
         ),
         tags$div(
@@ -695,6 +764,13 @@ ui4 <- tags$div(
           ),
         ),
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Ostatnia rzecz, która mnie ciekawi, ile znaków miała najdłuższa wysłana wiadomość?"
+          ),
+        ),
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -706,7 +782,14 @@ ui4 <- tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             textOutput("dlugosciWiadomosci_text8")
           )
-        )
+        ),
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Dzięki!"
+          ),
+        ),
       )
     )
   )
@@ -1310,7 +1393,7 @@ server <- function(input, output) {
             type = "bar", frame = ~month_year, 
             marker = list(color = "blue")) %>%
       layout(title = list(text = "<b>Top 10 najczęściej wysyłanych emotek w czasie</b>", font = list(size = 20),
-                          y = 0.97, 
+                          y = 0.99, 
                           x = 0.51, 
                           xanchor = 'center', 
                           yanchor =  'top'),
@@ -1609,6 +1692,25 @@ server <- function(input, output) {
   })
   
   
+  ### tworzenie tekstów do strony emojiPlot
+  output$emojiPlot_text1 <- renderText({
+    
+    person <- case_when(person_main() == "a" ~ "Ania",
+                        person_main() == "z" ~ "Zosia",
+                        person_main() == "f" ~ "Filip")
+    
+    paste0("Ej ",
+           person,
+           ", jakich emotek najczęściej używasz? 🤔")
+  })
+  
+  output$emojiPlot_text2 <- renderText({"Cały czas używasz tych samych emotek? Jak to się rozkłada w czasie? 📅"})
+  
+  
+  
+  
+  
+  
   ################# tworzenie tekstow koniec ################
   
   
@@ -1653,20 +1755,21 @@ server <- function(input, output) {
     
     #"Jaka jest średnia długość twojej wiadomości?"
     output$dlugosciWiadomosci_text5 <- renderText({
-      paste("Średnia długość wiadomości to ", round(average_length, 2), " (liczba znaków)")
+      paste("Średnia wiadomość ma u mnie ", round(average_length, 2), " znaków")
     })
     
     #"Nie wiem za bardzo co tu napisać ale coś może by się przydało"
     output$dlugosciWiadomosci_text6 <- renderText({
-      paste("Moja przykładowa wiadomość: ")
-    }) #już tu pomiedzy nic nie wrzucaj i zostaw te dwa koty obok siebie, przeżyjemy
+      paste("Jasne, oto przykładowa wiadomość: ")
+    }) 
+    
     output$dlugosciWiadomosci_text7 <- renderText({
       paste(example_message)
     })
     
     #Jaka jest najdłuższa wysłana przez ciebie wiadomość?
     output$dlugosciWiadomosci_text8 <- renderText({
-      HTML(paste("Najdłuższa wysłana przeze mnie wiadomośc ma ", longest_message$MessageLength, " znaków"))
+      HTML(paste("Najdłuższa wysłana przeze mnie wiadomość miała ", longest_message$MessageLength, " znaków"))
       
     })
     
