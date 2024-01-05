@@ -44,10 +44,13 @@ emojiPlot_data <- read.csv("./appData/emojiData/cloud_data.csv")
 ##### wczytanie danych emojiPlot Zosi koniec #####
 
 
+##### wczytanie danych barPlot Zosi #####
+barPlot_data <- read.csv("./appData/emojiData/bar_data.csv")
+##### wczytanie danych barPlot Zosi koniec #####
+
+
 ##### wczytanie danych dlugosci wiadomosci Zosi #####
-dlugosciWiadomosciPlot_data <- read.csv("./appData/dlugosciWiadomosciPlot/length_data.csv") %>%
-  mutate(platform = ifelse(platform %in% c("mg", "fb"), "mg", "ig"))
-  colnames(dlugosciWiadomosciPlot_data) <- c("person", "MessageLength", "GroupOrPriv", "app")
+dlugosciWiadomosciPlot_data <- read.csv("appData/dlugosciWiadomosciPlot/dlugosciWiadomosci_data.csv")
 ##### wczytanie danych dlugosci wiadomosci Zosi koniec #####
 
 
@@ -464,7 +467,7 @@ ui3 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Powyżej pokazane są najczęściej wysyłane przeze mnie emotki, podczas całego okresu używania wybranej aplikacji (dokładnie jaki to okres można sobie wyczytać z heatmapy w zakładce Wiadomości). Warto dodać że liczba emotek jest proporcjonalna do liczby wysłanych wiadomości, stąd duże różnice w liczbie wysłanych emotek między wybranymi osobami. Wykresy zawierają dane zarówno z konwersacji prywatnych jak i grupowych."
           ),
         ),
         tags$div(
@@ -490,7 +493,7 @@ ui3 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Tu pokazane jest 10 najczęściej używanych przeze mnie emotek. Są one wybrane spośród emotek używanych przeze mnie najczęściej w całym okresie posiadania wybranej aplikacji. Wykres pokazuje jak użycie danej emotki rośnie w czasie. Przedstawiona jest kumulatywna liczba użytych emotek, od momentu pierwszej wiadomości, do wybranej daty."
           )
         )
       )
@@ -850,6 +853,11 @@ server <- function(input, output) {
                                       app == "mg")
   )
   
+  barPlot <- reactiveValues(data = barPlot_data %>%
+                              filter(person == "a",
+                                     app == "mg")
+  )
+  
   dlugosciWiadomosciPlot <- reactiveValues(data = dlugosciWiadomosciPlot_data %>%
                                 filter(person == "a"
                                        #app == "mg"
@@ -891,6 +899,8 @@ server <- function(input, output) {
              app %in% app_main()) %>% 
       group_by(all_emojis) %>% 
       summarise(Freq = sum(Freq, na.rm = TRUE))
+    
+    updateData5()
   }
   
   updateData4 <- function() {
@@ -898,6 +908,22 @@ server <- function(input, output) {
       filter(person %in% person_main(),
              app %in% app_main()
              )
+  }
+  
+  updateData5 <- function() {
+    if (all(person_main() == c("a", "z", "f"))) {
+      person_main("a")
+    }
+    
+    if (all(app_main() == c("mg", "ig"))) {
+      barPlot$data <- barPlot_data %>% 
+        filter(person == person_main(),
+               app == "both")
+    } else {
+    barPlot$data <- barPlot_data %>%
+      filter(person == person_main(),
+             app %in% app_main())
+    }
   }
   ### aktualizacja danych po naciśnięciu push buttonow koniec ####
   
@@ -1275,112 +1301,121 @@ server <- function(input, output) {
   
   ### tworzenie animowanego barplot Zosi
   output$animated_plot <- renderPlotly({
-    ### tu jest bardzo duzo do poprawy bo musza byc juz przygoyowane  wiekszosci dane  
-    updateData3()
+    updateData5()
     
-    convert_to_vector <- function(emoji_string) {
-      if (!is.na(emoji_string)) {
-        return(unlist(strsplit(emoji_string, "")))
-      } else {
-        return(NA)
-      }
-    }
-    # Filter messages containing emojis
-    data_with_emojis <- emojiPlot$data
+    data <- barPlot$data
     
-    data_with_emojis <- data_with_emojis %>% 
-      mutate(emojis = sapply(emojis, convert_to_vector))
-    
-    pivoted_data <- data_with_emojis %>%
-      select(Timestamp, emojis, person, app) %>%#select(Timestamp, emojis, name, platform) %>%
-      unnest(emojis) %>%
-      group_by(Timestamp, emojis, person, app) %>% #group_by(Timestamp, emojis, name, platform) %>% 
-      summarise(count = n()) %>%
-      arrange(emojis, Timestamp, person, app) %>% #arrange(emojis, Timestamp, name, platform) %>%
-      group_by(emojis) %>%
-      mutate(cumulative_count = cumsum(count)) 
-    
-    # Filter out rows containing unwanted emojis
-    filtered_df <- pivoted_data %>% filter(!(emojis %in% c("🏻", "🏼", "🏽", "🏾", "🏿", "♀")))
-    
-    
-    pivoted_data <- filtered_df
-    
-    pivoted_data <-  pivoted_data %>% filter(!is.na(emojis))
-    
-    # Select the top 10 emojis based on cumulative_count
-    top_10 <- pivoted_data %>%
-      group_by(emojis) %>%
-      arrange(desc(cumulative_count)) %>%
-      slice_head(n = 1) %>%
-      arrange(desc(cumulative_count)) %>%
-      head(10) %>% 
-      pull(emojis)
-    
-    # Add month_year column
-    pivoted_data <- pivoted_data %>%
-      mutate(month_year = format(ymd_hms(Timestamp, tz = "UTC"), "%Y-%m"))
-    
-    # Filter data for selected emojis
-    selected_data <- pivoted_data %>%
-      filter(emojis %in% top_10)
-    
-    selected_data <- selected_data %>% select(emojis, month_year, count, person) #selected_data <- selected_data %>% select(emojis, month_year, count, name)
-    
-    # Create a combination of all emojis and months for each sender
-    all_combinations <- expand_grid(emojis = unique(selected_data$emojis),
-                                    month_year = unique(selected_data$month_year),
-                                    person = unique(selected_data$person))#name = unique(selected_data$name))
-    
-    # Merge with selected_data to fill missing combinations with count 0
-    complete_data <- left_join(all_combinations, selected_data, by = c("emojis", "month_year", "person")) %>%
-      replace_na(list(count = 0))
-    
-    # Calculate cumulative count for each month
-    cumulative_data <- complete_data %>%
-      group_by(emojis) %>%
-      arrange(emojis, month_year) %>%
-      mutate(cumulative_count = cumsum(count))
-    
-    # For each emoji, keep only the row with the highest cumulative_count in each month
-    final_data <- cumulative_data %>%
-      group_by(emojis, month_year) %>%
-      slice_max(order_by = cumulative_count) %>%
-      ungroup()
-    
-    plot_ly(final_data, x = ~cumulative_count, y = ~emojis, 
-                             type = "bar", frame = ~month_year, 
-                             marker = list(color = "blue")) %>%
-      layout(title = "Top 10 Most Used Emojis Over Time",
-             xaxis = list(title = "Cumulative Count"),
-             yaxis = list(title = "Emojis", tickfont = list(size = 10)),
-             showlegend = FALSE) %>%
+    plot_ly(data,
+            x = ~cumulative_count, y = ~emojis, 
+            type = "bar", frame = ~month_year, 
+            marker = list(color = "blue")) %>%
+      layout(title = list(text = "<b>Top 10 najczęściej wysyłanych emotek w czasie</b>", font = list(size = 20),
+                          y = 0.97, 
+                          x = 0.51, 
+                          xanchor = 'center', 
+                          yanchor =  'top'),
+             xaxis = list(title = list(text = "<b>Łączna liczba wysłanych emotek", standoff = 15, font = list(size = 15)),showgrid = TRUE,
+                          gridcolor = "lightgrey"),
+             yaxis = list(title = list(text = "<b>Emotki</b>", standoff = 15, font = list(size = 15)), tickfont = list(size = 13)),
+             showlegend = FALSE,
+             plot_bgcolor = "rgba(0,0,0,0)",
+             paper_bgcolor = "rgba(0,0,0,0)") %>%
       animation_opts(150, redraw = TRUE) %>%
       animation_slider(currentvalue = 
-                         list(prefix = "Month: ", font = list(color="red")))
+                         list(prefix = "Miesiąc: ", font = list(color="red")))
     
   })
   
   
   ### tworzenie dlugosciWiadomosci Zosi
   output$dlugosciWiadomosci_plot <- renderPlotly({
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
+                            identical(app_main(),"ig") ~ " w Instagramie",
+                            TRUE ~ " w obu aplikacjach")
+    
+    chosen_person <- case_when(identical(person_main(),c("a","z","f")) ~ "dkdsdsmklkmlkmldskmldskmldskmlads",
+                               person_main() == "a" ~ "Anię",
+                               person_main() == "z" ~ "Zosię",
+                               person_main() == "f" ~ "Filipa")
+    
+    if (all(person_main() == c("a", "z", "f"))) {
+      chosen_color <- c("orange","darkgreen", "#FF007F")
+    } else {
+      chosen_color <- case_when(
+        person_main() == "a" ~ c("orange", "orange"),
+        person_main() == "z" ~ c("#FF007F", "#FF007F"),
+        person_main() == "f" ~ c("darkgreen", "darkgreen"))
+    }
+    
+    plot_title <- paste0("<b>",
+                         "Rozkład długości wiadomości",
+                         " wysłanych przez ",
+                         chosen_person,
+                         chosen_app,
+                         "</b>")
+    
+    title_all <- paste0("<b>",
+                        "Porównanie długości wiadomości wysłanych",
+                        chosen_app,
+                        "</b>")
+    
+    
     box_data <- filter_outliers(dlugosciWiadomosciPlot$data)
     if (length(person_main()) > 1) {
-      basic_plot <- plot_ly(box_data, x = ~person, y = ~MessageLength, type = "violin", color = ~person) %>%
-        layout(title = "Overall Sent Message Length Distribution",
-               yaxis = list(title = "Message Length (characters)",
-                            range = c(0, max(box_data$MessageLength)+10)))
-
+      basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~person, colors = chosen_color,showlegend = FALSE) %>%
+        layout(title = list(text = title_all, font = list(size = 20),
+                            y = 0.97, 
+                            x = 0.51, 
+                            xanchor = 'center', 
+                            yanchor =  'top'),
+               xaxis = list(
+                 tickvals = c("a", "f", "z"),
+                 ticktext = c("<br><b>Ania</b>", "<br><b>Filip</b>","<br><b>Zosia</b>"),
+                 tickfont = list(size = 15,
+                                 color = "black",
+                                 thickness = 3)),
+               yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
+                            range = c(0, max(box_data$MessageLength)+10),
+                            showgrid = TRUE,
+                            gridcolor = "lightgrey"
+               ),
+               plot_bgcolor = "rgba(0,0,0,0)",
+               paper_bgcolor = "rgba(0,0,0,0)",
+               hoverlabel = list(
+                 bgcolor = "white",  
+                 font = list(size = 14, 
+                             color = "black"))
+        )
+      
     } else {
-      basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~GroupOrPriv) %>%
-        layout(title = paste("Sent Message Length Distribution -",
-                             person_main()),
-               yaxis = list(title = "Message Length (characters)",
-                            range = c(0, max(box_data$MessageLength) + 10)))
+      basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~GroupOrPriv,colors = chosen_color, showlegend = FALSE) %>%
+        layout(title = list(text = plot_title, font = list(size = 20),
+                            y = 0.97, 
+                            x = 0.51, 
+                            xanchor = 'center', 
+                            yanchor =  'top'),
+               xaxis = list(
+                 tickvals = c("priv", "group"),
+                 ticktext = c("<br><b>konwersacje prywatne</b>", "<br><b>konwersacje grupowe</b>"),
+                 tickfont = list(size = 15,
+                                 color = "black",
+                                 thickness = 3)),
+               yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
+                            range = c(0, max(box_data$MessageLength) + 10),
+                            showgrid = TRUE,
+                            gridcolor = "lightgrey"
+               ),
+               plot_bgcolor = "rgba(0,0,0,0)",
+               paper_bgcolor = "rgba(0,0,0,0)",
+               hoverlabel = list(
+                 bgcolor = "white",  
+                 font = list(size = 14, 
+                             color = "black")  
+               ))
+      
     }
 
-    basic_plot %>% layout() # moze sie przydac na pozniej ;)
-
+    basic_plot
 
   })
 
@@ -1601,33 +1636,38 @@ server <- function(input, output) {
     total_priv <- sum(stats_data$GroupOrPriv == "priv")
     example_message <- example_data$example_message[example_data$name == person_main()]
     
-    
+    #"Ile wynosi twoja liczba wysłanych wiadomości?"
     output$dlugosciWiadomosci_text2 <- renderText({
-      paste("Total number of messages sent: ", (total_mg + total_in)," [", total_mg, "(messenger), ", total_in, " (instagram)]")
+      paste("Ogólnie liczba wysłanych wiadomości wynosi ", (total_mg + total_in))
     })
     
+    #"Jak to się rozkłada na rodzaje konwersacji?"
     output$dlugosciWiadomosci_text3 <- renderText({
-      paste("Total number sent on group chats: ", total_group)
+      paste("Na konwersacjach grupowych w sumie mam wysłane ", total_group, " wiadomości")
     })
     
+    #"A na konwersacjach prywatnych?"
     output$dlugosciWiadomosci_text4 <- renderText({
-      paste("Total number of private messages: ", total_priv)
+      paste("Na konwersacjach prywatnych ", total_priv)
     })
     
+    #"Jaka jest średnia długość twojej wiadomości?"
     output$dlugosciWiadomosci_text5 <- renderText({
-      paste("Overall average message length: ", round(average_length, 2))
+      paste("Średnia długość wiadomości to ", round(average_length, 2), " (liczba znaków)")
     })
     
+    #"Nie wiem za bardzo co tu napisać ale coś może by się przydało"
     output$dlugosciWiadomosci_text6 <- renderText({
-      paste("Example message: ", example_message)
-    })
-    
+      paste("Moja przykładowa wiadomość: ")
+    }) #już tu pomiedzy nic nie wrzucaj i zostaw te dwa koty obok siebie, przeżyjemy
     output$dlugosciWiadomosci_text7 <- renderText({
-      paste("Shortest message: ", shortest_message$MessageLength, " characters (", shortest_message$app, ")")
+      paste(example_message)
     })
     
+    #Jaka jest najdłuższa wysłana przez ciebie wiadomość?
     output$dlugosciWiadomosci_text8 <- renderText({
-      paste("Longest message: ", longest_message$MessageLength, " characters (", longest_message$app, ")")
+      HTML(paste("Najdłuższa wysłana przeze mnie wiadomośc ma ", longest_message$MessageLength, " znaków"))
+      
     })
     
     
