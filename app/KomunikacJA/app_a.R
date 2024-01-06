@@ -273,30 +273,26 @@ ui2 <- tags$div(
           class = "app_button",
           tags$button(
             id = "mg2",
-            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig2",
-            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "sp2",
-            class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
-            "sp"
+            class = c("btn btn-default action-button shiny-bound-input", "sp_button")
           )
         ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all2",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            class = c("btn btn-default action-button shiny-bound-input", "all_button")
           )
         )
       ),
@@ -432,22 +428,19 @@ ui3 <- tags$div(
           class = "app_button",
           tags$button(
             id = "mg3",
-            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig3",
-            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all3",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            class = c("btn btn-default action-button shiny-bound-input", "all_button")
           )
         )
       ),
@@ -591,22 +584,19 @@ ui4 <- tags$div(
           class = "app_button",
           tags$button(
             id = "mg4",
-            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig4",
-            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button")
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all4",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            class = c("btn btn-default action-button shiny-bound-input", "all_button")
           )
         )
       ),
@@ -767,8 +757,7 @@ ui5 <- tags$div(
           class = "app_button_focused",
           tags$button(
             id = "fb",
-            class = c("btn btn-default action-button shiny-bound-input", "fb_button"),
-            "fb"
+            class = c("btn btn-default action-button shiny-bound-input", "fb_button")
           )
         )
       )
