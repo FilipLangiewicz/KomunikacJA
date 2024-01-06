@@ -133,32 +133,28 @@ ui1 <- tags$div(
           class = "app_button",
           tags$button(
             id = "mg",
-            class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            class = c("btn btn-default action-button shiny-bound-input", "mg_button")
           )
         ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig",
-            class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            class = c("btn btn-default action-button shiny-bound-input", "ig_button")
           )
         ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "sp",
-            class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
-            "sp"
+            class = c("btn btn-default action-button shiny-bound-input", "sp_button")
           )
         ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            class = c("btn btn-default action-button shiny-bound-input", "all_button")
           )
         )
       ),
