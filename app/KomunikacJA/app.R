@@ -916,7 +916,7 @@ server <- function(input, output) {
   ### początkowe wybrane osoby i apki
   person_main <- reactiveVal("a")
   app_main <- reactiveVal("mg")
-  
+  typ_main <- reactiveVal(c('wyslane','odebrane','wszystkie'))
   
   
   #### wczytywanie początkowych danych na wykresy ####
@@ -970,7 +970,8 @@ server <- function(input, output) {
     
     linePlot$data <- linePlot_data %>%
       filter(person == person_main(),
-             app %in% app_main())
+             app %in% app_main(),
+             typ %in% typ_main())
   }
   
   updateData3 <- function() {
@@ -1083,12 +1084,20 @@ server <- function(input, output) {
   })
   
   observeEvent(input$ig2, {
+    typ_main(c('wyslane','odebrane','wszystkie'))
     app_main("ig")
     updateData2()
   })
   
   observeEvent(input$sp2, {
+    typ_main(c('wyslane','odebrane','wszystkie'))
     app_main("sp")
+    updateData2()
+  })
+  
+  observeEvent(input$all2, {
+    typ_main('wszystkie')
+    app_main(c("mg","sp","ig"))
     updateData2()
   })
   ##### nasluchiwanie ze strony linePlot Ani koniec #####
@@ -1333,8 +1342,6 @@ server <- function(input, output) {
   
   ### tworzenie lineplot Ani
   output$linePlot_plot <- renderPlotly({
-    updateData2()
-    
     chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
                             identical(app_main(),"ig") ~ " w Instagramie",
                             identical(app_main(),"sp") ~ " w Snapchacie",
@@ -1343,22 +1350,67 @@ server <- function(input, output) {
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
-    plot_title <- paste0("Liczba wiadomości",
-                         " wysłanych i odebranych przez ",
+    plot_title <- paste0("Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
                          " do danego dnia")
-    ggplotly(
-      linePlot$data %>%
-        #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
-        ggplot(aes(x=date, y = suma_kumulacyjna, color=typ)) +
-        geom_line()+
-        labs(title=plot_title,
-             x = "Data",   # Zmiana podpisu osi x
-             y = "Liczba wiadomości",)+ # Zmiana podpisu osi y
-        theme_minimal()
-      ) %>% 
-      layout(xaxis = list(rangeslider = list(type = "date"))) # to dodalem, bo duzo latwiej taki slider obsluzyc
+    legend_title <- case_when(
+      identical(app_main(), "mg") ~ "<i>typ</i>",
+      identical(app_main(), "ig") ~ "<i>typ</i>",
+      identical(app_main(), "sp") ~ "<i>typ</i>",
+      TRUE ~ "<i>aplikacja</i>")
+    podpis_y <- case_when(
+      identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
+      identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
+      identical(app_main(), "sp") ~ "<b>Liczba wiadomości</b>",
+      TRUE ~ "<b>Liczba wiadomości (log)</b>")
+    
+    linePlot$data %>% 
+      mutate(color_plot = case_when(
+        identical(app_main(), "mg") ~ typ,
+        identical(app_main(), "ig") ~ typ,
+        identical(app_main(), "sp") ~ typ,
+        TRUE ~ app)) %>% 
+      #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
+      ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
+      geom_line()+
+      labs(title=plot_title,
+           x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
+           y = podpis_y,
+           color = legend_title)+ 
+      scale_color_manual(values = c(
+        "mg" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+        "ig" = "#C13584",
+        "sp" = "#FFFC00",
+        "wszystkie" = "#0066CC",
+        "wyslane" = "#00CC66",
+        "odebrane" = "#99004C"
+      )) +
+      theme_minimal()+
+      theme(
+        plot.title = element_text(face = "bold", size = 19),
+        panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
+        legend.text = element_text(hjust = 0.5)
+      )->p
+    
+    p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
+      p 
+    } else {
+      p+ scale_y_log10()
+    }
+    ggplotly(p) %>% 
+      layout(title = list(font = list(size = 19),
+                          y = 0.97, 
+                          x = 0.51, 
+                          xanchor = 'center', 
+                          yanchor =  'top'),
+             plot_bgcolor = "rgba(0,0,0,0)",
+             paper_bgcolor = "rgba(0,0,0,0)",
+             xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
+                          title = list(standoff = 15)),
+             yaxis = list(fixedrange = TRUE,
+                          title = list(standoff = 15, y = 0)))
+    
   }) 
   
   
@@ -1728,6 +1780,41 @@ server <- function(input, output) {
   output$emojiPlot_text2 <- renderText({"Cały czas używasz tych samych emotek? Jak to się rozkłada w czasie? 📅"})
   
   
+  ### tworzenie tekstow do strony linePlotu
+  output$linePlot_text1 <- renderText({
+    person <- case_when(person_main() == "a" ~ "Ania",
+                        person_main() == "z" ~ "Zosia",
+                        person_main() == "f" ~ "Filip")
+    sex <- case_when(person_main() == "f" ~ "e",
+                     TRUE ~ "a")
+    
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
+                            TRUE ~ " na Messengerze, Instagramie i Snapchacie łącznie")
+    
+    paste0("Hej ",
+           person,
+           ", ciekawi mnie w jakich okresach czasu wysyłał", sex, "ś i odebierał", sex, "ś najwięcej wiadomości",
+           chosen_app)
+  })
+  
+  output$linePlot_text2 <- renderText({
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
+              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Dlaczego dane dla Instagrama i Snapchata nie zaczynają się od początku wykresu?",
+              TRUE ~"Dziękuję:)")
+    
+  })
+  
+  output$linePlot_text2_answer <- renderText({
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
+              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat.",
+              TRUE ~ "Nie ma sprawy, miłego dnia")
+    
+  })
+  
   
   
   
@@ -1740,14 +1827,24 @@ server <- function(input, output) {
   
   ### tworzenie odpowiedzi do dlugosciWiadomosci Zosi
   observe({
-    example_data <- data.frame(
-      name = c("z", "f", "a"),
-      example_message = c(
-        "This is an example message for 'z'.",
-        "An example message for 'f'.",
-        "Example message for 'a'."
-      )
-    )
+    
+    if (all(person_main() == c("a", "z", "f"))) {
+      example_message <- case_when(identical(app_main(),"mg") ~ "Każdy grzyb ma swój dom",
+                                   identical(app_main(),"ig") ~ "co tu ma być? nie ogarniam",
+                                   TRUE ~ "bardzo piękny projekt!!")
+      
+    } else {
+      example_message <- case_when(
+        person_main() == "a" ~ case_when(identical(app_main(),"mg") ~ "Zrobiłeś już projekt??",
+                                         identical(app_main(),"ig") ~ "Umiesz coś na kolosa??",
+                                         TRUE ~ "Wyślesz notatki z twd?"),
+        person_main() == "z" ~ case_when(identical(app_main(),"mg") ~ "ughhh dlaczego ja muszę to robić",
+                                         identical(app_main(),"ig") ~ "ale słodziutki kotek miau miau",
+                                         TRUE ~ "ej znalazłam świniaka latającego"),
+        person_main() == "f" ~ case_when(identical(app_main(),"mg") ~ "koty potrzebują piwnic",
+                                         identical(app_main(),"ig") ~ "yyyy eeee array lista",
+                                         TRUE ~ "Bardzo lubię małe koty"))
+    }
     
     stats_data <- dlugosciWiadomosciPlot$data
     average_length <- mean(stats_data$MessageLength)
@@ -1757,8 +1854,7 @@ server <- function(input, output) {
     total_in <- sum(stats_data$app == "ig")
     total_group <- sum(stats_data$GroupOrPriv == "group")
     total_priv <- sum(stats_data$GroupOrPriv == "priv")
-    example_message <- example_data$example_message[example_data$name == person_main()]
-    
+
     #"Ile wynosi twoja liczba wysłanych wiadomości?"
     output$dlugosciWiadomosci_text2 <- renderText({
       paste("Ogólnie liczba wysłanych wiadomości wynosi ", (total_mg + total_in))
