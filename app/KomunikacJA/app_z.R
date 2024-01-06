@@ -515,7 +515,7 @@ ui3 <- tags$div(
                    class = "person_img_convo"),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            paste0("Powyżej pokazane są najczęściej wysyłane przeze mnie emotki, podczas całego okresu używania wybranej aplikacji (dokładnie jaki to okres można sobie wyczytać z heatmapy Filipa, dziękuję) Warto dodać że liczba emotek jest proporcjonalna do liczby wysłanych wiadomości, stąd duże różnice w liczbie wysłanych emotek między wybranymi osobami. Wykresy zawierają dane zarówno z konwersacji prywatnych jak i grupowych."))
+            paste0("Powyżej pokazane są najczęściej wysyłane przeze mnie emotki podczas całego okresu używania wybranej aplikacji (dokładnie jaki to okres można sobie wyczytać z heatmapy Filipa, dziękuję) Warto dodać że liczba emotek jest proporcjonalna do liczby wysłanych wiadomości, stąd duże różnice w liczbie wysłanych emotek między wybranymi osobami. Wykresy zawierają dane zarówno z konwersacji prywatnych jak i grupowych."))
         ),
         
         #pytanie przed barPlotem: "Cały czas używasz tych samych emotek? Jak to się rozkłada w czasie?📅"
@@ -534,7 +534,7 @@ ui3 <- tags$div(
                    class = "person_img_convo"),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Tu pokazane jest 10 najczęściej używanych przeze mnie emotek. Są one wybrane spośród emotek używanych przeze mnie najczęściej w całym okresie posiadania wybranej aplikacji. Wykres pokazuje jak użycie danej emotki rośnie w czasie. Przedstawiona jest kumulatywna liczba użytych emotek, od momentu pierwszej wiadomości, do wybranej daty."
+            "Tu pokazane jest 10 najczęściej wysyłanych przeze mnie emotek. Są one wybrane spośród tych używanych najczęściej w całym okresie posiadania wybranej aplikacji. Wykres pokazuje jak użycie danej emotki rośnie w czasie. Przedstawiona jest kumulatywna liczba emotek, wysłanych od momentu pierwszej wiadomości, do wybranej daty."
           )
         )
       )
@@ -1484,6 +1484,7 @@ server <- function(input, output) {
     
     if (all(person_main() == c("a", "z", "f"))) {
       chosen_color <- c("orange","darkgreen", "#FF007F")
+      
     } else {
       chosen_color <- case_when(
         person_main() == "a" ~ c("orange", "orange"),
@@ -1663,14 +1664,24 @@ server <- function(input, output) {
   
   ### tworzenie odpowiedzi do dlugosciWiadomosci Zosi
   observe({
-    example_data <- data.frame(
-      name = c("z", "f", "a"),
-      example_message = c(
-        "This is an example message for 'z'.",
-        "An example message for 'f'.",
-        "Example message for 'a'."
-      )
-    )
+    
+    if (all(person_main() == c("a", "z", "f"))) {
+      example_message <- case_when(identical(app_main(),"mg") ~ "Każdy grzyb ma swój dom",
+                              identical(app_main(),"ig") ~ "co tu ma być? nie ogarniam",
+                              TRUE ~ "bardzo piękny projekt!!")
+      
+    } else {
+      example_message <- case_when(
+        person_main() == "a" ~ case_when(identical(app_main(),"mg") ~ "Zrobiłeś już projekt??",
+                                                       identical(app_main(),"ig") ~ "Umiesz coś na kolosa??",
+                                                       TRUE ~ "Wyślesz notatki z twd?"),
+        person_main() == "z" ~ case_when(identical(app_main(),"mg") ~ "ughhh dlaczego ja muszę to robić",
+                                         identical(app_main(),"ig") ~ "ale słodziutki kotek miau miau",
+                                         TRUE ~ "ej znalazłam świniaka latającego"),
+        person_main() == "f" ~ case_when(identical(app_main(),"mg") ~ "koty potrzebują piwnic",
+                                         identical(app_main(),"ig") ~ "yyyy eeee array lista",
+                                         TRUE ~ "Bardzo lubię małe koty"))
+    }
     
     stats_data <- dlugosciWiadomosciPlot$data
     average_length <- mean(stats_data$MessageLength)
@@ -1680,7 +1691,7 @@ server <- function(input, output) {
     total_in <- sum(stats_data$app == "ig")
     total_group <- sum(stats_data$GroupOrPriv == "group")
     total_priv <- sum(stats_data$GroupOrPriv == "priv")
-    example_message <- example_data$example_message[example_data$name == person_main()]
+    #example_message <- example_data$example_message[example_data$name == person_main()]
     
     #"Ile wynosi twoja liczba wysłanych wiadomości?"
     output$dlugosciWiadomosci_text2 <- renderText({
