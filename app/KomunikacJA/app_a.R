@@ -11,7 +11,6 @@ library(wordcloud2)
 
 
 
-
 ##### wczytanie funkcji pomocniczych #####
 filter_outliers <- function(data) {
   boxplot_stats <- boxplot.stats(data$MessageLength)
@@ -320,6 +319,13 @@ ui2 <- tags$div(
       class = "convo_div",
       tags$div(
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("linePlot_text1")
+          ))),
+      tags$div(
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -345,8 +351,27 @@ ui2 <- tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
             "Powyższy wykres pokazuje ile wiadomości odebrała i wysłała dana osoba w sumie do danego dnia. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać. Wybierając poszczególne aplikacje oddzielnie możemy zobaczyć podział wymienionych wiadomości na wysłane i odebrane. Przy wyborze przycisku wszystkich aplikacji wiadomości są podzielone na aplikacje, na których były wymieniane. Ze względu na to, że Messenger jest przeze mnie używany o wiele częściej i intensywniej, niż pozostałe komunikatory, zastosowana tu została skala logarytmiczna, aby łatwiej było odczytać wartości na osi Y."
           )
-        )
-      )
+        )),
+        tags$div(
+          tags$div(
+            class = "person_message_flip",
+            tags$div(
+              class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+              textOutput("linePlot_text2")
+            ))),
+      tags$div(
+        tags$div(
+          class = "person_message",
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im21",
+                        height = "auto",
+                        width = "auto"),
+          ),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("linePlot_text2_answer")
+            )))
       
       
     )
@@ -1628,6 +1653,8 @@ server <- function(input, output) {
     
     output$person_message_im20 <- renderImage({image}, 
                                               deleteFile = FALSE)
+    output$person_message_im21 <- renderImage({image}, 
+                                              deleteFile = FALSE)
     
   })
   ################# tworzenie zdjec do wiadomosci koniec ################
@@ -1659,7 +1686,39 @@ server <- function(input, output) {
            " roku wysłał", sex, "ś i odebrał", sex, "ś najwięcej wiadomości",
            chosen_app)
   })
+  ### tworzenie tekstow do linePlotu
+  output$linePlot_text1 <- renderText({
+    
+    person <- case_when(person_main() == "a" ~ "Ania",
+                        person_main() == "z" ~ "Zosia",
+                        person_main() == "f" ~ "Filip")
+    sex <- case_when(person_main() == "f" ~ "e",
+                     TRUE ~ "a")
+    
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
+                            TRUE ~ " na Messengerze, Instagramie i Snapchacie łącznie")
+    
+    paste0("Hej ",
+           person,
+           ", ciekawi mnie w jakich okresach czasu wysyłał", sex, "ś i odebierał", sex, "ś najwięcej wiadomości",
+           chosen_app)
+  })
+  output$linePlot_text2 <- renderText({
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
+               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Dlaczego dane dla Instagrama i Snapchata nie zaczynają się od początku wykresu?",
+              TRUE ~"Dziękuję:)")
   
+  })
+  output$linePlot_text2_answer <- renderText({
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
+              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat.",
+              TRUE ~"Nie ma sprawy, miłego dnia")
+    
+  })
   
   ################# tworzenie tekstow koniec ################
   
