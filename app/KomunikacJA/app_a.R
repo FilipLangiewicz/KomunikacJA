@@ -1282,10 +1282,10 @@ server <- function(input, output) {
                          chosen_app,
                          " do danego dnia")
     legend_title <- case_when(
-      identical(app_main(), "mg") ~ "<i>typ</i>",
-      identical(app_main(), "ig") ~ "<i>typ</i>",
-      identical(app_main(), "sp") ~ "<i>typ</i>",
-      TRUE ~ "<i>aplikacja</i>")
+      identical(app_main(), "mg") ~ "<b>typ</b>",
+      identical(app_main(), "ig") ~ "<b>typ</b>",
+      identical(app_main(), "sp") ~ "<b>typ</b>",
+      TRUE ~ "<b>aplikacja</b>")
     podpis_y <- case_when(
       identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
       identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
@@ -1298,19 +1298,20 @@ server <- function(input, output) {
           identical(app_main(), "ig") ~ typ,
           identical(app_main(), "sp") ~ typ,
           TRUE ~ app)) %>% 
+        mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
         #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
         ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
-        geom_line()+
+        geom_line(size=1.07)+
         labs(title=plot_title,
              x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
              y = podpis_y,
              color = legend_title)+ 
         scale_color_manual(values = c(
-          "mg" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-          "ig" = "#C13584",
-          "sp" = "#FFFC00",
+          "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+          "Instagram" = "#C13584",
+          "Snapchat" = "#ECD504",
           "wszystkie" = "#0066CC",
-          "wyslane" = "#00CC66",
+          "wysłane" = "#00CC66",
           "odebrane" = "#99004C"
         )) +
         theme_minimal()+
@@ -1323,7 +1324,8 @@ server <- function(input, output) {
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p 
     } else {
-      p+ scale_y_log10()
+      p+ scale_y_log10(labels = scales::number_format(scale = 1))
+     #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
      ggplotly(p) %>% 
       layout(title = list(font = list(size = 19),
@@ -1694,13 +1696,28 @@ server <- function(input, output) {
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
                (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
               (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Dlaczego dane dla Instagrama i Snapchata nie zaczynają się od początku wykresu?",
+              (identical(app_main(),"mg") && identical(person_main(),"z")) ~ "Dlaczego pod koniec 2022 r. zaczęłaś wymieniać znacznie więcej wiadomości na Messengerze niż wcześniej?",
+              (identical(app_main(),"ig") && identical(person_main(),"z")) ~ "Dlaczego w 2019r. zaczęłaś wymieniać więcej wiadomości na Instagramie?",
+              (identical(app_main(),"sp") && identical(person_main(),"z")) ~ "Dlaczego w 2019r. zaczęłaś wymieniać więcej wiadomości na Snapchacie?",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"z")) ~ "Widać, że do 2018r. i po czerwcu 2022r. najwięcej korzystałaś w Messengera, a pomiędzy 2018r. a 2020r. dużo wiadomości wymieniałaś na Snapchacie i Instagramie. Od 2020r. przez jakiś czas mniej pisałaś z ludźmi. Czy masz pomysł, dlaczego tak było?",
+              (identical(app_main(),"mg") && identical(person_main(),"f")) ~ "Na początku 2019r. i 2022r. liczba wymienianych przez Ciebie wiadomości wzrosła. Czy domyślasz się, dlaczego tak mogło się zdarzyć?",
+              (identical(app_main(),"sp") && identical(person_main(),"f")) ~ "Na początku sierpnia wymieniłeś na Snapchacie prawie 2 tysiace wiadomości w 3 dni? Jak to możliwe?",
+              (identical(app_main(),"ig") && identical(person_main(),"f")) ~ "W kwietniu 2020r. i  w wakacje w 2021r. widać nagły wzrost w liczbie wymienianych przez Ciebie wiadomości na Instagramie. Coś szczególnego wtedy się stało?",
               TRUE ~"Dziękuję:)")
   
   })
   output$linePlot_text2_answer <- renderText({
-    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
-              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
-              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat.",
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
+              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat 😇",
+              (identical(app_main(),"mg") && identical(person_main(),"z")) ~ "Wtedy poszłam na studia, poznałam dużo fajnych nowych ludzi i z niektórymi cały czas utrzymuje bliski kontakt, plus pewnie sporo wiadomości odebranych jest ze studenckich groupchatów, samouczki z algebry same się przecież nie zrobią",
+              (identical(app_main(),"ig") && identical(person_main(),"z")) ~ "W połowie 2018 poszłam do międzynarodowego liceum, gdzie większość osób korzystała właśnie ze Snapchata lub Instagrama, messenger nie był tam za bardzo popularny",
+              (identical(app_main(),"sp") && identical(person_main(),"z")) ~ "W połowie 2018 poszłam do międzynarodowego liceum, gdzie większość osób korzystała właśnie ze Snapchata lub Instagrama, messenger nie był tam za bardzo popularny",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"z")) ~ "Od końca 2017 roku byłam w Belgii, chociaż na początku większość czasu spędzałam nadal wśród Polaków, z czasem coraz więcej moich znajomych była spoza Polski i najwięcej korzystali właśnie ze Snapchata i Instagrama, Messenger nie był tam zbyt popularną formą komunikacji. W 2020 wiadomo, COVID, ograniczone kontakty, pisało się mniej",
+              (identical(app_main(),"mg") && identical(person_main(),"f")) ~ "Wiem, ale nie powiem 😶",
+              (identical(app_main(),"sp") && identical(person_main(),"f")) ~ "Byłem wtedy na wakacjach, może dlatego ¯\\_(ツ)_/¯",
+              (identical(app_main(),"ig") && identical(person_main(),"f")) ~ "Kwiecień to pewnie kwestia Covida i siedzenia w domu",
+              identical(person_main(),"a") ~ "Nie ma sprawy, miłego dnia ❤️",
               TRUE ~"Nie ma sprawy, miłego dnia")
     
   })
