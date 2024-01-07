@@ -343,12 +343,33 @@ ui2 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać.Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Powyższy wykres pokazuje ile wiadomości odebrała i wysłała dana osoba w sumie do danego dnia. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać. Wybierając poszczególne aplikacje oddzielnie możemy zobaczyć podział wymienionych wiadomości na wysłane i odebrane. Przy wyborze przycisku wszystkich aplikacji wiadomości są podzielone na aplikacje, na których były wymieniane. Ze względu na to, że Messenger jest przeze mnie używany o wiele częściej i intensywniej, niż pozostałe komunikatory, zastosowana tu została skala logarytmiczna, aby łatwiej było odczytać wartości na osi Y."
+          )
+        )),
+      tags$div(
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("linePlot_text2")
+          )
+        )
+      ),
+      tags$div(
+        tags$div(
+          class = "person_message",
+          tags$div(
+            class = "person_image_convo",
+            imageOutput("person_message_im21",
+                        height = "auto",
+                        width = "auto"),
+          ),
+          tags$div(
+            class = c("wiadomosc", "wiadomosc_tekst"),
+            textOutput("linePlot_text2_answer")
           )
         )
       )
-      
-      
     )
   )
 )
