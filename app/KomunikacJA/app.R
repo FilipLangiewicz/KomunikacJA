@@ -135,7 +135,7 @@ ui1 <- tags$div(
           tags$button(
             id = "mg",
             class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            ""
           )
         ),
         tags$div(
@@ -143,7 +143,7 @@ ui1 <- tags$div(
           tags$button(
             id = "ig",
             class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            ""
           )
         ),
         tags$div(
@@ -151,7 +151,7 @@ ui1 <- tags$div(
           tags$button(
             id = "sp",
             class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
-            "sp"
+            ""
           )
         ),
         tags$div(
@@ -159,7 +159,7 @@ ui1 <- tags$div(
           tags$button(
             id = "all",
             class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            ""
           )
         )
       ),
@@ -279,21 +279,21 @@ ui2 <- tags$div(
           tags$button(
             id = "mg2",
             class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig2",
             class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "sp2",
             class = c("btn btn-default action-button shiny-bound-input", "sp_button"),
-            "sp"
+            ""
           )
         ),
         tags$div(
@@ -301,7 +301,7 @@ ui2 <- tags$div(
           tags$button(
             id = "all2",
             class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            ""
           )
         )
       ),
@@ -433,21 +433,21 @@ ui3 <- tags$div(
           tags$button(
             id = "mg3",
             class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig3",
             class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all3",
             class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            ""
           )
         )
       ),
@@ -607,21 +607,21 @@ ui4 <- tags$div(
           tags$button(
             id = "mg4",
             class = c("btn btn-default action-button shiny-bound-input", "mg_button"),
-            "mg"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "ig4",
             class = c("btn btn-default action-button shiny-bound-input", "ig_button"),
-            "ig"
+            ""
           )        ),
         tags$div(
           class = "app_button",
           tags$button(
             id = "all4",
             class = c("btn btn-default action-button shiny-bound-input", "all_button"),
-            "all"
+            ""
           )
         )
       ),
@@ -852,7 +852,7 @@ ui5 <- tags$div(
           tags$button(
             id = "fb",
             class = c("btn btn-default action-button shiny-bound-input", "fb_button"),
-            "fb"
+            ""
           )
         )
       )
@@ -870,6 +870,13 @@ ui5 <- tags$div(
       class = "convo_div",
       
       tags$div(
+        tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            "Siemka, słyszałem, że na wydziale MiNI w ogóle nie ma czasu na życie towarzyskie i że ludzie wcale nie mają tam znajomych, czy to prawda?"
+          ),
+        ),
         tags$div(
           class = "person_message",
           tags$div(
@@ -893,7 +900,7 @@ ui5 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Powyższa mapka pokazuje ile danego dnia wybrana osoba wysłała i dostała w sumie wiadomości w wybranej aplikacji. Przy danych ze Snapchata należy pamiętać, że niektóre wiadomości w tej aplikacji znikają i nie są uwzględniane w danych, które udało nam się pobrać."
+            "Hmm, wystarczy spojrzeć na tek wykres, który pokazuje jak zmieniała się nasza liczba znajomych na Facebooku w czasie. Widać na nim duże przyrosty w momencie pójścia na studia u nas wszystkich i w sumie liczba ta cały czas trochę rośnie, więc to chyba nie jest prawda... Ciekawa sytuacja jest również w przypadku pójścia do liceum, widać wzrost u Filipa i u Ani, ale u Zosi jest ono rok wcześniej, bo była wtedy za granicą, gdzie jest inny system edukacji i rok wcześniej poszła do szkoły średniej"
           )
         )
       )
@@ -1100,6 +1107,7 @@ server <- function(input, output) {
   })
   
   observeEvent(input$mg2, {
+    typ_main(c('wyslane','odebrane','wszystkie'))
     app_main("mg")
     updateData2()
   })
@@ -1363,23 +1371,24 @@ server <- function(input, output) {
   
   ### tworzenie lineplot Ani
   output$linePlot_plot <- renderPlotly({
-    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
-                            identical(app_main(),"ig") ~ " w Instagramie",
-                            identical(app_main(),"sp") ~ " w Snapchacie",
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
                             TRUE ~ " we wszystkich aplikacjach")
     
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
+    
     plot_title <- paste0("Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
                          " do danego dnia")
     legend_title <- case_when(
-      identical(app_main(), "mg") ~ "<i>typ</i>",
-      identical(app_main(), "ig") ~ "<i>typ</i>",
-      identical(app_main(), "sp") ~ "<i>typ</i>",
-      TRUE ~ "<i>aplikacja</i>")
+      identical(app_main(), "mg") ~ "<b>Typ</b>",
+      identical(app_main(), "ig") ~ "<b>Typ</b>",
+      identical(app_main(), "sp") ~ "<b>Typ</b>",
+      TRUE ~ "<b>Aplikacja</b>")
     podpis_y <- case_when(
       identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
       identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
@@ -1392,19 +1401,19 @@ server <- function(input, output) {
         identical(app_main(), "ig") ~ typ,
         identical(app_main(), "sp") ~ typ,
         TRUE ~ app)) %>% 
-      #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
+      mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
       ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
-      geom_line()+
+      geom_line(size=1.07)+
       labs(title=plot_title,
            x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
            y = podpis_y,
            color = legend_title)+ 
       scale_color_manual(values = c(
-        "mg" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-        "ig" = "#C13584",
-        "sp" = "#FFFC00",
+        "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+        "Instagram" = "#C13584",
+        "Snapchat" = "#ECD504",
         "wszystkie" = "#0066CC",
-        "wyslane" = "#00CC66",
+        "wysłane" = "#00CC66",
         "odebrane" = "#99004C"
       )) +
       theme_minimal()+
@@ -1417,7 +1426,8 @@ server <- function(input, output) {
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p 
     } else {
-      p+ scale_y_log10()
+      p+ scale_y_log10(labels = scales::number_format(scale = 1))
+      #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
     ggplotly(p) %>% 
       layout(title = list(font = list(size = 19),
@@ -1433,6 +1443,7 @@ server <- function(input, output) {
                           title = list(standoff = 15, y = 0)))
     
   }) 
+  
   
   
   ### tworzenie emojiPlot Zosi
@@ -1591,7 +1602,19 @@ server <- function(input, output) {
         yaxis = list(title = "Liczba znajomych"),
         showlegend = TRUE,
         plot_bgcolor = "rgba(0,0,0,0)",
-        paper_bgcolor = "rgba(0,0,0,0)"
+        paper_bgcolor = "rgba(0,0,0,0)",
+        title = list(font = list(size = 19),
+                     y = 0.97, 
+                     x = 0.51, 
+                     xanchor = 'center', 
+                     yanchor =  'top'),
+
+        xaxis = list(rangeslider = list(type = "date"), 
+                     fixedrange = TRUE,
+                     title = list(standoff = 15)),
+        yaxis = list(fixedrange = TRUE,
+                     title = list(standoff = 15, 
+                                  y = 0))
         
       )
     
@@ -1601,7 +1624,7 @@ server <- function(input, output) {
   ################# tworzenie wykresów koniec ################
   
   
-  ################# tworzenie tytulu do heatmapy ################
+  ################# tworzenie tytulu do emojiPlot ################
   output$emoji_plot_title <- renderText({
     chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
                             identical(app_main(),"ig") ~ " na Instagramie",
@@ -1754,6 +1777,9 @@ server <- function(input, output) {
     output$person_message_im20 <- renderImage({image}, 
                                              deleteFile = FALSE)
     
+    output$person_message_im21 <- renderImage({image}, 
+                                              deleteFile = FALSE)
+    
   })
   ################# tworzenie zdjec do wiadomosci koniec ################
   
@@ -1803,6 +1829,7 @@ server <- function(input, output) {
   
   ### tworzenie tekstow do strony linePlotu
   output$linePlot_text1 <- renderText({
+    
     person <- case_when(person_main() == "a" ~ "Ania",
                         person_main() == "z" ~ "Zosia",
                         person_main() == "f" ~ "Filip")
@@ -1824,15 +1851,30 @@ server <- function(input, output) {
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
               (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Dlaczego dane dla Instagrama i Snapchata nie zaczynają się od początku wykresu?",
+              (identical(app_main(),"mg") && identical(person_main(),"z")) ~ "Dlaczego pod koniec 2022 r. zaczęłaś wymieniać znacznie więcej wiadomości na Messengerze niż wcześniej?",
+              (identical(app_main(),"ig") && identical(person_main(),"z")) ~ "Dlaczego w 2019r. zaczęłaś wymieniać więcej wiadomości na Instagramie?",
+              (identical(app_main(),"sp") && identical(person_main(),"z")) ~ "Dlaczego w 2019r. zaczęłaś wymieniać więcej wiadomości na Snapchacie?",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"z")) ~ "Widać, że do 2018r. i po czerwcu 2022r. najwięcej korzystałaś w Messengera, a pomiędzy 2018r. a 2020r. dużo wiadomości wymieniałaś na Snapchacie i Instagramie. Od 2020r. przez jakiś czas mniej pisałaś z ludźmi. Czy masz pomysł, dlaczego tak było?",
+              (identical(app_main(),"mg") && identical(person_main(),"f")) ~ "Na początku 2019r. i 2022r. liczba wymienianych przez Ciebie wiadomości wzrosła. Czy domyślasz się, dlaczego tak mogło się zdarzyć?",
+              (identical(app_main(),"sp") && identical(person_main(),"f")) ~ "Na początku sierpnia wymieniłeś na Snapchacie prawie 2 tysiace wiadomości w 3 dni? Jak to możliwe?",
+              (identical(app_main(),"ig") && identical(person_main(),"f")) ~ "W kwietniu 2020r. i  w wakacje w 2021r. widać nagły wzrost w liczbie wymienianych przez Ciebie wiadomości na Instagramie. Coś szczególnego wtedy się stało?",
               TRUE ~"Dziękuję:)")
     
   })
   
   output$linePlot_text2_answer <- renderText({
-    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
-              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami.",
-              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat.",
-              TRUE ~ "Nie ma sprawy, miłego dnia")
+    case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
+              (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"a")) ~ "Na tych aplikacjach założyłam konto później niż na Facebooku, dopiero w 2017 roku, dlatego nie ma danych dla tych aplikacji z wcześniejszych lat 😇",
+              (identical(app_main(),"mg") && identical(person_main(),"z")) ~ "Wtedy poszłam na studia, poznałam dużo fajnych nowych ludzi i z niektórymi cały czas utrzymuje bliski kontakt, plus pewnie sporo wiadomości odebranych jest ze studenckich groupchatów, samouczki z algebry same się przecież nie zrobią",
+              (identical(app_main(),"ig") && identical(person_main(),"z")) ~ "W połowie 2018 poszłam do międzynarodowego liceum, gdzie większość osób korzystała właśnie ze Snapchata lub Instagrama, messenger nie był tam za bardzo popularny",
+              (identical(app_main(),"sp") && identical(person_main(),"z")) ~ "W połowie 2018 poszłam do międzynarodowego liceum, gdzie większość osób korzystała właśnie ze Snapchata lub Instagrama, messenger nie był tam za bardzo popularny",
+              (identical(app_main(),c("mg","sp","ig")) && identical(person_main(),"z")) ~ "Od końca 2017 roku byłam w Belgii, chociaż na początku większość czasu spędzałam nadal wśród Polaków, z czasem coraz więcej moich znajomych była spoza Polski i najwięcej korzystali właśnie ze Snapchata i Instagrama, Messenger nie był tam zbyt popularną formą komunikacji. W 2020 wiadomo, COVID, ograniczone kontakty, pisało się mniej",
+              (identical(app_main(),"mg") && identical(person_main(),"f")) ~ "Wiem, ale nie powiem 😶",
+              (identical(app_main(),"sp") && identical(person_main(),"f")) ~ "Byłem wtedy na wakacjach, może dlatego ¯\\_(ツ)_/¯",
+              (identical(app_main(),"ig") && identical(person_main(),"f")) ~ "Kwiecień to pewnie kwestia Covida i siedzenia w domu",
+              identical(person_main(),"a") ~ "Nie ma sprawy, miłego dnia ❤️",
+              TRUE ~"Nie ma sprawy, miłego dnia")
     
   })
   
