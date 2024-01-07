@@ -1297,10 +1297,17 @@ server <- function(input, output) {
           identical(app_main(), "mg") ~ typ,
           identical(app_main(), "ig") ~ typ,
           identical(app_main(), "sp") ~ typ,
-          TRUE ~ app)) %>% 
-        mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
+          TRUE ~ app)) %>%
+        mutate(data=date) %>% 
+        mutate(suma_wiadomości = suma_kumulacyjna) %>% 
+        mutate("color" = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
+        mutate(color = case_when(
+          identical(app_main(), "mg") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
+          identical(app_main(), "ig") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
+          identical(app_main(), "sp") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
+          TRUE ~ factor(color, levels = c("Messenger", "Instagram", "Snapchat")))) %>% 
         #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
-        ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
+        ggplot(aes(x=data, y = suma_wiadomości, color = color)) +
         geom_line(size=1.07)+
         labs(title=plot_title,
              x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
@@ -1320,14 +1327,15 @@ server <- function(input, output) {
           panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
           legend.text = element_text(hjust = 0.5)
           )->p
- 
+    
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p 
     } else {
       p+ scale_y_log10(labels = scales::number_format(scale = 1))
      #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
-     ggplotly(p) %>% 
+    p2 <- 
+     ggplotly(p, tooltip = c("data", "suma_wiadomości")) %>% 
       layout(title = list(font = list(size = 19),
              y = 0.97, 
              x = 0.51, 
@@ -1338,7 +1346,7 @@ server <- function(input, output) {
      xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
                   title = list(standoff = 15)),
      yaxis = list(fixedrange = TRUE,
-                  title = list(standoff = 15, y = 0)))
+                  title = list(standoff = 15, y = 0), zeroline = TRUE))
      
   }) 
   
