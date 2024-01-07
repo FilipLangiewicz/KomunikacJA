@@ -921,12 +921,11 @@ ui_main <- tags$div(includeCSS("./css/styles.css"),
                       style = "background-color: white;",
                       navbarPage("",
                                  tabPanel(HTML("<b class = 'JA'>JA</b>"), ui0),
-                                 tabPanel(HTML("<b class = 'menu_text'>Wiadomości</b>"), ui1, value = 2),
+                                 tabPanel(HTML("<b class = 'menu_text'>Wiadomości</b>"), ui1),
                                  tabPanel(HTML("<b class = 'menu_text'>Aplikacje</b>"), ui2),
                                  tabPanel(HTML("<b class = 'menu_text'>Emocje</b>"), ui3),
                                  tabPanel(HTML("<b class = 'menu_text'>Forma</b>"), ui4),
-                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5),
-                                 selected = 2
+                                 tabPanel(HTML("<b class = 'menu_text'>Znajomi</b>"), ui5)
                       )
                     )
 )
@@ -1062,7 +1061,7 @@ server <- function(input, output) {
              app %in% app_main())
     }
   }
-  ### aktualizacja danych po naciśnięciu push buttonow koniec ####
+  #### aktualizacja danych po naciśnięciu push buttonow koniec ####
   
   
   ### aktualizacja mozliwych do wyboru opcji po nacisnieciu pushbuttonow na stronie Heatmapy
@@ -1408,6 +1407,7 @@ server <- function(input, output) {
                          chosen_person,
                          chosen_app,
                          " do danego dnia")
+    
     legend_title <- case_when(
       identical(app_main(), "mg") ~ "<b>Typ</b>",
       identical(app_main(), "ig") ~ "<b>Typ</b>",
@@ -1469,7 +1469,6 @@ server <- function(input, output) {
   }) 
   
   
-  
   ### tworzenie emojiPlot Zosi
   output$emoji_plot <- renderUI({
     updateData3()
@@ -1521,8 +1520,8 @@ server <- function(input, output) {
   
   ### tworzenie dlugosciWiadomosci Zosi
   output$dlugosciWiadomosci_plot <- renderPlotly({
-    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
-                            identical(app_main(),"ig") ~ " w Instagramie",
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
                             TRUE ~ " w obu aplikacjach")
     
     chosen_person <- case_when(identical(person_main(),c("a","z","f")) ~ "dkdsdsmklkmlkmldskmldskmldskmlads",
@@ -1547,7 +1546,7 @@ server <- function(input, output) {
                          "</b>")
     
     title_all <- paste0("<b>",
-                        "Porównanie długości wiadomości wysłanych",
+                        "Porównanie długości wiadomości wysłanych przez nas",
                         chosen_app,
                         "</b>")
     
@@ -1617,31 +1616,54 @@ server <- function(input, output) {
     friendsPlot_data %>%
       group_by(person, date) %>%
       summarise(liczba_znajomych = n()) %>%
-      mutate(sumaryczna_liczba_znajomych = cumsum(liczba_znajomych)) %>%
-      plot_ly(x = ~date, y = ~sumaryczna_liczba_znajomych, color = ~person, type = "scatter", mode = "lines") %>%
+      mutate(sumaryczna_liczba_znajomych = cumsum(liczba_znajomych),
+             names = case_when(person == "a" ~ "Ania",
+                               person == "f" ~ "Filip",
+                               person == "z" ~ "Zosia"),
+             odmienione = case_when(person == "a" ~ "Ani",
+                                    person == "f" ~ "Filipa",
+                                    person == "z" ~ "Zosi")
+             ) %>%
+      plot_ly(x = ~date, 
+              y = ~sumaryczna_liczba_znajomych, 
+              color = ~person, 
+              type = "scatter", 
+              mode = "lines",
+              colors = c("orange","darkgreen", "#FF007F"),
+              name = ~names, 
+              hoverinfo = "text",
+              hovertext = ~paste0(format(date, "%d.%m.%Y"), 
+                                  " roku liczba znajomych ",
+                                   odmienione,
+                                   " wynosiła <b>",
+                                 sumaryczna_liczba_znajomych,
+                                  "</b>"),
+              line = list(width = 3)
+              ) %>%
       layout(
-        title = "Liczba znajomych w czasie",
-        xaxis = list(title = "Data", 
-                     rangeslider = list(type = "date")),
-        yaxis = list(title = "Liczba znajomych"),
+        title = "<b>Liczba znajomych na Facebooku w czasie</b>",
         showlegend = TRUE,
         plot_bgcolor = "rgba(0,0,0,0)",
         paper_bgcolor = "rgba(0,0,0,0)",
-        title = list(font = list(size = 19),
+        title = list(font = list(size = 20),
                      y = 0.97, 
                      x = 0.51, 
                      xanchor = 'center', 
                      yanchor =  'top'),
-
         xaxis = list(rangeslider = list(type = "date"), 
-                     fixedrange = TRUE,
-                     title = list(standoff = 15)),
-        yaxis = list(fixedrange = TRUE,
-                     title = list(standoff = 15, 
-                                  y = 0))
-        
+                     title = list(text = "<b>Data</b>",
+                                  standoff = 15),
+                     showgrid = TRUE,
+                     gridcolor = "lightgrey"
+                     ),
+        yaxis = list(title = list(text = "<b>Liczba znajomych</b>", 
+                                  standoff = 15, 
+                                  font = list(size = 13.5)),
+                     showgrid = TRUE,
+                     gridcolor = "lightgrey",
+                     fixedrange = TRUE
+                     )
       )
-    
   })
   
     
