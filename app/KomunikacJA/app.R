@@ -1450,10 +1450,10 @@ server <- function(input, output) {
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p 
     } else {
-      p+ scale_y_log10(labels = scales::number_format(scale = 1))
+      p + scale_y_continuous(trans = "log",breaks = c(1, 100, 1000, 10000),limits = c(0, 100000),labels = c("1", "100", "1000", "10000"))
       #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
-    ggplotly(p) %>% 
+    p <- ggplotly(p) %>% 
       layout(title = list(font = list(size = 19),
                           y = 0.97, 
                           x = 0.51, 
@@ -1463,9 +1463,18 @@ server <- function(input, output) {
              paper_bgcolor = "rgba(0,0,0,0)",
              xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
                           title = list(standoff = 15)),
-             yaxis = list(fixedrange = TRUE,
-                          title = list(standoff = 15, y = 0)))
-    
+             yaxis = list(#fixedrange = TRUE,
+                          title = list(standoff = 15, y = 0)
+                         # type = "log",
+                          #range = c(0, 100000)
+                         )
+                         )
+    # if (!(identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp"))) {
+    #   p <- p %>% 
+    #     layout(yaxis = list(tickvals = c(1, 10, 100),  # Wartości tick, które chcesz wyświetlić
+    #                         ticktext = c('1', '10', '100')))
+    # }
+    p
   }) 
   
   
