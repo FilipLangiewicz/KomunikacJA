@@ -900,7 +900,7 @@ ui5 <- tags$div(
           ),
           tags$div(
             class = c("wiadomosc", "wiadomosc_tekst"),
-            "Hmm, wystarczy spojrzeć na tek wykres, który pokazuje jak zmieniała się nasza liczba znajomych na Facebooku w czasie. Widać na nim duże przyrosty w momencie pójścia na studia u nas wszystkich i w sumie liczba ta cały czas trochę rośnie, więc to chyba nie jest prawda... Ciekawa sytuacja jest również w przypadku pójścia do liceum, widać wzrost u Filipa i u Ani, ale u Zosi jest ono rok wcześniej, bo była wtedy za granicą, gdzie jest inny system edukacji i rok wcześniej poszła do szkoły średniej"
+            "Hmm, wystarczy spojrzeć na tek wykres, który pokazuje jak zmieniała się nasza liczba znajomych na Facebooku w czasie. Widać na nim duże przyrosty w momencie pójścia na studia u nas wszystkich i w sumie liczba ta cały czas trochę rośnie, więc to chyba nie jest prawda... Ciekawa sytuacja jest również w przypadku pójścia do liceum, widać wzrost u Filipa i u Ani, ale u Zosi jest on rok wcześniej, bo była wtedy za granicą, gdzie jest inny system edukacji i rok wcześniej poszła do szkoły średniej"
           )
         )
       )
@@ -1641,12 +1641,13 @@ server <- function(input, output) {
               line = list(width = 3)
               ) %>%
       layout(
-        title = "<b>Liczba znajomych na Facebooku w czasie</b>",
         showlegend = TRUE,
+        legend = list(title = list(text = "<b>Osoby</b>")),  # Tytuł legendy
         plot_bgcolor = "rgba(0,0,0,0)",
         paper_bgcolor = "rgba(0,0,0,0)",
-        title = list(font = list(size = 20),
-                     y = 0.97, 
+        title = list(text = "<b>Liczba znajomych na Facebooku w czasie</b>",
+                     font = list(size = 20),
+                     y = 0.99, 
                      x = 0.51, 
                      xanchor = 'center', 
                      yanchor =  'top'),
