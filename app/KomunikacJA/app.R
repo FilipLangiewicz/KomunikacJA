@@ -1006,6 +1006,14 @@ server <- function(input, output) {
     if (all(person_main() == c("a", "z", "f"))) {
       person_main("a")
     }
+
+    if (identical(app_main(), c("mg", "sp", "ig"))) {
+      app_main("mg")
+    }
+    
+    if (identical(app_main(), "sp")) {
+      app_main("mg")
+    }
     
     emojiPlot$data <- emojiPlot_data %>%
       filter(person == person_main(),
@@ -1017,6 +1025,14 @@ server <- function(input, output) {
   }
   
   updateData4 <- function() {
+    if (identical(app_main(), c("mg", "sp", "ig"))) {
+      app_main("mg")
+    }
+    
+    if (identical(app_main(), "sp")) {
+      app_main("mg")
+    }
+    
     dlugosciWiadomosciPlot$data <- dlugosciWiadomosciPlot_data %>%
       filter(person %in% person_main(),
              app %in% app_main()
@@ -1027,7 +1043,15 @@ server <- function(input, output) {
     if (all(person_main() == c("a", "z", "f"))) {
       person_main("a")
     }
+
+    if (identical(app_main(), c("mg", "sp", "ig"))) {
+      app_main("mg")
+    }
     
+    if (identical(app_main(), "sp")) {
+      app_main("mg")
+    }
+
     if (all(app_main() == c("mg", "ig"))) {
       barPlot$data <- barPlot_data %>% 
         filter(person == person_main(),
@@ -1469,7 +1493,7 @@ server <- function(input, output) {
   
   ### tworzenie animowanego barplot Zosi
   output$animated_plot <- renderPlotly({
-    updateData5()
+    updateData3()
     
     data <- barPlot$data
     
