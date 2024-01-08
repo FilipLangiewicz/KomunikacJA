@@ -1967,10 +1967,6 @@ server <- function(input, output) {
   
   
   ################# tworzenie tekstow ################
-  
-
-  
-  
   ### tworzenie tekstu do heatmapy
   output$heatmapa_text1 <- renderText({
     
@@ -2025,9 +2021,10 @@ server <- function(input, output) {
     
     paste0("Hej ",
            person,
-           ", ciekawi mnie w jakich okresach czasu wysyłał", sex, "ś i odebierał", sex, "ś najwięcej wiadomości",
+           ", ciekawi mnie w jakich okresach czasu wysyłał", sex, "ś i odbierał", sex, "ś najwięcej wiadomości",
            chosen_app)
   })
+  
   output$linePlot_text2 <- renderText({
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
@@ -2042,6 +2039,7 @@ server <- function(input, output) {
               TRUE ~"Dziękuję:)")
     
   })
+  
   output$linePlot_text2_answer <- renderText({
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
@@ -2057,11 +2055,6 @@ server <- function(input, output) {
               TRUE ~"Nie ma sprawy, miłego dnia")
     
   })
-  
-  
-  
-  
-  
   
   ################# tworzenie tekstow koniec ################
   
