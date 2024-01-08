@@ -1300,14 +1300,18 @@ server <- function(input, output) {
           TRUE ~ app)) %>%
         mutate(data=date) %>% 
         mutate(suma_wiadomości = suma_kumulacyjna) %>% 
-        mutate("color" = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
-        mutate(color = case_when(
-          identical(app_main(), "mg") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
-          identical(app_main(), "ig") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
-          identical(app_main(), "sp") ~ factor(color, levels = c("wszystkie", "odebrane", "wysłane")),
-          TRUE ~ factor(color, levels = c("Messenger", "Instagram", "Snapchat")))) %>% 
+        mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
+        mutate(color_plot = case_when(
+          identical(app_main(), "mg") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+          identical(app_main(), "ig") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+          identical(app_main(), "sp") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+          TRUE ~ factor(color_plot, levels = c("Messenger", "Instagram", "Snapchat")))) %>% 
+        mutate(tekst = ifelse(color_plot == "wysłane", "wysłałeś", ifelse(color_plot == "odebrane", "odebrałeś", "odebrałeś i wysłałeś"))) %>% 
         #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
-        ggplot(aes(x=data, y = suma_wiadomości, color = color)) +
+        ggplot(aes(x=data, y = suma_wiadomości, color = color_plot, text = paste0(format(data, "%d %B %Y"),
+                                                                             "<br>Do tego dnia <br><b> ",
+                                                                             tekst,
+                                                                             " w sumie </b>", suma_wiadomości, " wiadomości</b>", chosen_app))) +
         geom_line(size=1.07)+
         labs(title=plot_title,
              x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
@@ -1334,8 +1338,7 @@ server <- function(input, output) {
       p+ scale_y_log10(labels = scales::number_format(scale = 1))
      #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
-    p2 <- 
-     ggplotly(p, tooltip = c("data", "suma_wiadomości")) %>% 
+ ggplotly(p, tooltip = "text") %>% 
       layout(title = list(font = list(size = 19),
              y = 0.97, 
              x = 0.51, 
