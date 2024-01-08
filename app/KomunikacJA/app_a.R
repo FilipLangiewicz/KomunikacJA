@@ -1269,23 +1269,23 @@ server <- function(input, output) {
   
   ### tworzenie lineplot Ani
   output$linePlot_plot <- renderPlotly({
-    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
-                            identical(app_main(),"ig") ~ " w Instagramie",
-                            identical(app_main(),"sp") ~ " w Snapchacie",
-                            TRUE ~ " we wszystkich aplikacjach")
+    chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
+                            identical(app_main(),"ig") ~ " na Instagramie",
+                            identical(app_main(),"sp") ~ " na Snapchacie",
+                            TRUE ~ (" we wszystkich aplikacjach"))
     
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
-    plot_title <- paste0("Liczba wymienionych wiadomości przez ",
+    plot_title <- paste0("<b>Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
-                         " do danego dnia")
+                         " do danego dnia</b>")
     legend_title <- case_when(
-      identical(app_main(), "mg") ~ "<b>typ</b>",
-      identical(app_main(), "ig") ~ "<b>typ</b>",
-      identical(app_main(), "sp") ~ "<b>typ</b>",
-      TRUE ~ "<b>aplikacja</b>")
+      identical(app_main(), "mg") ~ "<b>Typ</b>",
+      identical(app_main(), "ig") ~ "<b>Typ</b>",
+      identical(app_main(), "sp") ~ "<b>Typ</b>",
+      TRUE ~ "<b>Aplikacja</b>")
     podpis_y <- case_when(
       identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
       identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
@@ -1306,51 +1306,168 @@ server <- function(input, output) {
           identical(app_main(), "ig") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
           identical(app_main(), "sp") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
           TRUE ~ factor(color_plot, levels = c("Messenger", "Instagram", "Snapchat")))) %>% 
-        mutate(tekst = ifelse(color_plot == "wysłane", "wysłałeś", ifelse(color_plot == "odebrane", "odebrałeś", "odebrałeś i wysłałeś"))) %>% 
+        mutate(tekst = ifelse(color_plot == "wysłane", "wysłano", ifelse(color_plot == "odebrane", "odebrano", "odebrano i wysłano"))) %>% 
+        plot_ly(
+          x = ~data,
+          y = ~suma_wiadomości,
+          type = 'scatter',
+          mode = 'lines',
+          line = list(width = 3),
+          color = ~color_plot,
+          colors = c(
+            "Messenger" = "#0695FF",
+            "Instagram" = "#C13584",
+            "Snapchat" = "#ECD504",
+            "wszystkie" = "#0066CC",
+            "wysłane" = "#00CC66",
+            "odebrane" = "#99004C"
+          ),
+          hoverinfo = "text",
+          hovertext = ~paste0(
+            format(data, "%d %B %Y"),
+            "<br>Do tego dnia ",
+            tekst,
+            "<br>w sumie <b>", suma_wiadomości, " </b>wiadomości", ifelse(app=="mg", " na Messengerze",
+                                                                          ifelse(app=="ig", " na Instagramie",
+                                                                                 ifelse(app=="sp", " na Snapchacie",
+                                                                             "")))
+          )
+        )  -> p
+      #to ponizej juz niewazne, bo zmienilam na plotly
         #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
-        ggplot(aes(x=data, y = suma_wiadomości, color = color_plot, text = paste0(format(data, "%d %B %Y"),
-                                                                             "<br>Do tego dnia <br><b> ",
-                                                                             tekst,
-                                                                             " w sumie </b>", suma_wiadomości, " wiadomości</b>", chosen_app))) +
-        geom_line(size=1.07)+
-        labs(title=plot_title,
-             x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
-             y = podpis_y,
-             color = legend_title)+ 
-        scale_color_manual(values = c(
-          "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-          "Instagram" = "#C13584",
-          "Snapchat" = "#ECD504",
-          "wszystkie" = "#0066CC",
-          "wysłane" = "#00CC66",
-          "odebrane" = "#99004C"
-        )) +
-        theme_minimal()+
-        theme(
-          plot.title = element_text(face = "bold", size = 19),
-          panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
-          legend.text = element_text(hjust = 0.5)
-          )->p
-    
+        # plot_ly(
+        #   x = ~data,
+        #   y = ~suma_wiadomości,
+        #   type = 'scatter',
+        #   mode = 'lines',
+        #   line = list(width = 1.07),
+        #   color = ~color_plot,
+        #   colors = c(
+        #     "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+        #     "Instagram" = "#C13584",
+        #     "Snapchat" = "#ECD504",
+        #     "wszystkie" = "#0066CC",
+        #     "wysłane" = "#00CC66",
+        #     "odebrane" = "#99004C" ),
+        #     hoverinfo = "text",
+        #     hovertext = paste0(format(data, "%d %B %Y"),
+        #                              "<br>Do tego dnia ",
+        #                               ~tekst,
+        #                             "<br>w sumie <b>", ~suma_wiadomości, " </b>wiadomości", chosen_app)) %>% 
+        # layout(
+        #   title = list(text = plot_title, font = list(size = 19, face = "bold"), y = 0.97, 
+        #                x = 0.51, 
+        #                xanchor = 'center', 
+        #                yanchor =  'top'),
+        #   legend = list(title = legend_title),
+        #   showlegend = TRUE,
+        #   plot_bgcolor = "rgba(0,0,0,0)",
+        #   paper_bgcolor = "rgba(0,0,0,0)",
+        #   xaxis = list(title = "<b>Zakres dat</b>",rangeslider = list(type = "date"), fixedrange = TRUE,
+        #                title = list(standoff = 15)),
+        #   yaxis = list(title = podpis_y, fixedrange = TRUE,
+        #                title = list(standoff = 15, y = 0), zeroline = TRUE))
+ #        ) ggplot(aes(x=data, y = suma_wiadomości, color = color_plot, text = paste0(format(data, "%d %B %Y"),
+ #                                                                             "<br>Do tego dnia ",
+ #                                                                             tekst,
+ #                                                                             "<br>w sumie <b>", suma_wiadomości, " </b>wiadomości", chosen_app))) +
+ #        geom_line(size=1.07)+
+ #        labs(title=plot_title,
+ #             x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
+ #             y = podpis_y,
+ #             color = legend_title)+ 
+ #        scale_color_manual(values = c(
+ #          "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+ #          "Instagram" = "#C13584",
+ #          "Snapchat" = "#ECD504",
+ #          "wszystkie" = "#0066CC",
+ #          "wysłane" = "#00CC66",
+ #          "odebrane" = "#99004C"
+ #        )) +
+ #        theme_minimal()+
+ #        theme(
+ #          plot.title = element_text(face = "bold", size = 19),
+ #          panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
+ #          legend.text = element_text(hjust = 0.5)
+ #          )->p
+ #    
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
-      p 
-    } else {
-      p+ scale_y_log10(labels = scales::number_format(scale = 1))
-     #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
+      p %>%
+        layout(
+          title = list(
+            text = plot_title,
+            font = list(size = 19, face = "bold"),
+            y = 0.99,
+            x = 0.51,
+            xanchor = 'center',
+            yanchor = 'top'
+          ),
+          legend = list(title = list(text = legend_title)),
+          showlegend = TRUE,
+          plot_bgcolor = "rgba(0,0,0,0)",
+          paper_bgcolor = "rgba(0,0,0,0)",
+          xaxis = list(
+            title = "<b>Zakres dat</b>",
+            rangeslider = list(type = "date"),
+            fixedrange = TRUE,
+            title = list(standoff = 15),
+            showgrid = TRUE,
+            gridcolor = "lightgrey"
+          ),
+          yaxis = list(
+            title = podpis_y,
+            fixedrange = TRUE,
+            title = list(standoff = 15, y = 0),
+            zeroline = TRUE,
+            showgrid = TRUE,
+            gridcolor = "lightgrey", tickformat = ' '
+          )
+        )
+     } else {
+       p%>%
+         layout(
+           title = list(
+             text = plot_title,
+             font = list(size = 19, face = "bold"),
+             y = 0.99,
+             x = 0.51,
+             xanchor = 'center',
+             yanchor = 'top'
+           ),
+           legend = list(title = list(text = legend_title)),
+           showlegend = TRUE,
+           plot_bgcolor = "rgba(0,0,0,0)",
+           paper_bgcolor = "rgba(0,0,0,0)",
+           xaxis = list(
+             title = "<b>Zakres dat</b>",
+             rangeslider = list(type = "date"),
+             fixedrange = TRUE,
+             title = list(standoff = 15), showgrid = TRUE,
+             gridcolor = "lightgrey"
+           ),
+           yaxis = list(
+             title = podpis_y,
+             fixedrange = TRUE,
+             title = list(standoff = 15, y = 0),
+             zeroline = TRUE, type = 'log', showgrid = TRUE,
+            gridcolor = "lightgrey", tickformat = ' ')
+           )
+  #tu poniezej zostalo jeszcze z ggplota, ale juz niepotrzebne
+      #  p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
- ggplotly(p, tooltip = "text") %>% 
-      layout(title = list(font = list(size = 19),
-             y = 0.97, 
-             x = 0.51, 
-             xanchor = 'center', 
-             yanchor =  'top'),
-             plot_bgcolor = "rgba(0,0,0,0)",
-             paper_bgcolor = "rgba(0,0,0,0)",
-     xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
-                  title = list(standoff = 15)),
-     yaxis = list(fixedrange = TRUE,
-                  title = list(standoff = 15, y = 0), zeroline = TRUE))
-     
+ # ggplotly(p, tooltip = "text") %>% 
+ #      layout(title = list(font = list(size = 19),
+ #             y = 0.97, 
+ #             x = 0.51, 
+ #             xanchor = 'center', 
+ #             yanchor =  'top'),
+ #             plot_bgcolor = "rgba(0,0,0,0)",
+ #             paper_bgcolor = "rgba(0,0,0,0)",
+ #     xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
+ #                  title = list(standoff = 15)),
+ #     yaxis = list(fixedrange = TRUE,
+ #                  title = list(standoff = 15, y = 0), zeroline = TRUE))
+ #     
   }) 
   
   ### tworzenie emojiPlot Zosi

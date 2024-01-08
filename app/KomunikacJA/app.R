@@ -320,6 +320,14 @@ ui2 <- tags$div(
       class = "convo_div",
       tags$div(
         tags$div(
+          class = "person_message_flip",
+          tags$div(
+            class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
+            textOutput("linePlot_text1")
+          ))),
+      class = "convo_div",
+      tags$div(
+        tags$div(
           class = "person_message",
           tags$div(
             class = "person_image_convo",
@@ -1397,17 +1405,15 @@ server <- function(input, output) {
     chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
                             identical(app_main(),"ig") ~ " na Instagramie",
                             identical(app_main(),"sp") ~ " na Snapchacie",
-                            TRUE ~ " we wszystkich aplikacjach")
+                            TRUE ~ (" we wszystkich aplikacjach"))
     
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
-    
-    plot_title <- paste0("Liczba wymienionych wiadomości przez ",
+    plot_title <- paste0("<b>Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
-                         " do danego dnia")
-    
+                         " do danego dnia</b>")
     legend_title <- case_when(
       identical(app_main(), "mg") ~ "<b>Typ</b>",
       identical(app_main(), "ig") ~ "<b>Typ</b>",
@@ -1424,57 +1430,177 @@ server <- function(input, output) {
         identical(app_main(), "mg") ~ typ,
         identical(app_main(), "ig") ~ typ,
         identical(app_main(), "sp") ~ typ,
-        TRUE ~ app)) %>% 
+        TRUE ~ app)) %>%
+      mutate(data=date) %>% 
+      mutate(suma_wiadomości = suma_kumulacyjna) %>% 
       mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
-      ggplot(aes(x=date, y = suma_kumulacyjna, color = color_plot)) +
-      geom_line(size=1.07)+
-      labs(title=plot_title,
-           x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
-           y = podpis_y,
-           color = legend_title)+ 
-      scale_color_manual(values = c(
-        "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-        "Instagram" = "#C13584",
-        "Snapchat" = "#ECD504",
-        "wszystkie" = "#0066CC",
-        "wysłane" = "#00CC66",
-        "odebrane" = "#99004C"
-      )) +
-      theme_minimal()+
-      theme(
-        plot.title = element_text(face = "bold", size = 19),
-        panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
-        legend.text = element_text(hjust = 0.5)
-      )->p
-    
+      mutate(color_plot = case_when(
+        identical(app_main(), "mg") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+        identical(app_main(), "ig") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+        identical(app_main(), "sp") ~ factor(color_plot, levels = c("wszystkie", "odebrane", "wysłane")),
+        TRUE ~ factor(color_plot, levels = c("Messenger", "Instagram", "Snapchat")))) %>% 
+      mutate(tekst = ifelse(color_plot == "wysłane", "wysłano", ifelse(color_plot == "odebrane", "odebrano", "odebrano i wysłano"))) %>% 
+      plot_ly(
+        x = ~data,
+        y = ~suma_wiadomości,
+        type = 'scatter',
+        mode = 'lines',
+        line = list(width = 3),
+        color = ~color_plot,
+        colors = c(
+          "Messenger" = "#0695FF",
+          "Instagram" = "#C13584",
+          "Snapchat" = "#ECD504",
+          "wszystkie" = "#0066CC",
+          "wysłane" = "#00CC66",
+          "odebrane" = "#99004C"
+        ),
+        hoverinfo = "text",
+        hovertext = ~paste0(
+          format(data, "%d %B %Y"),
+          "<br>Do tego dnia ",
+          tekst,
+          "<br>w sumie <b>", suma_wiadomości, " </b>wiadomości", ifelse(app=="mg", " na Messengerze",
+                                                                        ifelse(app=="ig", " na Instagramie",
+                                                                               ifelse(app=="sp", " na Snapchacie",
+                                                                                      "")))
+        )
+      )  -> p
+    #to ponizej juz niewazne, bo zmienilam na plotly
+    #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
+    # plot_ly(
+    #   x = ~data,
+    #   y = ~suma_wiadomości,
+    #   type = 'scatter',
+    #   mode = 'lines',
+    #   line = list(width = 1.07),
+    #   color = ~color_plot,
+    #   colors = c(
+    #     "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+    #     "Instagram" = "#C13584",
+    #     "Snapchat" = "#ECD504",
+    #     "wszystkie" = "#0066CC",
+    #     "wysłane" = "#00CC66",
+    #     "odebrane" = "#99004C" ),
+    #     hoverinfo = "text",
+    #     hovertext = paste0(format(data, "%d %B %Y"),
+    #                              "<br>Do tego dnia ",
+    #                               ~tekst,
+    #                             "<br>w sumie <b>", ~suma_wiadomości, " </b>wiadomości", chosen_app)) %>% 
+    # layout(
+    #   title = list(text = plot_title, font = list(size = 19, face = "bold"), y = 0.97, 
+    #                x = 0.51, 
+    #                xanchor = 'center', 
+    #                yanchor =  'top'),
+    #   legend = list(title = legend_title),
+    #   showlegend = TRUE,
+    #   plot_bgcolor = "rgba(0,0,0,0)",
+    #   paper_bgcolor = "rgba(0,0,0,0)",
+    #   xaxis = list(title = "<b>Zakres dat</b>",rangeslider = list(type = "date"), fixedrange = TRUE,
+    #                title = list(standoff = 15)),
+    #   yaxis = list(title = podpis_y, fixedrange = TRUE,
+    #                title = list(standoff = 15, y = 0), zeroline = TRUE))
+    #        ) ggplot(aes(x=data, y = suma_wiadomości, color = color_plot, text = paste0(format(data, "%d %B %Y"),
+    #                                                                             "<br>Do tego dnia ",
+    #                                                                             tekst,
+    #                                                                             "<br>w sumie <b>", suma_wiadomości, " </b>wiadomości", chosen_app))) +
+    #        geom_line(size=1.07)+
+    #        labs(title=plot_title,
+    #             x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
+    #             y = podpis_y,
+    #             color = legend_title)+ 
+    #        scale_color_manual(values = c(
+    #          "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
+    #          "Instagram" = "#C13584",
+    #          "Snapchat" = "#ECD504",
+    #          "wszystkie" = "#0066CC",
+    #          "wysłane" = "#00CC66",
+    #          "odebrane" = "#99004C"
+    #        )) +
+    #        theme_minimal()+
+    #        theme(
+    #          plot.title = element_text(face = "bold", size = 19),
+    #          panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
+    #          legend.text = element_text(hjust = 0.5)
+    #          )->p
+    #    
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
-      p 
+      p %>%
+        layout(
+          title = list(
+            text = plot_title,
+            font = list(size = 19, face = "bold"),
+            y = 0.99,
+            x = 0.51,
+            xanchor = 'center',
+            yanchor = 'top'
+          ),
+          legend = list(title = list(text = legend_title)),
+          showlegend = TRUE,
+          plot_bgcolor = "rgba(0,0,0,0)",
+          paper_bgcolor = "rgba(0,0,0,0)",
+          xaxis = list(
+            title = "<b>Zakres dat</b>",
+            rangeslider = list(type = "date"),
+            fixedrange = TRUE,
+            title = list(standoff = 15),
+            showgrid = TRUE,
+            gridcolor = "lightgrey"
+          ),
+          yaxis = list(
+            title = podpis_y,
+            fixedrange = TRUE,
+            title = list(standoff = 15, y = 0),
+            zeroline = TRUE,
+            showgrid = TRUE,
+            gridcolor = "lightgrey", tickformat = ' '
+          )
+        )
     } else {
-      p + scale_y_continuous(trans = "log",breaks = c(1, 100, 1000, 10000),limits = c(0, 100000),labels = c("1", "100", "1000", "10000"))
-      #   p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
+      p%>%
+        layout(
+          title = list(
+            text = plot_title,
+            font = list(size = 19, face = "bold"),
+            y = 0.99,
+            x = 0.51,
+            xanchor = 'center',
+            yanchor = 'top'
+          ),
+          legend = list(title = list(text = legend_title)),
+          showlegend = TRUE,
+          plot_bgcolor = "rgba(0,0,0,0)",
+          paper_bgcolor = "rgba(0,0,0,0)",
+          xaxis = list(
+            title = "<b>Zakres dat</b>",
+            rangeslider = list(type = "date"),
+            fixedrange = TRUE,
+            title = list(standoff = 15), showgrid = TRUE,
+            gridcolor = "lightgrey"
+          ),
+          yaxis = list(
+            title = podpis_y,
+            fixedrange = TRUE,
+            title = list(standoff = 15, y = 0),
+            zeroline = TRUE, type = 'log', showgrid = TRUE,
+            gridcolor = "lightgrey", tickformat = ' ')
+        )
+      #tu poniezej zostalo jeszcze z ggplota, ale juz niepotrzebne
+      #  p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
-    p <- ggplotly(p) %>% 
-      layout(title = list(font = list(size = 19),
-                          y = 0.97, 
-                          x = 0.51, 
-                          xanchor = 'center', 
-                          yanchor =  'top'),
-             plot_bgcolor = "rgba(0,0,0,0)",
-             paper_bgcolor = "rgba(0,0,0,0)",
-             xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
-                          title = list(standoff = 15)),
-             yaxis = list(#fixedrange = TRUE,
-                          title = list(standoff = 15, y = 0)
-                         # type = "log",
-                          #range = c(0, 100000)
-                         )
-                         )
-    # if (!(identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp"))) {
-    #   p <- p %>% 
-    #     layout(yaxis = list(tickvals = c(1, 10, 100),  # Wartości tick, które chcesz wyświetlić
-    #                         ticktext = c('1', '10', '100')))
-    # }
-    p
+    # ggplotly(p, tooltip = "text") %>% 
+    #      layout(title = list(font = list(size = 19),
+    #             y = 0.97, 
+    #             x = 0.51, 
+    #             xanchor = 'center', 
+    #             yanchor =  'top'),
+    #             plot_bgcolor = "rgba(0,0,0,0)",
+    #             paper_bgcolor = "rgba(0,0,0,0)",
+    #     xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
+    #                  title = list(standoff = 15)),
+    #     yaxis = list(fixedrange = TRUE,
+    #                  title = list(standoff = 15, y = 0), zeroline = TRUE))
+    #     
   }) 
   
   
@@ -1902,7 +2028,6 @@ server <- function(input, output) {
            ", ciekawi mnie w jakich okresach czasu wysyłał", sex, "ś i odebierał", sex, "ś najwięcej wiadomości",
            chosen_app)
   })
-  
   output$linePlot_text2 <- renderText({
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Instagramie?",
               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Dlaczego w sierpniu 2021r. zaczęłaś wymieniać tak dużo wiadomości na Snapchacie?",
@@ -1917,7 +2042,6 @@ server <- function(input, output) {
               TRUE ~"Dziękuję:)")
     
   })
-  
   output$linePlot_text2_answer <- renderText({
     case_when((identical(app_main(),"ig") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
               (identical(app_main(),"sp") && identical(person_main(),"a")) ~ "Wyjechałam wtedy na wymianę do Niemiec, gdzie poznałam dużo osób z państw, w których młode osoby używają głównie Instagrama i Snapchata do komunikacji. Dlatego ja tez zaczęłam z nich korzystać, pisząc z tymi osobami 🤸🏻‍♀️",
@@ -1933,6 +2057,7 @@ server <- function(input, output) {
               TRUE ~"Nie ma sprawy, miłego dnia")
     
   })
+  
   
   
   
