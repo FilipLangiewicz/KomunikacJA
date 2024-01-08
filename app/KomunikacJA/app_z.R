@@ -646,7 +646,7 @@ ui4 <- tags$div(
                    class = "person_img_convo"),
           tags$div(
             class = "wiadomosc",
-            plotlyOutput("dlugosciWiadomosci_plot"),
+            htmlOutput("inc"),
           ),
         ),
         tags$div(
@@ -1470,100 +1470,144 @@ server <- function(input, output) {
     
   })
   
+  ################HTML #################################### długości wiadomości
   
-  ### tworzenie dlugosciWiadomosci Zosi
-  output$dlugosciWiadomosci_plot <- renderPlotly({
-    chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
-                            identical(app_main(),"ig") ~ " w Instagramie",
-                            TRUE ~ " w obu aplikacjach")
     
-    chosen_person <- case_when(identical(person_main(),c("a","z","f")) ~ "dkdsdsmklkmlkmldskmldskmldskmlads",
-                               person_main() == "a" ~ "Anię",
-                               person_main() == "z" ~ "Zosię",
-                               person_main() == "f" ~ "Filipa")
-    
+  shiny::addResourcePath("wykresyHTML", "./appData/wykresyHTML")  
+  
+  a_mg <- tags$iframe(src = "wykresyHTML/a_mg.html", height = "100%", width = "100%", frameborder = "0")
+  a_ig <- tags$iframe(src = "wykresyHTML/a_ig.html", height = "100%", width = "100%", frameborder = "0")
+  a_all <- tags$iframe(src = "wykresyHTML/a_all.html", height = "100%", width = "100%", frameborder = "0")
+  z_mg <- tags$iframe(src = "wykresyHTML/z_mg.html", height = "100%", width = "100%", frameborder = "0")
+  z_ig <- tags$iframe(src = "wykresyHTML/z_ig.html", height = "100%", width = "100%", frameborder = "0")
+  z_all <- tags$iframe(src = "wykresyHTML/z_all.html", height = "100%", width = "100%", frameborder = "0")
+  f_mg <- tags$iframe(src = "wykresyHTML/f_mg.html", height = "100%", width = "100%", frameborder = "0")
+  f_ig <- tags$iframe(src = "wykresyHTML/f_ig.html", height = "100%", width = "100%", frameborder = "0")
+  f_all <- tags$iframe(src = "wykresyHTML/f_all.html", height = "100%", width = "100%", frameborder = "0")
+  all_all <- tags$iframe(src = "wykresyHTML/all_all.html", height = "100%", width = "100%", frameborder = "0")
+  all_mg <- tags$iframe(src = "wykresyHTML/all_mg.html", height = "100%", width = "100%", frameborder = "0")
+  all_ig <- tags$iframe(src = "wykresyHTML/all_ig.html", height = "100%", width = "100%", frameborder = "0")
+  
+  html_wykresy <- list(a_mg, a_ig, a_all, z_mg, z_ig,z_all,f_mg,f_ig,f_all,all_mg,all_ig,all_all)
+  print("zapisano htmle do listy")
+  
+  getNumber <- function() { 
     if (all(person_main() == c("a", "z", "f"))) {
-      chosen_color <- c("orange","darkgreen", "#FF007F")
-      
-    } else {
-      chosen_color <- case_when(
-        person_main() == "a" ~ c("orange", "orange"),
-        person_main() == "z" ~ c("#FF007F", "#FF007F"),
-        person_main() == "f" ~ c("darkgreen", "darkgreen"))
-    }
-      
-    plot_title <- paste0("<b>",
-                         "Rozkład długości wiadomości",
-                         " wysłanych przez ",
-                         chosen_person,
-                         chosen_app,
-                         "</b>")
-    
-    title_all <- paste0("<b>",
-                        "Porównanie długości wiadomości wysłanych",
-                        chosen_app,
-                        "</b>")
-    
-    
-    box_data <- filter_outliers(dlugosciWiadomosciPlot$data)
-    if (length(person_main()) > 1) {
-      basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~person, colors = chosen_color,showlegend = FALSE) %>%
-        layout(title = list(text = title_all, font = list(size = 20),
-                            y = 0.97, 
-                            x = 0.51, 
-                            xanchor = 'center', 
-                            yanchor =  'top'),
-               xaxis = list(
-                 tickvals = c("a", "f", "z"),
-                 ticktext = c("<br><b>Ania</b>", "<br><b>Filip</b>","<br><b>Zosia</b>"),
-                 tickfont = list(size = 15,
-                                 color = "black",
-                                 thickness = 3)),
-               yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
-                            range = c(0, max(box_data$MessageLength)+10),
-                            showgrid = TRUE,
-                            gridcolor = "lightgrey"
-               ),
-               plot_bgcolor = "rgba(0,0,0,0)",
-               paper_bgcolor = "rgba(0,0,0,0)",
-               hoverlabel = list(
-                 bgcolor = "white",  
-                 font = list(size = 14, 
-                             color = "black"))
-               )
+      number <- case_when(identical(app_main(),"mg") ~ 10,
+                                   identical(app_main(),"ig") ~ 11,
+                                   TRUE ~ 12)
 
     } else {
-      basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~GroupOrPriv,colors = chosen_color, showlegend = FALSE) %>%
-        layout(title = list(text = plot_title, font = list(size = 20),
-                                      y = 0.97, 
-                                      x = 0.51, 
-                                      xanchor = 'center', 
-                                      yanchor =  'top'),
-               xaxis = list(
-                 tickvals = c("priv", "group"),
-                 ticktext = c("<br><b>konwersacje prywatne</b>", "<br><b>konwersacje grupowe</b>"),
-                 tickfont = list(size = 15,
-                                 color = "black",
-                                 thickness = 3)),
-               yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
-                            range = c(0, max(box_data$MessageLength) + 10),
-                            showgrid = TRUE,
-                            gridcolor = "lightgrey"
-               ),
-                            plot_bgcolor = "rgba(0,0,0,0)",
-                            paper_bgcolor = "rgba(0,0,0,0)",
-               hoverlabel = list(
-                 bgcolor = "white",  
-                 font = list(size = 14, 
-                             color = "black")  
-               ))
-      
-    }
+      number <- case_when(
+        person_main() == "a" ~ case_when(identical(app_main(),"mg") ~ 1,
+                                         identical(app_main(),"ig") ~ 2,
+                                         TRUE ~ 3),
+        person_main() == "z" ~ case_when(identical(app_main(),"mg") ~ 4,
+                                         identical(app_main(),"ig") ~ 5,
+                                         TRUE ~ 6),
+        person_main() == "f" ~ case_when(identical(app_main(),"mg") ~ 7,
+                                         identical(app_main(),"ig") ~ 8,
+                                         TRUE ~ 9))
 
-    basic_plot %>% layout() # moze sie przydac na pozniej ;)
-
-
-  })
+    return(number)
+  }}
+  
+  
+  output$inc<-renderUI({html_wykresy[[getNumber()]]})
+  
+  # ### tworzenie dlugosciWiadomosci Zosi
+  # output$dlugosciWiadomosci_plot <- renderPlotly({
+  #   chosen_app <- case_when(identical(app_main(),"mg") ~ " w Messengerze",
+  #                           identical(app_main(),"ig") ~ " w Instagramie",
+  #                           TRUE ~ " w obu aplikacjach")
+  #   
+  #   chosen_person <- case_when(identical(person_main(),c("a","z","f")) ~ "dkdsdsmklkmlkmldskmldskmldskmlads",
+  #                              person_main() == "a" ~ "Anię",
+  #                              person_main() == "z" ~ "Zosię",
+  #                              person_main() == "f" ~ "Filipa")
+  #   
+  #   if (all(person_main() == c("a", "z", "f"))) {
+  #     chosen_color <- c("orange","darkgreen", "#FF007F")
+  #     
+  #   } else {
+  #     chosen_color <- case_when(
+  #       person_main() == "a" ~ c("orange", "orange"),
+  #       person_main() == "z" ~ c("#FF007F", "#FF007F"),
+  #       person_main() == "f" ~ c("darkgreen", "darkgreen"))
+  #   }
+  #     
+  #   plot_title <- paste0("<b>",
+  #                        "Rozkład długości wiadomości",
+  #                        " wysłanych przez ",
+  #                        chosen_person,
+  #                        chosen_app,
+  #                        "</b>")
+  #   
+  #   title_all <- paste0("<b>",
+  #                       "Porównanie długości wiadomości wysłanych",
+  #                       chosen_app,
+  #                       "</b>")
+  #   
+  #   
+  #   box_data <- filter_outliers(dlugosciWiadomosciPlot$data)
+  #   if (length(person_main()) > 1) {
+  #     basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~person, colors = chosen_color,showlegend = FALSE) %>%
+  #       layout(title = list(text = title_all, font = list(size = 20),
+  #                           y = 0.97, 
+  #                           x = 0.51, 
+  #                           xanchor = 'center', 
+  #                           yanchor =  'top'),
+  #              xaxis = list(
+  #                tickvals = c("a", "f", "z"),
+  #                ticktext = c("<br><b>Ania</b>", "<br><b>Filip</b>","<br><b>Zosia</b>"),
+  #                tickfont = list(size = 15,
+  #                                color = "black",
+  #                                thickness = 3)),
+  #              yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
+  #                           range = c(0, max(box_data$MessageLength)+10),
+  #                           showgrid = TRUE,
+  #                           gridcolor = "lightgrey"
+  #              ),
+  #              plot_bgcolor = "rgba(0,0,0,0)",
+  #              paper_bgcolor = "rgba(0,0,0,0)",
+  #              hoverlabel = list(
+  #                bgcolor = "white",  
+  #                font = list(size = 14, 
+  #                            color = "black"))
+  #              )
+  # 
+  #   } else {
+  #     basic_plot <- plot_ly(box_data, y = ~MessageLength, type = "violin", color = ~GroupOrPriv,colors = chosen_color, showlegend = FALSE) %>%
+  #       layout(title = list(text = plot_title, font = list(size = 20),
+  #                                     y = 0.97, 
+  #                                     x = 0.51, 
+  #                                     xanchor = 'center', 
+  #                                     yanchor =  'top'),
+  #              xaxis = list(
+  #                tickvals = c("priv", "group"),
+  #                ticktext = c("<br><b>konwersacje prywatne</b>", "<br><b>konwersacje grupowe</b>"),
+  #                tickfont = list(size = 15,
+  #                                color = "black",
+  #                                thickness = 3)),
+  #              yaxis = list(title = list(text = "<b>Długość wiadomości (liczba znaków)</b>", standoff = 15, font = list(size = 13.5)),
+  #                           range = c(0, max(box_data$MessageLength) + 10),
+  #                           showgrid = TRUE,
+  #                           gridcolor = "lightgrey"
+  #              ),
+  #                           plot_bgcolor = "rgba(0,0,0,0)",
+  #                           paper_bgcolor = "rgba(0,0,0,0)",
+  #              hoverlabel = list(
+  #                bgcolor = "white",  
+  #                font = list(size = 14, 
+  #                            color = "black")  
+  #              ))
+  #     
+  #   }
+  # 
+  #   basic_plot %>% layout() # moze sie przydac na pozniej ;)
+  # 
+  # 
+  # })
 
 
   ### tworzenie friendsPlot 
