@@ -62,7 +62,7 @@
     border-color: white;
     width: -webkit-fill-available;
     margin-bottom: 10px;
-    height: 60px;
+    height: 54px;
     border-radius:20px;
     font-weight: 700;
     background-position: center;
@@ -73,8 +73,8 @@
     background-color: #EBEDF0;
     border-color: #EBEDF0;
     width: -webkit-fill-available;
-    margin-bottom: 10px;
-    height: 60px;
+    margin-bottom: 20px;
+    height: 54px;
 }
 
 .app_button .btn.btn-default.action-button.shiny-bound-input:focus {
@@ -83,7 +83,7 @@
     border-color: #ECF3FF;
     width: -webkit-fill-available;
     margin-bottom: 10px;
-    height: 60px;
+    height: 54px;
 }
 
 .navbar-nav {
@@ -341,8 +341,8 @@ footer a:hover{
   background-color: #EBEDF0;
   border-color: #EBEDF0;
   width: -webkit-fill-available;
-  margin-bottom: 10px;
-  height: 60px;
+  margin-bottom: 20px;
+  height: 54px;
 }
 
 .app_button_focused .btn.btn-default.action-button.shiny-bound-input, .app_button_focused .btn.btn-default.action-button.shiny-bound-input:focus {
@@ -350,8 +350,8 @@ footer a:hover{
   background-color: #ECF3FF;
   border-color: #ECF3FF;
   width: -webkit-fill-available;
-  margin-bottom: 10px;
-  height: 60px;
+  margin-bottom: 20px;
+  height: 54px;
   font-weight: 700;
   border-radius:20px;
   background-position: center;
@@ -401,6 +401,10 @@ footer a:hover{
 }
 .all_button{
   background-image: URL("collage.jpg");
+  background-size: cover;
+}
+.all_button3{
+  background-image: URL("mgig.jpg");
   background-size: cover;
 }
 

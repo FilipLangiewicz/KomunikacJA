@@ -57,7 +57,6 @@ dlugosciWiadomosciPlot_data <- read.csv("appData/dlugosciWiadomosciPlot/dlugosci
 ##### wczytanie danych friendsPlot #####
 friendsPlot_data <- read.csv("./appData/friendsPlot/friendsData.csv",
                              colClasses = c(date = "Date"))
-
 ##### wczytanie danych friendsPlot koniec #####
 
 
@@ -183,9 +182,6 @@ ui1 <- tags$div(
             class = c("wiadomosc_flip", "wiadomosc_tekst_flip"),
             textOutput("heatmapa_text1")
           ),
-        # tu chyba jednak nie powinno być tego zdjęcia
-        #   tags$img(src = "mycat.jpg",
-        #            class = "person_img_convo_flip"),
         ),
         tags$div(
           class = "person_message",
@@ -229,7 +225,6 @@ ui1 <- tags$div(
 
 
 ############################# ui liczba wiadomosci Ani #####################
-
 ui2 <- tags$div(
   
   tags$div(
@@ -390,8 +385,6 @@ ui2 <- tags$div(
 
 
 ############################# ui emoji plot Zosi #####################
-
-
 ui3 <- tags$div(
   
   tags$div(
@@ -454,7 +447,7 @@ ui3 <- tags$div(
           class = "app_button",
           tags$button(
             id = "all3",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            class = c("btn btn-default action-button shiny-bound-input", "all_button3"),
             ""
           )
         )
@@ -554,8 +547,6 @@ ui3 <- tags$div(
 
 
 ############################# ui dlugosci wiadomosci Zosi #####################
-
-
 ui4 <- tags$div(
 
   tags$div(
@@ -628,7 +619,7 @@ ui4 <- tags$div(
           class = "app_button",
           tags$button(
             id = "all4",
-            class = c("btn btn-default action-button shiny-bound-input", "all_button"),
+            class = c("btn btn-default action-button shiny-bound-input", "all_button3"),
             ""
           )
         )
@@ -829,8 +820,6 @@ ui4 <- tags$div(
 
   
 ############################# ui friendsPlot #####################
-
-  
 ui5 <- tags$div(
   
   tags$div(
@@ -922,7 +911,6 @@ ui5 <- tags$div(
   
 
 ############################# ui główne #####################
-
 ui_main <- tags$div(includeCSS("./css/styles.css"),
                     style = "background-color: red; display:block;",
                     tags$div(
@@ -978,8 +966,8 @@ server <- function(input, output) {
   )
   
   dlugosciWiadomosciPlot <- reactiveValues(data = dlugosciWiadomosciPlot_data %>%
-                                filter(person == "a"
-                                       #app == "mg"
+                                filter(person == "z",
+                                       app == "ig"
                                        )
   )
   #### wczytywanie początkowych danych na wykresy koniec ####
@@ -1001,6 +989,10 @@ server <- function(input, output) {
   updateData2 <- function() {
     if (all(person_main() == c("a", "z", "f"))) {
       person_main("a")
+    }
+    
+    if (identical(app_main(), c("mg", "ig"))) {
+      app_main("mg")
     }
     
     linePlot$data <- linePlot_data %>%
@@ -1033,11 +1025,11 @@ server <- function(input, output) {
   
   updateData4 <- function() {
     if (identical(app_main(), c("mg", "sp", "ig"))) {
-      app_main("mg")
+      app_main("ig")
     }
     
     if (identical(app_main(), "sp")) {
-      app_main("mg")
+      app_main("ig")
     }
     
     dlugosciWiadomosciPlot$data <- dlugosciWiadomosciPlot_data %>%
@@ -1402,6 +1394,8 @@ server <- function(input, output) {
   
   ### tworzenie lineplot Ani
   output$linePlot_plot <- renderPlotly({
+    updateData2()
+    
     chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
                             identical(app_main(),"ig") ~ " na Instagramie",
                             identical(app_main(),"sp") ~ " na Snapchacie",
@@ -1410,20 +1404,23 @@ server <- function(input, output) {
     chosen_person <- case_when(person_main() == "a" ~ "Anię",
                                person_main() == "z" ~ "Zosię",
                                person_main() == "f" ~ "Filipa")
+    
     plot_title <- paste0("<b>Liczba wymienionych wiadomości przez ",
                          chosen_person,
                          chosen_app,
                          " do danego dnia</b>")
+    
     legend_title <- case_when(
       identical(app_main(), "mg") ~ "<b>Typ</b>",
       identical(app_main(), "ig") ~ "<b>Typ</b>",
       identical(app_main(), "sp") ~ "<b>Typ</b>",
       TRUE ~ "<b>Aplikacja</b>")
+    
     podpis_y <- case_when(
       identical(app_main(), "mg") ~ "<b>Liczba wiadomości</b>",
       identical(app_main(), "ig") ~ "<b>Liczba wiadomości</b>",
       identical(app_main(), "sp") ~ "<b>Liczba wiadomości</b>",
-      TRUE ~ "<b>Liczba wiadomości (log)</b>")
+      TRUE ~ "<b>Liczba wiadomości (skala log)</b>")
     
     linePlot$data %>% 
       mutate(color_plot = case_when(
@@ -1431,7 +1428,7 @@ server <- function(input, output) {
         identical(app_main(), "ig") ~ typ,
         identical(app_main(), "sp") ~ typ,
         TRUE ~ app)) %>%
-      mutate(data=date) %>% 
+      mutate(data = date) %>% 
       mutate(suma_wiadomości = suma_kumulacyjna) %>% 
       mutate(color_plot = ifelse(color_plot == "wyslane", "wysłane", ifelse(color_plot == "ig", "Instagram", ifelse(color_plot == "sp", "Snapchat", ifelse(color_plot == "mg", "Messenger", color_plot))))) %>%
       mutate(color_plot = case_when(
@@ -1466,64 +1463,7 @@ server <- function(input, output) {
                                                                                       "")))
         )
       )  -> p
-    #to ponizej juz niewazne, bo zmienilam na plotly
-    #filter(year(date) >= min(input$rok) & year(date) <= max(input$rok)) %>% # to juz niepotrzebne wiec wyrzucilem
-    # plot_ly(
-    #   x = ~data,
-    #   y = ~suma_wiadomości,
-    #   type = 'scatter',
-    #   mode = 'lines',
-    #   line = list(width = 1.07),
-    #   color = ~color_plot,
-    #   colors = c(
-    #     "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-    #     "Instagram" = "#C13584",
-    #     "Snapchat" = "#ECD504",
-    #     "wszystkie" = "#0066CC",
-    #     "wysłane" = "#00CC66",
-    #     "odebrane" = "#99004C" ),
-    #     hoverinfo = "text",
-    #     hovertext = paste0(format(data, "%d %B %Y"),
-    #                              "<br>Do tego dnia ",
-    #                               ~tekst,
-    #                             "<br>w sumie <b>", ~suma_wiadomości, " </b>wiadomości", chosen_app)) %>% 
-    # layout(
-    #   title = list(text = plot_title, font = list(size = 19, face = "bold"), y = 0.97, 
-    #                x = 0.51, 
-    #                xanchor = 'center', 
-    #                yanchor =  'top'),
-    #   legend = list(title = legend_title),
-    #   showlegend = TRUE,
-    #   plot_bgcolor = "rgba(0,0,0,0)",
-    #   paper_bgcolor = "rgba(0,0,0,0)",
-    #   xaxis = list(title = "<b>Zakres dat</b>",rangeslider = list(type = "date"), fixedrange = TRUE,
-    #                title = list(standoff = 15)),
-    #   yaxis = list(title = podpis_y, fixedrange = TRUE,
-    #                title = list(standoff = 15, y = 0), zeroline = TRUE))
-    #        ) ggplot(aes(x=data, y = suma_wiadomości, color = color_plot, text = paste0(format(data, "%d %B %Y"),
-    #                                                                             "<br>Do tego dnia ",
-    #                                                                             tekst,
-    #                                                                             "<br>w sumie <b>", suma_wiadomości, " </b>wiadomości", chosen_app))) +
-    #        geom_line(size=1.07)+
-    #        labs(title=plot_title,
-    #             x = "<b>Zakres dat</b>",   # Zmiana podpisu osi x
-    #             y = podpis_y,
-    #             color = legend_title)+ 
-    #        scale_color_manual(values = c(
-    #          "Messenger" = "#0695FF",    # dostosuj kolory dla różnych wartości w color_plot
-    #          "Instagram" = "#C13584",
-    #          "Snapchat" = "#ECD504",
-    #          "wszystkie" = "#0066CC",
-    #          "wysłane" = "#00CC66",
-    #          "odebrane" = "#99004C"
-    #        )) +
-    #        theme_minimal()+
-    #        theme(
-    #          plot.title = element_text(face = "bold", size = 19),
-    #          panel.grid.major = element_line(size = 1.1, color = "#CECECE" ),
-    #          legend.text = element_text(hjust = 0.5)
-    #          )->p
-    #    
+
     p <- if (identical(app_main(), "mg") || identical(app_main(), "ig") || identical(app_main(), "sp")) {
       p %>%
         layout(
@@ -1542,22 +1482,22 @@ server <- function(input, output) {
           xaxis = list(
             title = "<b>Zakres dat</b>",
             rangeslider = list(type = "date"),
-            fixedrange = TRUE,
             title = list(standoff = 15),
             showgrid = TRUE,
             gridcolor = "lightgrey"
           ),
           yaxis = list(
-            title = podpis_y,
-            fixedrange = TRUE,
-            title = list(standoff = 15, y = 0),
+            title = list(text = podpis_y, 
+                         standoff = 15),
             zeroline = TRUE,
             showgrid = TRUE,
-            gridcolor = "lightgrey", tickformat = ' '
-          )
+            gridcolor = "lightgrey", 
+            tickformat = " "
+          ),
+          margin = list(l = 50, r = 50, b = 50, t = 30, pad = 10)
         )
     } else {
-      p%>%
+      p  %>% 
         layout(
           title = list(
             text = plot_title,
@@ -1574,33 +1514,25 @@ server <- function(input, output) {
           xaxis = list(
             title = "<b>Zakres dat</b>",
             rangeslider = list(type = "date"),
-            fixedrange = TRUE,
-            title = list(standoff = 15), showgrid = TRUE,
+            title = list(standoff = 15), 
+            showgrid = TRUE,
             gridcolor = "lightgrey"
           ),
           yaxis = list(
-            title = podpis_y,
-            fixedrange = TRUE,
-            title = list(standoff = 15, y = 0),
-            zeroline = TRUE, type = 'log', showgrid = TRUE,
-            gridcolor = "lightgrey", tickformat = ' ')
+            range = c(-1.1, 1.2 * max(log10(linePlot$data$suma_kumulacyjna))),
+            tickvals = c(0.1, 1, 10, 100, 1000, 10000, 100000, 1000000),
+            ticktext = c("0", "1", "10", "100", "1000", "10000", "100000", "1000000"),
+            title = list(text = podpis_y,
+                         standoff = 15),
+            type = 'log',
+            showgrid = TRUE,
+            zeroline = TRUE, 
+            gridcolor = "lightgrey", 
+            tickformat = ' '),
+          margin = list(l = 50, r = 50, b = 50, t = 30, pad = 10)
+          
         )
-      #tu poniezej zostalo jeszcze z ggplota, ale juz niepotrzebne
-      #  p+scale_y_log10()+scale_y_continuous(breaks = c(0, 100, 10000, 1000000))
     }
-    # ggplotly(p, tooltip = "text") %>% 
-    #      layout(title = list(font = list(size = 19),
-    #             y = 0.97, 
-    #             x = 0.51, 
-    #             xanchor = 'center', 
-    #             yanchor =  'top'),
-    #             plot_bgcolor = "rgba(0,0,0,0)",
-    #             paper_bgcolor = "rgba(0,0,0,0)",
-    #     xaxis = list(rangeslider = list(type = "date"), fixedrange = TRUE,
-    #                  title = list(standoff = 15)),
-    #     yaxis = list(fixedrange = TRUE,
-    #                  title = list(standoff = 15, y = 0), zeroline = TRUE))
-    #     
   }) 
   
   
@@ -1655,6 +1587,8 @@ server <- function(input, output) {
   
   ### tworzenie dlugosciWiadomosci Zosi
   output$dlugosciWiadomosci_plot <- renderPlotly({
+    updateData4()
+    
     chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
                             identical(app_main(),"ig") ~ " na Instagramie",
                             TRUE ~ " w obu aplikacjach")
