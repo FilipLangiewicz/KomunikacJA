@@ -74,7 +74,7 @@ ui0 <- tags$div(
   img(src = "logo.png", 
       style = "height:76vh;"),
   tags$footer(
-    HTML("<a href = 'https://github.com/FilipLangiewicz/Projekt_TWD_02'>Link do repozytorium na GitHubie</a>"),
+    HTML("<a href = 'https://github.com/FilipLangiewicz/Projekt_TWD_02' target='_blank'>Link do repozytorium na GitHubie </a>"),
     HTML("<p class = 'copyright'>© Copright 2023</p>"))
   
 )
@@ -1484,7 +1484,8 @@ server <- function(input, output) {
             rangeslider = list(type = "date"),
             title = list(standoff = 15),
             showgrid = TRUE,
-            gridcolor = "lightgrey"
+            gridcolor = "lightgrey",
+            range = c(min(linePlot$data$date) - 60, max(linePlot$data$date) + 60)
           ),
           yaxis = list(
             title = list(text = podpis_y, 
@@ -1516,7 +1517,8 @@ server <- function(input, output) {
             rangeslider = list(type = "date"),
             title = list(standoff = 15), 
             showgrid = TRUE,
-            gridcolor = "lightgrey"
+            gridcolor = "lightgrey",
+            range = c(min(linePlot$data$date) - 60, max(linePlot$data$date) + 60)
           ),
           yaxis = list(
             range = c(-1.1, 1.2 * max(log10(linePlot$data$suma_kumulacyjna))),
@@ -1528,7 +1530,8 @@ server <- function(input, output) {
             showgrid = TRUE,
             zeroline = TRUE, 
             gridcolor = "lightgrey", 
-            tickformat = ' '),
+            tickformat = ' '
+          ),
           margin = list(l = 50, r = 50, b = 50, t = 30, pad = 10)
           
         )
@@ -1951,7 +1954,7 @@ server <- function(input, output) {
     chosen_app <- case_when(identical(app_main(),"mg") ~ " na Messengerze",
                             identical(app_main(),"ig") ~ " na Instagramie",
                             identical(app_main(),"sp") ~ " na Snapchacie",
-                            TRUE ~ " na Messengerze, Instagramie i Snapchacie łącznie")
+                            TRUE ~ " na Messengerze, Instagramie i Snapchacie")
     
     paste0("Hej ",
            person,

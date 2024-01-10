@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend&display=swap');
+
+
 .person_button{
   width: 100%;
 }
@@ -361,6 +364,7 @@ footer a:hover{
 .JA {
   color:#ff00ff;
   font-size: 40px;
+  font-family: 'Lexend', sans-serif;
 }
 
 .menu_text{
