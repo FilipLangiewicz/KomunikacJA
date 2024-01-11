@@ -122,7 +122,6 @@
     text-align: center;
     width:180px;
     align-items: center;
-
 }
 
 .navbar-default li a{
@@ -498,6 +497,6 @@ footer a:hover{
   font-size: 20px;
   text-align: center;
   font-weight: 600;
-  font-family: "Open Sans";
+  font-family: "Open Sans", Verdana, Arial, sans-serif;
 }
 

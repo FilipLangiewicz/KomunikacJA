@@ -75,7 +75,7 @@ ui0 <- tags$div(
       style = "height:76vh;"),
   tags$footer(
     HTML("<a href = 'https://github.com/FilipLangiewicz/Projekt_TWD_02' target='_blank'>Link do repozytorium na GitHubie </a>"),
-    HTML("<p class = 'copyright'>© Copright 2023</p>"))
+    HTML("<p class = 'copyright'>Copyright © 2023 <i>Kamińska, Ostrowska, Langiewicz</i></p>"))
   
 )
 
